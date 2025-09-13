@@ -1,0 +1,15 @@
+.badgeIconWrapper {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  background-color: red;
+  border-radius: 100px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+}

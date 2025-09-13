@@ -1,0 +1,7 @@
+.titleSection {
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: var(--font-size-title);
+}

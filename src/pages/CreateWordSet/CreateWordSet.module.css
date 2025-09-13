@@ -1,0 +1,45 @@
+/* Common */
+
+.createWordSet {
+}
+
+/* Title */
+.title {
+}
+
+.text {
+  font-size: var(--font-size-title);
+  font-weight: 600;
+}
+
+/* Input */
+.wordset-input {
+  height: 200px;
+}
+
+.name {
+}
+
+.desc {
+  flex: 1;
+}
+
+.desc,
+.name {
+  border-radius: var(--radius-medium);
+  border: none;
+  background-color: var(--color-gray-200);
+}
+
+.image {
+  cursor: pointer;
+  outline: 3px var(--color-black) dashed;
+  color: var(--color-black);
+  border-radius: var(--radius-medium);
+  height: 100%;
+  aspect-ratio: 27 / 37;
+}
+
+/* toolbar */
+.toolbar {
+}

@@ -1,0 +1,7 @@
+.Login {
+  width: 100%;
+  background-color: var(--ui-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

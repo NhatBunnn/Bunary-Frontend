@@ -1,0 +1,14 @@
+/* Common */
+
+.friendCard {
+  width: 180px;
+  background-color: var(--ui-white);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--box-shadow-primary);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.friendCard:hover {
+  background-color: var(--background-hover);
+}

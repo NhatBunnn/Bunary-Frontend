@@ -1,0 +1,8 @@
+.settingPanel {
+}
+.header {
+}
+.content {
+  border-radius: var(--radius-large);
+  background-color: var(--color-white);
+}

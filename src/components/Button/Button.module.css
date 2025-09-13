@@ -1,0 +1,11 @@
+.button {
+  background-color: fff;
+  padding: 6px 14px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  box-shadow: var(--box-shadow-primary);
+}
+
+.icon {
+  margin-right: 6px;
+}

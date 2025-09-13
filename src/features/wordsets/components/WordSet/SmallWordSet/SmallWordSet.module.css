@@ -1,0 +1,35 @@
+/* Common */
+.smallWordSet {
+  background-color: var(--color-white);
+  padding: 6px;
+  border-radius: var(--radius-medium);
+  box-shadow: var(--box-shadow-primary);
+  cursor: pointer;
+  transform: translateY(0);
+  transition: 0.3s;
+}
+
+.smallWordSet:hover {
+  transform: translateY(-3px);
+  background-color: var(--background-hover);
+  box-shadow: var(--box-shadow-secondary);
+}
+
+/* Thumbnail  */
+
+.thumbnail {
+  background-color: chartreuse;
+  height: 55px;
+  width: 55px;
+  overflow: hidden;
+  border-radius: var(--radius-small);
+  margin-right: 8px;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Content */

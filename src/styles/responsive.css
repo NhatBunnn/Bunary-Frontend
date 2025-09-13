@@ -1,0 +1,15 @@
+@media (min-width: var(--bp-mobile)) {
+  /* css cho mobile */
+}
+
+@media (min-width: var(--bp-tablet)) {
+  /* css cho tablet */
+}
+
+@media (min-width: var(--bp-desktop)) {
+  /* css cho desktop nhỏ */
+}
+
+@media (min-width: var(--bp-large)) {
+  /* css cho desktop lớn */
+}

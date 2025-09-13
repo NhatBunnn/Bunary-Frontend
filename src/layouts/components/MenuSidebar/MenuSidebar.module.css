@@ -1,0 +1,25 @@
+.menuSidebar {
+  height: 300vh;
+  background-color: var(--color-white);
+  position: fixed;
+}
+
+.menuSidebar hr {
+  margin: 12px 0;
+  width: 100%;
+}
+
+.title {
+  height: 63px;
+  padding: 12px 12px 0 12px;
+  font-size: var(--font-size-title);
+  font-weight: 600;
+}
+
+.icon {
+  margin-top: 5px;
+}
+
+.content {
+  padding: 0 12px 12px 12px;
+}

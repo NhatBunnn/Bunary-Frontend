@@ -1,0 +1,113 @@
+/* Reset CSS */
+
+@font-face {
+  font-family: SVN-Segoe;
+  src: url(../assets/fonts/Lexend-Regular.ttf);
+}
+
+:root {
+  --font-family: SVN-Segoe, Lexend-Medium, sans-serif;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer:hover {
+  background-color: var(--background-hover);
+}
+
+.link-no-style {
+  color: inherit;
+  text-decoration: none;
+}
+
+.outline-primary {
+  outline: 1px solid var(--color-gray-500);
+}
+
+.divider-bottom {
+  border-bottom: 1px solid var(--color-gray-300);
+  margin: 0;
+}
+
+.divider-top {
+  border-top: 1px solid var(--color-gray-300);
+  margin: 0;
+}
+
+:root {
+  /* PRIMARY COLOR */
+  --color-primary: #0866ff; /* màu chủ đạo */
+
+  /* NEUTRAL COLORS */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-100: rgba(0, 0, 0, 0.04);
+  --color-gray-200: rgba(0, 0, 0, 0.08);
+  --color-gray-300: rgba(0, 0, 0, 0.16);
+  --color-gray-400: rgba(0, 0, 0, 0.32);
+  --color-gray-500: rgba(0, 0, 0, 0.64);
+
+  /* TEXT COLORS */
+  --text-primary: #000000;
+  --text-secondary: #6f7882;
+  --text-muted: rgba(0, 0, 0, 0.32);
+
+  /* BACKGROUND & SURFACE */
+  --background-default: #f2f4f7;
+  --background-hover: #0000000d;
+  --background-hover-white: rgba(255, 255, 255, 0.04);
+
+  /* BOX SHADOW */
+  --box-shadow-primary: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  --box-shadow-secondary: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  /* BORDER RADIUS */
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 16px;
+  --radius-round: 100px;
+
+  /* FONT SIZE ---------------- */
+  --font-size-caption: 13px; /* chú thích, text nhỏ */
+  --font-size-small: 14px; /* mô tả ngắn, text phụ */
+  --font-size-body: 16px; /* văn bản thường */
+  --font-size-subtitle: 18px; /* tiêu đề phụ */
+  --font-size-title: 24px; /* tiêu đề chính */
+  --font-size-heading: 36px; /* heading lớn */
+
+  /* REPONSIVE */
+
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 992px;
+  --bp-large: 1200px;
+}
+
+/* START */
+* {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+body {
+  /* height: 3000px; */
+  background-color: #f4f5f7;
+  font-family: var(--font-family) !important;
+  font-size: 15px;
+  color: var(--unchanged-mainBlack-textColor);
+  scroll-behavior: smooth;
+}
+
+html {
+  font-size: 16px;
+}
+
+body ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}

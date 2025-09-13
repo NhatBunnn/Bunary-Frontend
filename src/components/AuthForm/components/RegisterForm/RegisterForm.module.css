@@ -1,0 +1,66 @@
+/* common */
+
+.registerForm {
+  width: 100%;
+  height: 100%;
+}
+
+/* content */
+
+.content {
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--ui-white);
+  margin: 0 4.3% !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+/* Image */
+
+.authImage {
+}
+
+/* Form */
+.authForm {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-oauth2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  width: 100%;
+  outline: 1px solid #000;
+  cursor: pointer;
+}
+
+.commonError {
+  background-color: #fae5e5;
+  color: #b30000;
+  border-radius: var(--radius-medium);
+  padding: 6px 12px;
+}
+
+.btn-oauth2:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-oauth2 span {
+  padding-left: 8px;
+}
+
+.btn-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: brown;
+  padding: 8px 16px;
+  border-radius: 8px;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}

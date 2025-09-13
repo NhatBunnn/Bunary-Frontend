@@ -1,0 +1,12 @@
+.messageItem {
+}
+
+.messageItem .message {
+  background-color: #0866ff;
+  padding: 2px 12px;
+  border-radius: var(--radius-large);
+}
+
+.messageItem .avatar {
+  transform: translateY(6px);
+}

@@ -1,0 +1,30 @@
+/* Common */
+
+/* Title  */
+
+/* action bar */
+
+/* wordcard  */
+.wordcard {
+  height: 510px;
+  align-items: stretch;
+}
+
+.thumbnail {
+  /* aspect-ratio: 27 / 37; */
+  overflow: hidden;
+  height: 100%;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+}
+
+.word-lists {
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

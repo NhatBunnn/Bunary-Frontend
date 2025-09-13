@@ -1,0 +1,52 @@
+.flashCard {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 63px;
+}
+
+/* Content */
+.content {
+  max-width: 900px;
+  width: 100%;
+  padding: 12px;
+  position: relative;
+  perspective: 2000px;
+}
+
+/* card */
+
+.content .card {
+  height: 564px;
+  background-color: var(--color-white);
+  border-radius: var(--radius-large);
+  box-shadow: var(--box-shadow-primary);
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  position: relative;
+}
+
+.card.flipped {
+  transform: rotateX(180deg);
+}
+
+.front,
+.back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-large);
+  backface-visibility: hidden;
+  position: absolute;
+}
+
+.back {
+  transform: rotateX(180deg);
+}
+
+/* action */
+.content .control-btn {
+  display: flex;
+  align-items: center;
+}

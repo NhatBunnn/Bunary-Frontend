@@ -1,0 +1,61 @@
+/* common */
+.profileCard {
+  background-color: var(--color-white);
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.profileCard {
+  transition: transform 0.3s ease;
+}
+
+.profileCard:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
+/* slider */
+
+.slider {
+}
+
+.banner {
+  position: relative;
+  aspect-ratio: 3 / 1;
+  width: 100%;
+  margin-bottom: 90px;
+}
+
+.header {
+  position: absolute;
+  top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar {
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.name {
+  font-size: var(--font-size-title);
+}
+
+/* Content */
+.content {
+  background-color: var(--color-white);
+}
+
+.social {
+  gap: 10px;
+}
+
+.information {
+}
+
+.information li {
+  display: flex;
+  justify-content: space-between;
+}

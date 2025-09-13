@@ -1,0 +1,91 @@
+/* Common */
+
+.chatWindow {
+  background-color: var(--color-white);
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  width: 328px;
+  height: 455px;
+  border-radius: var(--radius-medium);
+  box-shadow: var(--box-shadow-primary);
+}
+
+/* Header */
+.chatHeader {
+  padding: 6px;
+}
+
+.info .name {
+}
+
+.info .status {
+  line-height: 1.1;
+  font-size: var(--font-size-caption);
+}
+
+.action .call {
+  font-size: 16px;
+}
+
+.action .close {
+  font-size: 24px;
+}
+
+.action .call,
+.action .close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.action .call:hover,
+.action .close:hover {
+  background-color: var(--background-hover);
+  border-radius: 100px;
+}
+
+/* Body */
+.chatBody {
+  overflow-y: scroll;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Input */
+.chatInput {
+  padding: 12px 6px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  width: 100%;
+}
+
+.chatInput input {
+  border-radius: 100px;
+  height: 35px;
+}
+
+.chatInput .send {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.send:hover {
+  background-color: var(--background-hover);
+  border-radius: 100px;
+}

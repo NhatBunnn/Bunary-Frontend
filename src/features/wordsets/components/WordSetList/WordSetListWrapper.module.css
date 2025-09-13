@@ -1,0 +1,12 @@
+.slider-container {
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.slider-track {
+  display: flex;
+}
+
+.slider {
+  flex: 0 0 calc(100% / 3);
+}

@@ -1,0 +1,36 @@
+/* Common */
+
+.content {
+  padding-top: 63px;
+  background-color: var(--background-default);
+}
+
+.menuSidebarReponsive {
+  width: 217px;
+  box-shadow: var(--box-shadow-primary);
+  position: fixed;
+  background-color: var(--color-white);
+  z-index: 20;
+  transform: translateX(-271px);
+  transition: 0.4s ease-in-out;
+}
+
+.menuSidebar {
+  flex: 0 0 217px;
+  margin-right: 31px;
+  box-shadow: var(--box-shadow-primary);
+}
+
+.rankingSidebar {
+  flex: 0 0 217px;
+  margin-left: 31px;
+  display: none;
+  box-shadow: var(--box-shadow-primary);
+}
+
+/* Reponsive */
+@media (max-width: 1400px) {
+  .menuSidebar {
+    flex: 0 0 70px;
+  }
+}

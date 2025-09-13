@@ -1,0 +1,35 @@
+/* slider */
+.slider {
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+}
+
+.preface {
+  font-size: var(--font-size-heading);
+  text-transform: uppercase;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  align-self: center;
+  color: #fff;
+}
+
+/* content */
+
+.post-lists {
+  height: 1000px;
+}
+
+.profileCard-sticky {
+  margin-top: -50px;
+  position: sticky;
+  top: 85px;
+}
