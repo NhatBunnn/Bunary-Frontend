@@ -141,6 +141,7 @@ function CreateWordSet() {
                 term={wordCard.term}
                 ipa={wordCard.ipa}
                 type={wordCard.type}
+                thumb={wordCard.thumbnail}
                 meaning={wordCard.meaning}
                 onChange={handleChange}
                 onRemove={removeWordCard}

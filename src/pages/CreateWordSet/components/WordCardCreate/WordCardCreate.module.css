@@ -14,7 +14,7 @@
 /* Body */
 .wordCardInput {
   display: grid;
-  grid-template-columns: 3fr 3fr 2fr 3fr 2fr;
+  grid-template-columns: 3fr 3fr 2fr 3fr 1fr;
   gap: 10px;
   padding: 0px 12px 12px 12px;
 }
@@ -41,9 +41,12 @@
 }
 
 .input .text-input {
-  height: 35px;
   border-radius: var(--radius-small);
   border: none;
+  overflow: hidden;
+  padding: 5px;
+  resize: none;
+  height: 34px;
 }
 
 .image {
@@ -51,4 +54,10 @@
   outline: 2px var(--color-black) dashed;
   color: var(--color-black);
   border-radius: var(--radius-medium);
+  overflow: hidden;
+}
+
+/* image-footer */
+.image-footer {
+  /* background: red; */
 }

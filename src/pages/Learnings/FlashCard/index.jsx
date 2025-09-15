@@ -4,6 +4,7 @@ import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
 import useFlashCard from "../../../hooks/learnings/useFlashCard";
 import Loading from "../../../components/Loading";
+import { Image } from "../../../assets/images";
 
 const c = classNames.bind(styles);
 
@@ -14,19 +15,13 @@ function FlashCard() {
 
   if (loading) return <Loading />;
 
-  const cards = [
-    { id: 1, front: "HTML", back: "ngôn ngữ đánh dấu để tạo trang web" },
-    { id: 2, front: "CSS", back: "tạo style cho trang web" },
-    { id: 3, front: "JS", back: "ngôn ngữ chạy trên trình duyệt" },
-  ];
-
   const handleSlideNext = () => {
-    setCurrentCard((prev) => (prev >= cards.length - 1 ? 0 : prev + 1));
+    setCurrentCard((prev) => (prev >= words.length - 1 ? 0 : prev + 1));
     setIsFlip(false);
   };
 
   const handleSlidePrev = () => {
-    setCurrentCard((prev) => (prev === 0 ? cards.length - 1 : prev - 1));
+    setCurrentCard((prev) => (prev === 0 ? words.length - 1 : prev - 1));
     setIsFlip(false);
   };
 
@@ -48,8 +43,20 @@ function FlashCard() {
           )}
           onClick={handleFlip}
         >
-          <div className={c("front")}>{words[currentCard]?.term}</div>
-          <div className={c("back")}>{words[currentCard]?.meaning}</div>
+          <div className={c("front")}>
+            <Image
+              src={words[currentCard]?.thumbnail}
+              size="300px"
+              className="mb-3"
+            />
+            <div>
+              {words[currentCard]?.term} {words[currentCard]?.partOfSpeech}
+            </div>
+          </div>
+          <div className={c("back")}>
+            <div>{words[currentCard]?.ipa}</div>
+            <div>{words[currentCard]?.meaning}</div>
+          </div>
         </div>
         <div className={c("action")}>
           <div className={c("control-btn")}>

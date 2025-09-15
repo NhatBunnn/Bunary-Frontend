@@ -13,7 +13,6 @@ function WordSetListProvider({ children }) {
   useEffect(() => {
     const fetchWordSet = async () => {
       try {
-        // const token = await getAccessToken();
         if (!accessToken || loadingToken) return;
 
         const response = await fetch(`${API_URL}/api/v1/wordsets`, {

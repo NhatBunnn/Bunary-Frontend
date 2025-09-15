@@ -12,8 +12,10 @@ function useCreateWordSet() {
   const [description, setDescription] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [wordCards, setWordCards] = useState([
-    { term: "", ipa: "", partOfSpeech: "", meaning: "", thumbnail: null },
+    { term: "", ipa: "", partOfSpeech: "", meaning: "", thumbnail: "" },
   ]);
+
+  console.log("wordCards ", wordCards);
 
   const handleSaveWordSet = async (e) => {
     setLoading(true);
@@ -29,7 +31,7 @@ function useCreateWordSet() {
       const wordSet = {
         title,
         description,
-        word: wordCards,
+        word: wordCards.filter((d) => d.term.trim() !== ""),
       };
 
       const formData = new FormData();

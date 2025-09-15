@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAccessToken } from "../service/apiService";
 import { API_URL } from "../config/apiConfig";
 import { useAccessToken } from "./AccessTokenProvider";
 const UserListContext = createContext();
@@ -15,7 +14,6 @@ function UserListProvider({ children }) {
       setLoadingUserList(true);
 
       try {
-        // const token = await getAccessToken();
         if (!accessToken || loadingToken) return;
 
         const response = await fetch(`${API_URL}/api/v1/users`, {
