@@ -5,11 +5,8 @@ import {
   faClose,
   faPhone,
   faPaperPlane,
-  faTruckLoading,
-  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
-import { useWebsocket } from "../../context/WebSocketProvider";
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import Avatar from "../Avatar";
 import MessageItem from "./component";
 import { useUser } from "../../context/UserProvider";
@@ -36,7 +33,7 @@ function ChatWindow() {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
-  }, [chatMessages[receiver.id]]);
+  }, [chatMessages]);
 
   return (
     openChatWindow && (

@@ -1,6 +1,32 @@
 .slider-container {
   width: 100%;
-  overflow-x: scroll;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-leftArrow,
+.btn-rightArrow {
+  background-color: var(--color-white);
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  border: 2px solid #000;
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.btn-leftArrow {
+  left: 5px;
+}
+
+.btn-rightArrow {
+  right: 5px;
 }
 
 .slider-track {
@@ -9,4 +35,7 @@
 
 .slider {
   flex: 0 0 calc(100% / 3);
+  /* gap: 5; */
+  display: flex;
+  justify-content: center;
 }

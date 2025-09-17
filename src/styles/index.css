@@ -57,6 +57,7 @@
   --background-default: #f2f4f7;
   --background-hover: #0000000d;
   --background-hover-white: rgba(255, 255, 255, 0.04);
+  --background-backdrop: rgba(0, 0, 0, 0.5);
 
   /* BOX SHADOW */
   --box-shadow-primary: rgba(0, 0, 0, 0.16) 0px 1px 4px;

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Button.module.css";
 import classNames from "classnames/bind";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const c = classNames.bind(styles);
 

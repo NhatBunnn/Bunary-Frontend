@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useStatus from "./useStatus";
 import { getAccessToken } from "../service/apiService";
 import { useNotification } from "../context/NotificationProvider";
@@ -15,7 +16,7 @@ function useCreateWordSet() {
     { term: "", ipa: "", partOfSpeech: "", meaning: "", thumbnail: "" },
   ]);
 
-  console.log("wordCards ", wordCards);
+  const navigate = useNavigate();
 
   const handleSaveWordSet = async (e) => {
     setLoading(true);
@@ -52,7 +53,13 @@ function useCreateWordSet() {
 
       if (dataResponse.statusCode >= 200 && dataResponse.statusCode < 300) {
         showNotification(dataResponse.message, "success");
-        console.log(dataResponse.message);
+        navigate(
+          `/wordset/${dataResponse.data.id}/${dataResponse.data.title
+            .split(" ")
+            .filter(Boolean)
+            .map((d) => d.toLowerCase())
+            .join("-")}`
+        );
       } else {
         showNotification(dataResponse.error, "error");
       }

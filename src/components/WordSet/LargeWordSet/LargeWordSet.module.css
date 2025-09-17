@@ -7,7 +7,7 @@
   cursor: pointer;
   transform: translateY(0);
   transition: 0.3s;
-  width: 326px;
+  min-width: 326px;
   max-width: 100%;
 }
 

@@ -64,9 +64,9 @@ function Header({ isMenu = false, onMenuClick, onRankingMenu }) {
         </div>
       )}
       {/* Logo */}
-      <div className={c("logo")}>
+      <Link className={c("logo")} to={"/"}>
         <Image src={Images.Logo} width="40px" height="40px" />
-      </div>
+      </Link>
 
       {/* Search */}
       <div className={c("search", "d-flex", "justify-content-center")}>

@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useAccessToken } from "../../context/AccessTokenProvider";
 import { useNotification } from "../../context/NotificationProvider";
 import { API_URL } from "../../config/apiConfig";
-import Loading from "../../components/Loading";
 
 function useFlashCard() {
   const [words, setWords] = useState([]);

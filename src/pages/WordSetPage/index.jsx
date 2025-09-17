@@ -9,11 +9,18 @@ import { faIdCard } from "@fortawesome/free-solid-svg-icons/faIdCard";
 import Word from "../../components/Word";
 import useWordSetPage from "../../hooks/useWordSetPage";
 import Loading from "../../components/Loading";
+import LearningSetting from "./component/LearningSetting/LearningSetting";
+import { useState } from "react";
 
 const c = classNames.bind(styles);
 
 function WordSetPage() {
   const { words, wordSet, loadingWords } = useWordSetPage();
+  const [openSetting, setOpenSetting] = useState("");
+
+  const handleToggleSetting = (type) => {
+    openSetting ? setOpenSetting("") : setOpenSetting((prev) => type);
+  };
 
   if (loadingWords || !wordSet) {
     return <Loading />;
@@ -21,6 +28,9 @@ function WordSetPage() {
 
   return (
     <div className={c("wordSetPage")}>
+      {openSetting !== "" && (
+        <LearningSetting onClose={handleToggleSetting} wordSetId={wordSet.id} />
+      )}
       {/* Title */}
       <TitleSection
         title={wordSet.title}
@@ -43,7 +53,9 @@ function WordSetPage() {
         <Button
           label="Thẻ ghi nhớ"
           icon={faIdCard}
-          to={`/flashcard/${wordSet.id}`}
+          onClick={() => {
+            handleToggleSetting("flashCard");
+          }}
         />
         <Button label="Trắc nghiệm" icon={faIdCard} />
         <Button label="Kiểm tra" icon={faIdCard} />

@@ -1,0 +1,58 @@
+/* common */
+.flashCardSetting {
+  background-color: var(--color-white);
+  box-shadow: var(--box-shadow-primary);
+  max-width: 856px;
+  border-radius: var(--radius-large);
+}
+
+/* preview */
+
+.card {
+  height: 224px;
+  background-color: green;
+}
+
+/* setting */
+.setting {
+  background-color: var(--color-white);
+  box-shadow: var(--box-shadow-primary);
+  border-radius: var(--radius-medium);
+}
+
+.setting .tab-header {
+  display: flex;
+}
+
+.tab-header .tab {
+  height: 40px;
+  padding: 0 8px;
+  align-content: center;
+  cursor: pointer;
+}
+
+.font-tab {
+  border-radius: var(--radius-medium) var(--radius-medium) 0 0;
+  background-color: var(--color-gray-300);
+}
+
+/* content */
+.content {
+  border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+  overflow: hidden;
+}
+
+.content .setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 8px;
+}
+
+.content .setting-item:nth-child(odd) {
+  background-color: var(--color-gray-300);
+}
+.content .setting-item:nth-child(even) {
+  background-color: var(--color-gray-100);
+}

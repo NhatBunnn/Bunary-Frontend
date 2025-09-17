@@ -4,7 +4,6 @@ import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
 import useFlashCard from "../../../hooks/learnings/useFlashCard";
 import Loading from "../../../components/Loading";
-import { Image } from "../../../assets/images";
 
 const c = classNames.bind(styles);
 
@@ -44,11 +43,9 @@ function FlashCard() {
           onClick={handleFlip}
         >
           <div className={c("front")}>
-            <Image
-              src={words[currentCard]?.thumbnail}
-              size="300px"
-              className="mb-3"
-            />
+            <div className={c("image")}>
+              <img src={words[currentCard]?.thumbnail} alt="" />
+            </div>
             <div>
               {words[currentCard]?.term} {words[currentCard]?.partOfSpeech}
             </div>
