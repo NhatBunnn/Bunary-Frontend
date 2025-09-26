@@ -3,7 +3,6 @@ import classNames from "classnames/bind";
 import { Image, Images } from "../../assets/images";
 import Button from "../Button";
 import { faMessage, faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
 
 const c = classNames.bind(styles);
 

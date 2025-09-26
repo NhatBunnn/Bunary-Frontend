@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import styles from "./SmallWordSet.module.css";
 import classNames from "classnames/bind";
 

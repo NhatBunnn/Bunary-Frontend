@@ -49,7 +49,7 @@ function WordSetList({ className }) {
         >
           {wordSets?.map((d, i) => {
             return (
-              <div className={c("slider")}>
+              <div className={c("slider")} key={i}>
                 <WordSet size="large" author={d.author} wordSet={d} />
               </div>
             );

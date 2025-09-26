@@ -8,7 +8,7 @@
   transform: translateY(0);
   transition: 0.3s;
   min-width: 326px;
-  max-width: 100%;
+  width: 100%;
 }
 
 .largeWordSet:hover {

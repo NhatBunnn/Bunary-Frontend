@@ -4,6 +4,17 @@
   overflow: hidden;
 }
 
+.slider-track {
+  display: flex;
+  gap: 15px;
+}
+
+.slider {
+  flex: 0 0 calc(((100% - 30px) / 3));
+  display: flex;
+  justify-content: center;
+}
+
 .btn-leftArrow,
 .btn-rightArrow {
   background-color: var(--color-white);
@@ -29,13 +40,14 @@
   right: 5px;
 }
 
-.slider-track {
-  display: flex;
+@media (max-width: 1200px) {
+  .slider {
+    flex: 0 0 calc(((100% - 30px) / 2));
+  }
 }
 
-.slider {
-  flex: 0 0 calc(100% / 3);
-  /* gap: 5; */
-  display: flex;
-  justify-content: center;
+@media (max-width: 992px) {
+  .slider {
+    flex: 0 0 calc(((100% - 30px)));
+  }
 }

@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 const c = classNames.bind(styles);
 
 function BadgeIconWrapper({ children }) {
-  const { notification, setNotification } = useWebsocket();
+  const { notification } = useWebsocket();
 
   return (
     <div className={c("badgeIconWrapper")}>

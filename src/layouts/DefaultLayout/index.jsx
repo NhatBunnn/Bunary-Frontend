@@ -4,7 +4,6 @@ import MenuSidebar from "../components/MenuSidebar";
 import RankingSidebar from "../components/RankingSidebar";
 import styles from "./DefaultLayout.module.css";
 import classNames from "classnames/bind";
-import { Background } from "../../assets/images";
 import ChatWindow from "../../components/ChatWindow";
 
 const c = classNames.bind(styles);

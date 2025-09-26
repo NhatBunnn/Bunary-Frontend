@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import useAuthBase from "./useAuthBase";
-import { useUser } from "../../context/UserProvider";
 import { API_URL } from "../../config/apiConfig";
 import { useAccessToken } from "../../context/AccessTokenProvider";
 

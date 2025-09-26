@@ -13,6 +13,7 @@ import {
   faBook,
   faCartShopping,
   faClose,
+  faPeopleGroup,
   faRankingStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -44,6 +45,7 @@ const MenuSidebar = forwardRef(({ isSidebarResponsive, onClick }, ref) => {
       <div className={c("content")}>
         <MenuItem icon={faHouse} label="Trang chủ" to="/" />
         <MenuItem icon={faUser} label="Người dùng" to="/profile " />
+        <MenuItem icon={faPeopleGroup} label="Cộng đồng" to="/profile " />
         <hr />
         <MenuItem icon={faBook} label="Học" />
         <MenuItem icon={faFileWord} label="Từ tích lũy" />

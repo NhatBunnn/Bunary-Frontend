@@ -2,20 +2,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Image, Images } from "../../../assets/images";
 import styles from "./Header.module.css";
 import classNames from "classnames/bind";
-import {
-  faBars,
-  faBell,
-  faMagnifyingGlass,
-  faStore,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faStore } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button";
 import { useUser } from "../../../context/UserProvider";
 import useLogout from "../../../hooks/auth/useLogout";
-import BadgeIconWrapper from "../../../components/wrapper/BadgeIconWrapper";
 import Avatar from "../../../components/Avatar";
 import Loading from "../../../components/Loading";
+import Notify from "./component/Notify/Notify";
+import Search from "./component/Search/Search";
 
 const c = classNames.bind(styles);
 
@@ -69,28 +65,7 @@ function Header({ isMenu = false, onMenuClick, onRankingMenu }) {
       </Link>
 
       {/* Search */}
-      <div className={c("search", "d-flex", "justify-content-center")}>
-        <label className={c("warpper", "d-flex", "justify-content-center")}>
-          <div
-            className={c(
-              "icon",
-              "d-flex",
-              "justify-content-center",
-              "align-items-center"
-            )}
-          >
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              style={{ fontSize: "18px" }}
-            />
-          </div>
-          <input
-            type="text"
-            className={c("input")}
-            placeholder="Tìm kiếm bài học ..."
-          />
-        </label>
-      </div>
+      <Search />
 
       {/* Actions */}
       <div className={c("actions")}>
@@ -105,11 +80,7 @@ function Header({ isMenu = false, onMenuClick, onRankingMenu }) {
             <div className={c("store")}>
               <FontAwesomeIcon icon={faStore} />
             </div>
-            <BadgeIconWrapper>
-              <div className={c("notify")}>
-                <FontAwesomeIcon icon={faBell} />
-              </div>
-            </BadgeIconWrapper>
+            <Notify />
             <div className={c("avatar")} ref={dropDownRef}>
               <Avatar
                 src={user.avatar || Images.avatar}

@@ -8,7 +8,7 @@ import {
   faFileCircleExclamation,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
-import { Background, Image, Images } from "../../../../assets/images";
+import { Background, Image } from "../../../../assets/images";
 import SuccessAlert from "../../../Notification";
 import useLogin from "../../../../hooks/auth/useLogin";
 
@@ -35,7 +35,10 @@ function LoginForm() {
           {/* Section: Image */}
           <div className={c("col", "p-0")}>
             <div className={c("authImage", "h-100")}>
-              <Background src={Images.imageForm} className={"h-100"} />
+              <Background
+                src="https://eaut.edu.vn/wp-content/uploads/2020/04/truong.jpg"
+                className={"h-100"}
+              />
             </div>
           </div>
           {/* Section: Form */}
@@ -54,7 +57,7 @@ function LoginForm() {
                 >
                   {/* Logo */}
                   <Image
-                    src={Images.Logo}
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR35GYg9WGaeYqLhbgJWT9uVvfJQSHud2Hixw&s"
                     width="80px"
                     height="80px"
                     className={c("mb-2")}

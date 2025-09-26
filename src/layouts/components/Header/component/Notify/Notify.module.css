@@ -1,0 +1,12 @@
+.notify {
+  font-size: 25px;
+}
+
+.notify {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-gray-500);
+}
