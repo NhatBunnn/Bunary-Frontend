@@ -1,0 +1,14 @@
+/* collectionPreview */
+.collectionPreview {
+  padding: 6px;
+  background-color: var(--color-white);
+  height: 55px;
+  box-shadow: var(--box-shadow-primary);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border-radius: var(--radius-medium);
+}
+
+.collectionPreview:hover {
+  background-color: var(--background-hover);
+}

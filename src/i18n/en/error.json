@@ -1,0 +1,6 @@
+
+{
+  "AUTH_LOGIN_SUCCESS": "Login successful",
+  "AUTH_REGISTER_SUCCESS": "Registration successful",
+  "AUTH_SEND_CODE_SUCCESS": "Verification code sent"
+}

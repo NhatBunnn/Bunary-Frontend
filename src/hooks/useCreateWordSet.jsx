@@ -6,7 +6,7 @@ import { useNotification } from "../context/NotificationProvider";
 import { API_URL } from "../config/apiConfig";
 
 function useCreateWordSet() {
-  const { errors, setErrors, setLoading, loading } = useStatus();
+  const { error, setError,  fieldErrors, setFieldErrors, setLoading, loading } = useStatus();
   const { showNotification } = useNotification();
 
   const [title, setTitle] = useState("");
@@ -20,12 +20,12 @@ function useCreateWordSet() {
 
   const handleSaveWordSet = async (e) => {
     setLoading(true);
-    setErrors();
+    setFieldErrors({});
     try {
       const token = await getAccessToken();
 
       if (title === "") {
-        setErrors("Không để trống tiêu đề");
+        setFieldErrors({ title: "Không để trống email" });
         return;
       }
 
@@ -64,7 +64,6 @@ function useCreateWordSet() {
         showNotification(dataResponse.error, "error");
       }
     } catch (error) {
-      console.log(error);
       showNotification(error.message, "error");
     } finally {
       setLoading(false);
@@ -73,7 +72,7 @@ function useCreateWordSet() {
 
   return {
     handleSaveWordSet,
-    errors,
+    fieldErrors,
     title,
     setTitle,
     description,

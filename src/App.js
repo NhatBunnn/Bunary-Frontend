@@ -4,6 +4,7 @@ import { Fragment } from "react/jsx-runtime";
 import GlobalProfiders from "./context/GlobalProviders";
 
 import Notification from "./components/Notification";
+import "./i18n";
 
 function App() {
   return (

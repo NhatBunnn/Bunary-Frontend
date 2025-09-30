@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function useAuthBase() {
   const [success, setSuccess] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -14,8 +14,8 @@ function useAuthBase() {
     setEmail,
     password,
     setPassword,
-    errors,
-    setErrors,
+    error,
+    setError,
     success,
     setSuccess,
     fieldErrors,

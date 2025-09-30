@@ -16,7 +16,7 @@ function CreateWordSet() {
   const { showNotification } = useNotification();
 
   const {
-    errors,
+    fieldErrors,
     title,
     setTitle,
     description,
@@ -88,17 +88,16 @@ function CreateWordSet() {
           )}
         >
           <ValidateInput
-            errors={errors}
+            field="title"
+            fieldErrors={fieldErrors}
             value={title}
             onChange={setTitle}
-            type="text"
             placeholder="   Tiêu đề"
             className={c("name", "mb-4", "outline-prmary")}
           />
           <input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            type="text"
             placeholder="   Mô tả"
             className={c("desc", "outline-primary")}
           />

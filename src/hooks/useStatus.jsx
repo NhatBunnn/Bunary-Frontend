@@ -6,13 +6,16 @@ function useStatus() {
   const { showNotification } = useNotification();
 
   const [success, setSuccess] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
   return {
     success,
     setSuccess,
-    errors,
-    setErrors,
+    error,
+    setError,
+    fieldErrors,
+    setFieldErrors,
     loading,
     setLoading,
     showNotification,

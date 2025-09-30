@@ -53,7 +53,7 @@ const MenuSidebar = forwardRef(({ isSidebarResponsive, onClick }, ref) => {
         <MenuItem icon={faRankingStar} label="Bảng xếp hạng" />
         <hr />
         <MenuItem icon={faFile} label="Thẻ ghi nhớ" to="/createwordset" />
-        <MenuItem icon={faFolder} label="Thư mục" />
+        <MenuItem icon={faFolder} label="Bộ sưu tập" to="/collection" />
         <hr />
         <MenuItem icon={faCartShopping} label="Cửa hàng" />
         <MenuItem icon={faStar} label="ChatGPT" />

@@ -21,7 +21,7 @@ function LoginForm() {
     password,
     setPassword,
     fieldErrors,
-    errors,
+    error,
     success,
     loading,
     handleSubmit,
@@ -76,7 +76,7 @@ function LoginForm() {
                   {/* Form auth */}
                   <form onSubmit={handleSubmit} className="w-100 mb-4">
                     {/* error */}
-                    {errors.length > 0 && (
+                    {error !== "" && (
                       <div
                         className={c(
                           "commonError",
@@ -91,15 +91,14 @@ function LoginForm() {
                           className="me-2"
                         />
                         <div>
-                          {errors.map((err, index) => {
-                            return <div key={index}>{err}</div>;
-                          })}
+                          {error}
                         </div>
                       </div>
                     )}
 
                     {/* email */}
                     <ValidateInput
+                      field="email"
                       fieldErrors={fieldErrors}
                       onChange={setEmail}
                       value={email}
@@ -108,6 +107,7 @@ function LoginForm() {
                     />
                     {/* password */}
                     <ValidateInput
+                      field="password"
                       fieldErrors={fieldErrors}
                       onChange={setPassword}
                       value={password}

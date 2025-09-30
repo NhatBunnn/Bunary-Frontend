@@ -1,0 +1,5 @@
+{
+  "AUTH_LOGIN_SUCCESS": "Đăng nhập thành công",
+  "AUTH_REGISTER_SUCCESS": "Registration successful",
+  "AUTH_SEND_CODE_SUCCESS": "Verification code sent"
+}

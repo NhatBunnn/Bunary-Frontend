@@ -1,8 +1,11 @@
 /* Common */
+.defaultLayout {
+  background-color: var(--background-default);
+  height: 100vh;
+}
 
 .content {
   padding-top: 63px;
-  background-color: var(--background-default);
 }
 
 .menuSidebarReponsive {

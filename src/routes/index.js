@@ -9,6 +9,7 @@ import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
 import FlashCard from "../pages/Learnings/FlashCard";
 import HeaderOnly from "../layouts/HeaderOnly";
+import { Collection, CollectionDetail } from "@pages/index";
 
 //Route ko cần đăng nhập cx xem đc
 const publicRoutes = [
@@ -21,6 +22,12 @@ const publicRoutes = [
   { path: "/profile", Page: Profile, Layout: DefaultLayout },
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/flashcard/:id", Page: FlashCard, Layout: HeaderOnly },
+  { path: "/collection", Page: Collection, Layout: DefaultLayout },
+  {
+    path: "/collection/:id/:slug",
+    Page: CollectionDetail,
+    Layout: DefaultLayout,
+  },
 
   //   { path: "/Upload", Component: Upload, layout: HeaderOnly },
 ];

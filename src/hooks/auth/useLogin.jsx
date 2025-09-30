@@ -2,8 +2,12 @@ import { useNavigate } from "react-router-dom";
 import useAuthBase from "./useAuthBase";
 import { API_URL } from "../../config/apiConfig";
 import { useAccessToken } from "../../context/AccessTokenProvider";
+import { useTranslation } from "react-i18next";
 
 function useLogin() {
+  const { t: ts } = useTranslation("success");
+  const { t: te } = useTranslation("error");
+
   const authBase = useAuthBase();
   const navigate = useNavigate();
 
@@ -12,7 +16,7 @@ function useLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    authBase.setErrors([]);
+    authBase.setError("");
     authBase.setFieldErrors({});
 
     if (authBase.email === "") {
@@ -45,23 +49,11 @@ function useLogin() {
         if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
           setAccessToken(dataReponse.data.accessToken);
 
-          authBase.setSuccess("Đăng nhập thành công");
+          authBase.setSuccess(ts("AUTH_LOGIN_SUCCESS"));
           navigate(`/`);
         } else {
-          if (dataReponse.fieldError) {
-            const response = dataReponse.fieldError;
-            const newErrors = {};
-
-            Object.entries(response).forEach(([field, message]) => {
-              newErrors[field] = message;
-            });
-
-            authBase.setFieldErrors(newErrors);
-          }
-          if (dataReponse.error) {
-            const response = dataReponse.error;
-            authBase.setErrors(...response);
-          }
+          const response = dataReponse;
+          authBase.setError(te(response.errorCode));
         }
       })
       .catch((error) => {
