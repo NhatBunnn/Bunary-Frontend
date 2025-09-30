@@ -1,3 +1,9 @@
 {
-  "AUTH_INVALID": "Email hoặc mật khẩu không đúng"
+  
+  "AUTH_INVALID": "Email hoặc mật khẩu không đúng",
+  "AUTH_EMAIL_NOT_EMPTY": "Email không được để trống",
+  "AUTH_PASSWORD_NOT_EMPTY": "Mật khẩu không được để trống",
+  
+
+  "COLLECTIONS_FETCH_FAILED": "Lấy danh sách bộ sưu tập thất bại, vui lòng thử lại sau"
 }

@@ -20,12 +20,12 @@ function useLogin() {
     authBase.setFieldErrors({});
 
     if (authBase.email === "") {
-      authBase.setFieldErrors({ email: "Không để trống email" });
+      authBase.setFieldErrors({ email: te("AUTH_EMAIL_NOT_EMPTY") });
       return;
     }
 
     if (authBase.password === "") {
-      authBase.setFieldErrors({ password: "Không để trống mật khẩu" });
+      authBase.setFieldErrors({ password: te("AUTH_PASSWORD_NOT_EMPTY") });
       return;
     }
 
@@ -48,7 +48,6 @@ function useLogin() {
 
         if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
           setAccessToken(dataReponse.data.accessToken);
-
           authBase.setSuccess(ts("AUTH_LOGIN_SUCCESS"));
           navigate(`/`);
         } else {

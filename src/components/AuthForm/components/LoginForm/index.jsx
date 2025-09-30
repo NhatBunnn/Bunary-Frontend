@@ -4,10 +4,7 @@ import classNames from "classnames/bind";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import ValidateInput from "../../../ValidateInput";
-import {
-  faFileCircleExclamation,
-  faSpinner,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Background, Image } from "../../../../assets/images";
 import SuccessAlert from "../../../Notification";
 import useLogin from "../../../../hooks/auth/useLogin";
@@ -86,13 +83,8 @@ function LoginForm() {
                           "mb-3"
                         )}
                       >
-                        <FontAwesomeIcon
-                          icon={faFileCircleExclamation}
-                          className="me-2"
-                        />
-                        <div>
-                          {error}
-                        </div>
+                        <FontAwesomeIcon icon={faClose} className="me-2" />
+                        <div>{error}</div>
                       </div>
                     )}
 

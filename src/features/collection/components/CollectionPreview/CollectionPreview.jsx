@@ -5,7 +5,7 @@ import { faFolder, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const c = bindClass(styles);
 
-function CollectionPreview() {
+function CollectionPreview({ name = "Bộ sưu tập" }) {
   return (
     <div
       className={c(
@@ -17,7 +17,7 @@ function CollectionPreview() {
       )}
     >
       <FontAwesomeIcon icon={faFolder} />
-      <div className={c("name")}>Bộ từ vựng cambrige 16</div>
+      <div className={c("name")}>{name}</div>
       <FontAwesomeIcon icon={faTrash} className="ms-auto" />
     </div>
   );

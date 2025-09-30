@@ -28,7 +28,7 @@ function AccessTokenProvider({ children }) {
   }, [accessToken]);
 
   if (loadingToken) {
-    return <Loading />; // Hiển thị component Loading khi đang lấy token
+    return <Loading />;
   }
 
   return (

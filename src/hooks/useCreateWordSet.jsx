@@ -6,7 +6,7 @@ import { useNotification } from "../context/NotificationProvider";
 import { API_URL } from "../config/apiConfig";
 
 function useCreateWordSet() {
-  const { error, setError,  fieldErrors, setFieldErrors, setLoading, loading } = useStatus();
+  const { fieldErrors, setFieldErrors, setLoading, loading } = useStatus();
   const { showNotification } = useNotification();
 
   const [title, setTitle] = useState("");
