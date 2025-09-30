@@ -1,0 +1,17 @@
+.createCollection{
+    background-color: var(--background-backdrop
+    );
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog{
+    background-color: var(--color-white);
+    width: 300px;
+    border-radius: var(--radius-medium);
+    display: flex;
+    flex-direction: column;
+}

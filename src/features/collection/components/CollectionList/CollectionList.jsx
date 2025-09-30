@@ -19,9 +19,6 @@ function CollectionList() {
         collections.map((d) => {
           return <CollectionPreview key={d.id} name={d.name} />;
         })}
-      <div className="d-flex justify-content-center">
-        <Button label="Thêm bộ sưu tập" />
-      </div>
     </div>
   );
 }
