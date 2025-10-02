@@ -4,7 +4,7 @@ import { bindClass } from "@utils/classnames";
 import Button from "@components/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Fragment, useContext, useRef, useState } from "react";
-import { AddToCollectionContext } from "@context/AddToCollectionProvider";
+import { AddToCollectionContext } from "@context/UIContext/AddToCollectionProvider";
 import { CollectionListContext } from "@context/CollectionListProvider";
 import Loading from "@components/Loading";
 import CollectionPreview from "../CollectionPreview/CollectionPreview";

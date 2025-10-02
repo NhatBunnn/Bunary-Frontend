@@ -1,0 +1,14 @@
+.deleteConfirmation{
+    background-color: var(--background-backdrop);
+    inset: 0;
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content{
+    background-color: var(--color-white);
+}

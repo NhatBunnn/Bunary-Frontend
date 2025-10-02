@@ -107,3 +107,53 @@ export const AddWordSetToCollection = async (
     throw dataResponse;
   }
 };
+
+export const removeCollectionAndWordSet = async (
+  token,
+  collectionId,
+  wordSetId
+) => {
+  if (!token) throw new Error("No access token provided");
+
+  const response = await fetch(
+    `${API_URL}/api/v1/collections/${collectionId}/wordsets/${wordSetId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const dataResponse = await response.json();
+
+  if (response.ok) {
+    return dataResponse;
+  } else {
+    throw dataResponse;
+  }
+};
+
+export const removeCollection = async (token, collectionId) => {
+  if (!token) throw new Error("No access token provided");
+
+  const response = await fetch(
+    `${API_URL}/api/v1/collections/${collectionId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const dataResponse = await response.json();
+
+  if (response.ok) {
+    return dataResponse;
+  } else {
+    throw dataResponse;
+  }
+};

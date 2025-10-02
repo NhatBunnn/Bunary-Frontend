@@ -3,6 +3,9 @@ import styles from "./CollectionPreview.module.css";
 import { bindClass } from "@utils/classnames";
 import { faFolder, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
+import { DeleteConfirmContext } from "@context/UIContext/DeleteConfirmationProvider";
 
 const c = bindClass(styles);
 
@@ -10,7 +13,7 @@ function CollectionPreview({
   navigate = true,
   onClick,
   name = "Bộ sưu tập",
-  id,
+  collectionId,
   isActive = false,
   isHover = true,
 }) {
@@ -19,7 +22,8 @@ function CollectionPreview({
   return (
     <div
       onClick={() => {
-        if (navigate === true) currentNavigate(`/collection/${id}/wordsets`);
+        if (navigate === true)
+          currentNavigate(`/collection/${collectionId}/wordsets`);
         if (onClick) onClick();
       }}
       className={c(
@@ -34,7 +38,7 @@ function CollectionPreview({
     >
       <FontAwesomeIcon icon={faFolder} />
       <div className={c("name")}>{name}</div>
-      <FontAwesomeIcon icon={faTrash} className="ms-auto" />
+      <FontAwesomeIcon icon={faTrash} className="ms-auto" onClick={onClick} />
     </div>
   );
 }

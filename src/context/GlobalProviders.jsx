@@ -6,8 +6,8 @@ import WordSetListProvider from "./WordSetListProvider";
 import UserListProvider from "./UserListProvider";
 import AccessTokenProvider from "./AccessTokenProvider";
 import CreateCollectionProvider from "./CreateCollectionProvider";
-import AddToCollectionProvider from "./AddToCollectionProvider";
 import CollectionListProvider from "./CollectionListProvider";
+import UIProvider from "./UIContext/UIProvider";
 
 function GlobalProfiders({ children }) {
   return (
@@ -18,11 +18,11 @@ function GlobalProfiders({ children }) {
             <WordSetListProvider>
               <UserListProvider>
                 <CreateCollectionProvider>
-                  <AddToCollectionProvider>
-                    <CollectionListProvider>
+                  <CollectionListProvider>
+                    <UIProvider>
                       <UserProvider>{children}</UserProvider>
-                    </CollectionListProvider>
-                  </AddToCollectionProvider>
+                    </UIProvider>
+                  </CollectionListProvider>
                 </CreateCollectionProvider>
               </UserListProvider>
             </WordSetListProvider>

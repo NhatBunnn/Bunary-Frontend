@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 import "./i18n";
 import CreateCollection from "@features/collection/components/CreateCollection/CreateCollection";
 import AddToCollection from "@features/collection/components/AddToCollection/AddToCollection";
+import DeleteConfirmation from "@components/DeleteConfirmation/DeleteConfirmation";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                     <Layout>
                       <CreateCollection />
                       <AddToCollection />
+                      <DeleteConfirmation />
                       <Page />
                     </Layout>
                   </GlobalProfiders>

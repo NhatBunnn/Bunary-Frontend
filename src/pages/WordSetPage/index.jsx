@@ -11,7 +11,7 @@ import useWordSetPage from "../../hooks/useWordSetPage";
 import Loading from "../../components/Loading";
 import LearningSetting from "./component/LearningSetting/LearningSetting";
 import { useContext, useState } from "react";
-import { AddToCollectionContext } from "@context/AddToCollectionProvider";
+import { AddToCollectionContext } from "@context/UIContext/AddToCollectionProvider";
 
 const c = classNames.bind(styles);
 
