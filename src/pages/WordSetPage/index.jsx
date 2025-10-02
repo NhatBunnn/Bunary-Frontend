@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TitleSection from "../../components/TitleSection";
 import styles from "./WordSetPage.module.css";
 import classNames from "classnames/bind";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faChartColumn } from "@fortawesome/free-solid-svg-icons/faChartColumn";
 import Button from "../../components/Button";
 import { faIdCard } from "@fortawesome/free-solid-svg-icons/faIdCard";
@@ -10,13 +10,15 @@ import Word from "../../components/Word";
 import useWordSetPage from "../../hooks/useWordSetPage";
 import Loading from "../../components/Loading";
 import LearningSetting from "./component/LearningSetting/LearningSetting";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AddToCollectionContext } from "@context/AddToCollectionProvider";
 
 const c = classNames.bind(styles);
 
 function WordSetPage() {
   const { words, wordSet, loadingWords } = useWordSetPage();
   const [openSetting, setOpenSetting] = useState("");
+  const { setOpenDialog, setWordSet } = useContext(AddToCollectionContext);
 
   const handleToggleSetting = (type) => {
     openSetting ? setOpenSetting("") : setOpenSetting((prev) => type);
@@ -36,7 +38,16 @@ function WordSetPage() {
         title={wordSet.title}
         onTop={true}
         style={{ marginBottom: "8px" }}
-      />
+      >
+        <Button
+          label="Lưu"
+          icon={faBookmark}
+          onClick={() => {
+            setOpenDialog(true);
+            setWordSet(wordSet);
+          }}
+        />
+      </TitleSection>
       <div className={c("desc", "mb-2")}>{wordSet.description}</div>
       <div className={c("info", "d-flex", "align-items-center", "mb-3")}>
         <div className={c("learners-count")}>

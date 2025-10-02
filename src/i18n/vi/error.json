@@ -1,9 +1,23 @@
 {
+  "FETCH_FAILED": "Không thể tải dữ liệu từ máy chủ",
+  "NOT_FOUND": "Không tìm thấy dữ liệu",
+  "ID_NOT_FOUND": "Không tìm thấy dữ liệu với Id này",
+  "ALREADY_EXISTS": "Dữ liệu đã tồn tại",
   
   "AUTH_INVALID": "Email hoặc mật khẩu không đúng",
   "AUTH_EMAIL_NOT_EMPTY": "Email không được để trống",
   "AUTH_PASSWORD_NOT_EMPTY": "Mật khẩu không được để trống",
   
 
-  "COLLECTIONS_FETCH_FAILED": "Lấy danh sách bộ sưu tập thất bại, vui lòng thử lại sau"
+  "COLLECTIONS_FETCH_FAILED": "Không thể tải danh sách bộ sưu tập",
+  "COLLECTION_CREATE_FAILED": "Tạo bộ sưu tập thất bại",
+  "COLLECTION_UPDATE_FAILED": "Cập nhật bộ sưu tập thất bại",
+  "COLLECTIONS_ADD_WORDSET_FAILED": "Thêm bộ từ vựng vào bộ sưu tập thất bại",
+  "COLLECTION_DELETE_FAILED": "Xóa bộ sưu tập thất bại",
+
+  "WORDSETS_FETCH_FAILED": "Không thể tải danh sách bộ từ vựng",
+
+
+  "INPUT_NOT_EMPTY": "Vui lòng không để trống" 
+
 }

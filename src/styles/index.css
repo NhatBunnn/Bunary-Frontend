@@ -8,6 +8,11 @@
 :root {
   --font-family: SVN-Segoe, Lexend-Medium, sans-serif;
 }
+
+.button-active{
+  background-color: var(--background-hover) !important;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }

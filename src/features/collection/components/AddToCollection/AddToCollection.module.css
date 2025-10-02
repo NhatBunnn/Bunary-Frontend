@@ -1,5 +1,5 @@
-.createCollection{
-    background-color: var(--background-backdrop
+.addToCollection{
+   background-color: var(--background-backdrop
     );
     position: fixed;
     inset: 0;
@@ -11,8 +11,10 @@
 
 .dialog{
     background-color: var(--color-white);
-    width: 300px;
-    border-radius: var(--radius-medium);
-    display: flex;
-    flex-direction: column;
+    min-width: 480px;
+}
+
+.collectionList{
+    height: 300px;
+    overflow-y: scroll;
 }

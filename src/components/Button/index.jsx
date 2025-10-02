@@ -13,6 +13,7 @@ function Button({
   onClick,
   isLoading = false,
   to = "",
+  className,
 }) {
   const navigate = useNavigate();
 
@@ -22,7 +23,8 @@ function Button({
         "button",
         "d-inline-flex",
         "cursor-pointer",
-        "link-no-style"
+        "link-no-style",
+        className
       )}
       type={type}
       onClick={() => (to ? navigate(to) : onClick?.())}

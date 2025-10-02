@@ -40,7 +40,7 @@ function useCreateWordSet() {
       formData.append("wordSet", JSON.stringify(wordSet));
       if (thumbnailFile) formData.append("thumbnailFile", thumbnailFile);
 
-      const response = await fetch(`${API_URL}/api/v1/wordset`, {
+      const response = await fetch(`${API_URL}/api/v1/wordsets`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

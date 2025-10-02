@@ -24,7 +24,7 @@ const publicRoutes = [
   { path: "/flashcard/:id", Page: FlashCard, Layout: HeaderOnly },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
   {
-    path: "/collection/:id/:slug",
+    path: "/collection/:id/wordsets",
     Page: CollectionDetail,
     Layout: DefaultLayout,
   },

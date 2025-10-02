@@ -6,6 +6,7 @@ import GlobalProfiders from "./context/GlobalProviders";
 import Notification from "./components/Notification";
 import "./i18n";
 import CreateCollection from "@features/collection/components/CreateCollection/CreateCollection";
+import AddToCollection from "@features/collection/components/AddToCollection/AddToCollection";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                     <Notification />
                     <Layout>
                       <CreateCollection />
+                      <AddToCollection />
                       <Page />
                     </Layout>
                   </GlobalProfiders>

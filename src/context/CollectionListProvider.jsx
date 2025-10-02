@@ -1,14 +1,16 @@
 import { getAllCollections } from "@api/collectionApi";
 import { useAccessToken } from "@context/AccessTokenProvider";
-import { useEffect, useState } from "react";
-import useStatus from "./useStatus";
+import { createContext, useEffect, useState } from "react";
+import useStatus from "../hooks/useStatus";
 import { useNotification } from "@context/NotificationProvider";
 import { useTranslation } from "react-i18next";
 
-function useCollectionList() {
+export const CollectionListContext = createContext(null);
+
+function CollectionListProvider({ children }) {
   const { t: te } = useTranslation("error");
 
-  const { error, setError, setLoading, loading } = useStatus();
+  const { setLoading, loading } = useStatus();
   const { showNotification } = useNotification();
   const { accessToken } = useAccessToken();
   const [collections, setCollections] = useState([]);
@@ -28,9 +30,13 @@ function useCollectionList() {
     };
 
     getCollections();
-  }, [accessToken, setError, setLoading]);
+  }, [accessToken, setLoading, showNotification, te]);
 
-  return { loading, collections };
+  return (
+    <CollectionListContext.Provider value={{ loading, collections }}>
+      {children}
+    </CollectionListContext.Provider>
+  );
 }
 
-export default useCollectionList;
+export default CollectionListProvider;

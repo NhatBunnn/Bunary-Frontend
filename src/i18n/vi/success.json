@@ -1,5 +1,10 @@
 {
   "AUTH_LOGIN_SUCCESS": "Đăng nhập thành công",
   "AUTH_REGISTER_SUCCESS": "Registration successful",
-  "AUTH_SEND_CODE_SUCCESS": "Verification code sent"
+  "AUTH_SEND_CODE_SUCCESS": "Verification code sent",
+
+  "COLLECTIONS_CREATE_SUCCESS": "Tạo bộ sưu tập thành công",
+  "COLLECTIONS_UPDATE_SUCCESS": "Cập nhật bộ sưu tập thành công",
+  "COLLECTIONS_ADD_WORDSET_SUCCESS": "Thêm bộ từ vựng vào bộ sưu tập thành công",
+  "COLLECTIONS_DELETE_SUCCESS": "Xóa bộ sưu tập thành công"
 }

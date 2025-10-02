@@ -21,6 +21,7 @@ function UserListProvider({ children }) {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+
           credentials: "include",
         });
 

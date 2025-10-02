@@ -1,56 +1,52 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../config/apiConfig";
 import { useAccessToken } from "../context/AccessTokenProvider";
 import { useParams } from "react-router-dom";
-import { useWordSetListProvider } from "../context/WordSetListProvider";
+import { findWordsByWordSetId } from "@api/wordApi";
+import { useNotification } from "@context/NotificationProvider";
+import useStatus from "./useStatus";
+import { useTranslation } from "react-i18next";
+import { findWordSetById } from "@api/wordSetApi";
 
 function useWordSetPage() {
-  const { loadingToken, accessToken } = useAccessToken();
+  const { accessToken } = useAccessToken();
   const [words, setWords] = useState([]);
   const [wordSet, setWordSet] = useState("");
-  const [loadingWords, setLoadingWords] = useState(true);
-  const { wordSets, getWordSetById } = useWordSetListProvider();
+  // const { wordSets, getWordSetById } = useWordSetListProvider();
+
+  const { t: te } = useTranslation("error");
+  const { setLoading, loading } = useStatus();
+  const { showNotification } = useNotification();
 
   const { id } = useParams();
 
-  useEffect(() => {
-    if (!wordSets) return;
-
-    setWordSet(getWordSetById(id));
-  }, [wordSets, getWordSetById, id]);
+  // useEffect(() => {
+  //   const currentWordset = getWordSetById(id);
+  //   if (currentWordset) setWordSet(currentWordset);
+  // }, [wordSets, getWordSetById, id]);
 
   useEffect(() => {
     const fetchWords = async () => {
-      setLoadingWords(true);
+      setLoading(true);
       try {
-        if (!accessToken || loadingToken) return;
-
-        const response = await fetch(`${API_URL}/api/v1/words/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
+        const wordsRes = await findWordsByWordSetId(accessToken, id);
+        setWords(wordsRes.data);
+        const wordSetsRes = await findWordSetById(accessToken, id, {
+          includeUser: true,
+          includeCollection: true,
         });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.statusCode >= 200 && dataResponse.statusCode < 300) {
-          setWords(dataResponse.data);
-        } else {
-          console.log(dataResponse.error);
-        }
+        setWordSet(wordSetsRes.data);
       } catch (error) {
-        console.error(error);
+        showNotification(te("FETCH_FAILED"), "error");
+        setLoading(false);
       } finally {
-        setLoadingWords(false);
+        setLoading(false);
       }
     };
 
     fetchWords();
-  }, [accessToken, loadingToken, id, setLoadingWords]);
+  }, [accessToken, id, setLoading, showNotification, te]);
 
-  return { words, wordSet, loadingWords };
+  return { words, wordSet, loading };
 }
 
 export default useWordSetPage;

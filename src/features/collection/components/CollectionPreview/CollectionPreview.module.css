@@ -9,6 +9,6 @@
   border-radius: var(--radius-medium);
 }
 
-.collectionPreview:hover {
+.collectionPreview.hover:hover {
   background-color: var(--background-hover);
 }

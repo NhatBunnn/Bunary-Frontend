@@ -7,7 +7,7 @@ function WordSet({ size = "small", author, wordSet }) {
   return (
     <Fragment>
       {size === "small" ? (
-        <SmallWordSet />
+        <SmallWordSet wordSet={wordSet} />
       ) : (
         <LargeWordSet author={author} wordSet={wordSet} />
       )}

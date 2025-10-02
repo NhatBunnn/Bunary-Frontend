@@ -7,6 +7,7 @@ const c = classNames.bind(styles);
 function ValidateInput({
   field,
   fieldErrors,
+  error,
   onChange,
   value,
   label,
@@ -22,13 +23,16 @@ function ValidateInput({
         </label>
       )}
       <input
-        className={c("form-control", { "is-invalid": !!field && !!fieldErrors?.[field] })}
+        className={c("form-control", {
+          "is-invalid": (!!field && !!fieldErrors?.[field]) || error,
+        })}
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
       <div className="invalid-feedback">
         {fieldErrors && fieldErrors[field]}
+        {error && error}
       </div>
     </div>
   );
