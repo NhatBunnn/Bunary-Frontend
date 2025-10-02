@@ -17,13 +17,13 @@ function GlobalProfiders({ children }) {
           <ChatWindowProvider>
             <WordSetListProvider>
               <UserListProvider>
-                <CreateCollectionProvider>
-                  <CollectionListProvider>
+                <CollectionListProvider>
+                  <CreateCollectionProvider>
                     <UIProvider>
                       <UserProvider>{children}</UserProvider>
                     </UIProvider>
-                  </CollectionListProvider>
-                </CreateCollectionProvider>
+                  </CreateCollectionProvider>
+                </CollectionListProvider>
               </UserListProvider>
             </WordSetListProvider>
           </ChatWindowProvider>

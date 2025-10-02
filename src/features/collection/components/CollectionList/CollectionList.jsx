@@ -7,14 +7,14 @@ import { bindClass } from "@utils/classnames";
 import Loading from "@components/Loading";
 import { useContext } from "react";
 import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
-import { DeleteConfirmContext } from "@context/UIContext/DeleteConfirmationProvider";
+import { ConfirmDialogContext } from "@context/UIContext/ConfirmDialogProvider";
 
 const c = bindClass(styles);
 
 function CollectionList() {
   const { loading, collections } = useContext(CollectionListContext);
   const { handleRemoveCollection } = useCollectionPreview();
-  const { openDeleteConfirm } = useContext(DeleteConfirmContext);
+  const { handleOpenConfirm } = useContext(ConfirmDialogContext);
 
   if (loading) return <Loading />;
 
@@ -27,9 +27,9 @@ function CollectionList() {
               key={d.id}
               name={d.name}
               collectionId={d.id}
-              onClick={(e) => {
-                e.stopPropagation();
-                openDeleteConfirm({
+              onDelete={(e) => {
+                handleOpenConfirm({
+                  message: `Bạn muốn xóa bộ sưu tập ${d.name} không?`,
                   onConfirm: () => handleRemoveCollection(d.id),
                 });
               }}

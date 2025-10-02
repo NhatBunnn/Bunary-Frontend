@@ -15,6 +15,32 @@ function CollectionListProvider({ children }) {
   const { accessToken } = useAccessToken();
   const [collections, setCollections] = useState([]);
 
+  function updateCollections(action, payload) {
+    setCollections((prev) => {
+      switch (action) {
+        case "remove":
+          return prev.filter((c) => c.id !== payload.id);
+        case "add":
+          setLoading(true);
+          const getCollections = async () => {
+            try {
+              const dataResponse = await getAllCollections(accessToken);
+              setCollections(dataResponse.data.content);
+            } catch (error) {
+              showNotification(te("COLLECTIONS_FETCH_FAILED"));
+              setLoading(false);
+            } finally {
+              setLoading(false);
+            }
+          };
+          getCollections();
+
+        default:
+          return prev;
+      }
+    });
+  }
+
   useEffect(() => {
     setLoading(true);
     const getCollections = async () => {
@@ -33,7 +59,9 @@ function CollectionListProvider({ children }) {
   }, [accessToken, setLoading, showNotification, te]);
 
   return (
-    <CollectionListContext.Provider value={{ loading, collections }}>
+    <CollectionListContext.Provider
+      value={{ loading, collections, updateCollections }}
+    >
       {children}
     </CollectionListContext.Provider>
   );

@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import AddToCollectionProvider from "./AddToCollectionProvider";
-import DeleteConfirmationProvider from "./DeleteConfirmationProvider";
+import DeleteConfirmationProvider from "./ConfirmDialogProvider";
 
 export const UIContext = createContext(null);
 

@@ -2,20 +2,20 @@ import { bindClass } from "@utils/classnames";
 import styles from "./DeleteConfirmation.module.css";
 import { Fragment, useContext, useEffect, useRef } from "react";
 import Button from "@components/Button";
-import { DeleteConfirmContext } from "@context/UIContext/DeleteConfirmationProvider";
+import { ConfirmDialogContext } from "@context/UIContext/ConfirmDialogProvider";
 
 const c = bindClass(styles);
 
 function DeleteConfirmation() {
-  const { closeDeleteConfirm, confirmDelete, isDeleteConfirmOpen } =
-    useContext(DeleteConfirmContext);
+  const { handleConfirm, handleCloseConfirm, isConfirmOpen, message } =
+    useContext(ConfirmDialogContext);
 
   const backdropRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (backdropRef.current && backdropRef.current === e.target) {
-        closeDeleteConfirm(false);
+        handleCloseConfirm(false);
       }
     };
 
@@ -25,13 +25,13 @@ function DeleteConfirmation() {
 
   return (
     <Fragment>
-      {isDeleteConfirmOpen && (
+      {isConfirmOpen && (
         <div className={c("deleteConfirmation")} ref={backdropRef}>
           <div className={c("content", "p-3")}>
-            <div className={c("title", "mb-2")}>Muốn xóa ko?</div>
+            <div className={c("title", "mb-2")}>{message}</div>
             <div>
-              <Button label="Ôkê" onClick={() => confirmDelete()} />
-              <Button label="Deo" onClick={() => closeDeleteConfirm()} />
+              <Button label="Ôkê" onClick={handleConfirm} />
+              <Button label="Deo" onClick={handleCloseConfirm} />
             </div>
           </div>
         </div>

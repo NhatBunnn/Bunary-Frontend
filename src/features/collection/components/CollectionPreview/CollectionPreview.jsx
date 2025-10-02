@@ -5,13 +5,14 @@ import { faFolder, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
-import { DeleteConfirmContext } from "@context/UIContext/DeleteConfirmationProvider";
+import { DeleteConfirmContext } from "@context/UIContext/ConfirmDialogProvider";
 
 const c = bindClass(styles);
 
 function CollectionPreview({
   navigate = true,
   onClick,
+  onDelete,
   name = "Bộ sưu tập",
   collectionId,
   isActive = false,
@@ -38,7 +39,14 @@ function CollectionPreview({
     >
       <FontAwesomeIcon icon={faFolder} />
       <div className={c("name")}>{name}</div>
-      <FontAwesomeIcon icon={faTrash} className="ms-auto" onClick={onClick} />
+      <FontAwesomeIcon
+        icon={faTrash}
+        className="ms-auto"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete && onDelete(e);
+        }}
+      />
     </div>
   );
 }
