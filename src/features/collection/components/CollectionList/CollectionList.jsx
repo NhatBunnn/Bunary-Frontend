@@ -1,6 +1,6 @@
 import useCollectionList, {
   CollectionListContext,
-} from "@context/CollectionListProvider";
+} from "@context/ListContext/CollectionListProvider";
 import CollectionPreview from "../CollectionPreview/CollectionPreview";
 import styles from "./CollectionList.module.css";
 import { bindClass } from "@utils/classnames";

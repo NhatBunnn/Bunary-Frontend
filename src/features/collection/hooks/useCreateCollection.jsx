@@ -1,6 +1,6 @@
 import { createCollection } from "@api/collectionApi";
 import { useAccessToken } from "@context/AccessTokenProvider";
-import { CollectionListContext } from "@context/CollectionListProvider";
+import { CollectionListContext } from "@context/ListContext/CollectionListProvider";
 import { CreateCollectContext } from "@context/CreateCollectionProvider";
 import { useNotification } from "@context/NotificationProvider";
 import useStatus from "@hooks/useStatus";
@@ -32,8 +32,8 @@ function useCreateCollection() {
       showNotification(ts("COLLECTION_CREATE_SUCCESS"), "success");
 
       updateCollections("add", { name: data });
-    } catch (error) {
-      showNotification(te("COLLECTION_CREATE_FAILED"), "error");
+    } catch (e) {
+      showNotification(te(e.errorCode), "error");
       setLoading(false);
     } finally {
       setLoading(false);

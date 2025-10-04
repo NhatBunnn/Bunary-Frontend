@@ -20,6 +20,32 @@ export const getAllCollections = async (token) => {
   }
 };
 
+export const findAllCollectionsByCurrentUser = async (
+  token,
+  { page = 0, size = 10, sort = "id,asc" }
+) => {
+  if (!token) throw new Error("No access token provided");
+
+  const response = await fetch(
+    `${API_URL}/api/v1/collections/me?page=${page}&size=${size}&sort=${sort}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const dataResponse = await response.json();
+
+  if (response.ok) {
+    return dataResponse;
+  } else {
+    throw dataResponse;
+  }
+};
+
 export const createCollection = async (token, data) => {
   if (!token) throw new Error("No access token provided");
 

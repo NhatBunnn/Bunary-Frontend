@@ -6,8 +6,9 @@ import WordSetListProvider from "./WordSetListProvider";
 import UserListProvider from "./UserListProvider";
 import AccessTokenProvider from "./AccessTokenProvider";
 import CreateCollectionProvider from "./CreateCollectionProvider";
-import CollectionListProvider from "./CollectionListProvider";
+import CollectionListProvider from "./ListContext/CollectionListProvider";
 import UIProvider from "./UIContext/UIProvider";
+import ListProvider from "./ListContext/ListProvider";
 
 function GlobalProfiders({ children }) {
   return (
@@ -20,7 +21,9 @@ function GlobalProfiders({ children }) {
                 <CollectionListProvider>
                   <CreateCollectionProvider>
                     <UIProvider>
-                      <UserProvider>{children}</UserProvider>
+                      <ListProvider>
+                        <UserProvider>{children}</UserProvider>
+                      </ListProvider>
                     </UIProvider>
                   </CreateCollectionProvider>
                 </CollectionListProvider>

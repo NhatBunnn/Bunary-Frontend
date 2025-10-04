@@ -1,6 +1,6 @@
 import { removeCollection } from "@api/collectionApi";
 import { useAccessToken } from "@context/AccessTokenProvider";
-import { CollectionListContext } from "@context/CollectionListProvider";
+import { CollectionListContext } from "@context/ListContext/CollectionListProvider";
 import { useNotification } from "@context/NotificationProvider";
 import useStatus from "@hooks/useStatus";
 import { useContext } from "react";
@@ -10,7 +10,7 @@ function useCollectionPreview() {
   const { t: te } = useTranslation("error");
   const { t: ts } = useTranslation("success");
   const { showNotification } = useNotification();
-  const { setLoading, loading, setError, error } = useStatus();
+  const { setLoading, loading, setError } = useStatus();
   const { accessToken } = useAccessToken();
   const { updateCollections } = useContext(CollectionListContext);
 
@@ -21,8 +21,8 @@ function useCollectionPreview() {
       await removeCollection(accessToken, id);
       showNotification(ts("COLLECTION_CREATE_SUCCESS"), "success");
       updateCollections("remove", { id });
-    } catch (error) {
-      showNotification(te("COLLECTION_CREATE_FAILED"), "error");
+    } catch (e) {
+      showNotification(te(e.errorCode), "error");
       setLoading(false);
     } finally {
       setLoading(false);

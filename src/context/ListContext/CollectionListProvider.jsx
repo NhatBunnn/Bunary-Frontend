@@ -1,7 +1,7 @@
 import { getAllCollections } from "@api/collectionApi";
 import { useAccessToken } from "@context/AccessTokenProvider";
 import { createContext, useEffect, useState } from "react";
-import useStatus from "../hooks/useStatus";
+import useStatus from "../../hooks/useStatus";
 import { useNotification } from "@context/NotificationProvider";
 import { useTranslation } from "react-i18next";
 
@@ -15,30 +15,25 @@ function CollectionListProvider({ children }) {
   const { accessToken } = useAccessToken();
   const [collections, setCollections] = useState([]);
 
-  function updateCollections(action, payload) {
-    setCollections((prev) => {
-      switch (action) {
-        case "remove":
-          return prev.filter((c) => c.id !== payload.id);
-        case "add":
-          setLoading(true);
-          const getCollections = async () => {
-            try {
-              const dataResponse = await getAllCollections(accessToken);
-              setCollections(dataResponse.data.content);
-            } catch (error) {
-              showNotification(te("COLLECTIONS_FETCH_FAILED"));
-              setLoading(false);
-            } finally {
-              setLoading(false);
-            }
-          };
-          getCollections();
-
-        default:
-          return prev;
-      }
-    });
+  async function updateCollections(action, payload) {
+    switch (action) {
+      case "remove":
+        setCollections((prev) => prev.filter((c) => c.id !== payload.id));
+        break;
+      case "add":
+        setLoading(true);
+        try {
+          const dataResponse = await getAllCollections(accessToken);
+          setCollections(dataResponse.data.content);
+        } catch (error) {
+          showNotification(te("COLLECTIONS_FETCH_FAILED"));
+        } finally {
+          setLoading(false);
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {

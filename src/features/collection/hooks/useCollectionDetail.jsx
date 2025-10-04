@@ -25,11 +25,9 @@ function useCollectionDetail() {
         ]);
         setCollection(collectionRes.data);
         setWordSets(wordsetsRes.data);
-
-        console.log("wordsetsRes.data ", wordsetsRes.data);
-      } catch (error) {
+      } catch (e) {
         setLoading(false);
-        showNotification(te("FETCH_FAILED"), "error");
+        showNotification(te(e.errorCode), "error");
       } finally {
         setLoading(false);
       }

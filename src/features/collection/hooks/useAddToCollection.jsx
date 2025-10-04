@@ -14,11 +14,12 @@ function useAddToCollection() {
   const handleAddToCollection = async (collectionId, wordSetId) => {
     setLoading(true);
 
+    console.log("error ");
     try {
       await AddWordSetToCollection(accessToken, collectionId, wordSetId);
       showNotification(ts("COLLECTIONS_ADD_WORDSET_SUCCESS"), "success");
-    } catch (error) {
-      showNotification(te("COLLECTIONS_ADD_WORDSET_FAILED"), "error");
+    } catch (e) {
+      showNotification(te(e.errorCode), "error");
       setLoading(false);
     } finally {
       setLoading(false);
