@@ -6,14 +6,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import ValidateInput from "@components/ValidateInput";
 import Button from "@components/Button";
-import useCreateCollection from "@features/collection/hooks/useCreateCollection";
+import { MyCollectionListContext } from "@context/ListContext/MyCollectionProvider";
 
 const c = bindClass(styles);
 
 function CreateCollection() {
   const { openCreateCollect, handleToggleCreateCollect } =
     useContext(CreateCollectContext);
-  const { handleCreateCollection, loading, error } = useCreateCollection();
+  // const { handleCreateCollection, loading, error } = useCreateCollection();
+  const {
+    fetchMyCollections,
+
+    loading,
+
+    error,
+  } = useContext(MyCollectionListContext);
   const [name, setName] = useState("");
   const createCollectionRef = useRef(null);
 
@@ -45,7 +52,7 @@ function CreateCollection() {
             <div className={c("d-flex", "gap-2")}>
               <Button
                 label="Tạo"
-                onClick={() => handleCreateCollection(name)}
+                onClick={() => fetchMyCollections("create", { name })}
                 isLoading={loading}
               />
               <Button

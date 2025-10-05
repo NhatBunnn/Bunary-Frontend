@@ -1,24 +1,37 @@
-import { findAllCollectionsByCurrentUser } from "@api/collectionApi";
+import {
+  createCollection,
+  findAllCollectionsByCurrentUser,
+  removeCollection,
+} from "@api/collectionApi";
 import { useAccessToken } from "@context/AccessTokenProvider";
+import { CreateCollectContext } from "@context/CreateCollectionProvider";
 import { useNotification } from "@context/NotificationProvider";
 import useStatus from "@hooks/useStatus";
-import { createContext, useEffect, useState, useCallback } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 
 export const MyCollectionListContext = createContext(null);
 
 function MyCollectionProvider({ children }) {
+  const { t: ts } = useTranslation("success");
   const { t: te } = useTranslation("error");
-  const { setLoading, loading } = useStatus(false);
+  const { setLoading, loading, setError, error } = useStatus(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const { showNotification } = useNotification();
   const { accessToken } = useAccessToken();
   const [myCollections, setMyCollections] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMorePage, setHasMorePage] = useState(true);
+  const { handleToggleCreateCollect } = useContext(CreateCollectContext);
 
   const fetchCollections = useCallback(
-    async (pageNumber = 0, size = 10) => {
+    async (pageNumber = 0, size = 20) => {
       try {
         const dataResponse = await findAllCollectionsByCurrentUser(
           accessToken,
@@ -35,29 +48,96 @@ function MyCollectionProvider({ children }) {
         return [];
       }
     },
-    [accessToken, showNotification, te, setLoading]
+    [accessToken, showNotification, te]
   );
 
-  async function updateMyCollections(action, payload) {
-    switch (action) {
-      case "remove":
-        setMyCollections((prev) => prev.filter((c) => c.id !== payload.id));
-        break;
-      case "add":
-        setLoading(true);
-        const initialCollections = await fetchCollections(0, 5);
-        setMyCollections(initialCollections);
-        setPage(1);
-        setLoading(false);
-        break;
-      case "loadMore":
-        if (!hasMorePage || loadingMore === true) return;
+  const fetchMyCollections = useCallback(
+    async (action, payload) => {
+      switch (action) {
+        case "remove":
+          setLoading(true);
+          try {
+            await removeCollection(accessToken, payload.id);
+            showNotification(ts("COLLECTION_CREATE_SUCCESS"), "success");
+            setMyCollections((prev) => prev.filter((c) => c.id !== payload.id));
+          } catch (e) {
+            showNotification(te(e.errorCode), "error");
+            setLoading(false);
+          } finally {
+            setLoading(false);
+          }
+          break;
 
-        setLoadingMore(true);
-        const moreCollections = await fetchCollections(page, 5);
-        setMyCollections((prev) => [...prev, ...moreCollections]);
-        setPage((prev) => prev + 1);
-        setLoadingMore(false);
+        case "create":
+          setError("");
+          setLoading(true);
+
+          if (payload.name === "") {
+            setError(te("INPUT_NOT_EMPTY"));
+            setLoading(false);
+            return;
+          }
+
+          try {
+            await createCollection(accessToken, { name: payload.name });
+            showNotification(ts("COLLECTION_CREATE_SUCCESS"), "success");
+            fetchMyCollections("fetch");
+          } catch (e) {
+            showNotification(te(e.errorCode), "error");
+            setLoading(false);
+          } finally {
+            setLoading(false);
+            handleToggleCreateCollect(false);
+          }
+          break;
+
+        case "fetch":
+          setLoading(true);
+          const initialCollections = await fetchCollections(0, 20);
+          setMyCollections(initialCollections);
+          setPage(1);
+          setLoading(false);
+          break;
+
+        case "loadMore":
+          if (!hasMorePage || loadingMore) return;
+
+          setLoadingMore(true);
+          const moreCollections = await fetchCollections(page, 20);
+          setMyCollections((prev) => [...prev, ...moreCollections]);
+          setPage((prev) => prev + 1);
+          setLoadingMore(false);
+          break;
+
+        default:
+          break;
+      }
+    },
+    [
+      accessToken,
+      fetchCollections,
+      showNotification,
+      ts,
+      te,
+      handleToggleCreateCollect,
+      setLoading,
+      setError,
+      hasMorePage,
+      loadingMore,
+      page,
+    ]
+  );
+
+  async function updateMyCollectionsState(action, payload) {
+    switch (action) {
+      case "delete":
+        setMyCollections((prev) => prev.filter((d) => d.id !== payload.id));
+        break;
+      case "update":
+        fetchMyCollections("fetch");
+        break;
+      case "create":
+        fetchMyCollections("fetch");
         break;
       default:
         break;
@@ -65,17 +145,19 @@ function MyCollectionProvider({ children }) {
   }
 
   useEffect(() => {
-    updateMyCollections("add");
-  }, [accessToken]);
+    fetchMyCollections("fetch");
+  }, [accessToken, fetchMyCollections]);
 
   return (
     <MyCollectionListContext.Provider
       value={{
-        updateMyCollections,
+        fetchMyCollections,
+        updateMyCollectionsState,
         myCollections,
         loading,
         hasMorePage,
         loadingMore,
+        error,
       }}
     >
       {children}

@@ -2,8 +2,11 @@ import { useState } from "react";
 import useAuthBase from "./useAuthBase";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config/apiConfig";
+import { useTranslation } from "react-i18next";
 
 function useRegister() {
+  const { t: te } = useTranslation("error");
+
   const authBase = useAuthBase();
   const [repeatPassword, setRepeatPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -14,7 +17,7 @@ function useRegister() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    authBase.setErrors([]);
+    authBase.setError([]);
     authBase.setFieldErrors({});
 
     if (firstName === "") {
@@ -83,15 +86,14 @@ function useRegister() {
 
             authBase.setFieldErrors(newErrors);
           }
-          if (dataReponse.error) {
-            const response = dataReponse.error;
-            authBase.setErrors(...response);
+          if (dataReponse.errorCode) {
+            authBase.setError(te(dataReponse.errorCode));
           }
         }
       })
       .catch((error) => {
         authBase.setLoading(false);
-        authBase.setErrors([error.message]);
+        authBase.setError(error.message);
       });
   };
 

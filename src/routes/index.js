@@ -9,7 +9,7 @@ import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
 import FlashCard from "../pages/Learnings/FlashCard";
 import HeaderOnly from "../layouts/HeaderOnly";
-import { Collection, CollectionDetail } from "@pages/index";
+import { Collection, CollectionDetail, EditWordset } from "@pages/index";
 
 //Route ko cần đăng nhập cx xem đc
 const publicRoutes = [
@@ -23,6 +23,8 @@ const publicRoutes = [
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/flashcard/:id", Page: FlashCard, Layout: HeaderOnly },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
+  { path: "/wordset/:id/edit", Page: EditWordset, Layout: DefaultLayout },
+
   {
     path: "/collection/:id/wordsets",
     Page: CollectionDetail,

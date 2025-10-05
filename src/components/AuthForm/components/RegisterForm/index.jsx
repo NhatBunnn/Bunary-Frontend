@@ -1,10 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import ValidateInput from "../../../ValidateInput";
-import {
-  faFileCircleExclamation,
-  faSpinner,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Background, Image } from "../../../../assets/images";
 
 import styles from "./RegisterForm.module.css";
@@ -27,7 +24,7 @@ function RegisterForm() {
     repeatPassword,
     setRepeatPassword,
     fieldErrors,
-    errors,
+    error,
     success,
     loading,
     handleSubmit,
@@ -77,25 +74,17 @@ function RegisterForm() {
                   {/* Form auth */}
                   <form onSubmit={handleSubmit} class="w-100 mb-4">
                     {/* error */}
-                    {errors.length > 0 && (
+                    {error && (
                       <div
                         className={c(
                           "commonError",
                           "d-flex",
-                          "justify-content-left",
                           "align-items-center",
                           "mb-3"
                         )}
                       >
-                        <FontAwesomeIcon
-                          icon={faFileCircleExclamation}
-                          className="me-2"
-                        />
-                        <div>
-                          {errors.map((err, index) => {
-                            return <div key={index}>{err}</div>;
-                          })}
-                        </div>
+                        <FontAwesomeIcon icon={faClose} className="me-2" />
+                        {error}
                       </div>
                     )}
                     {/* Username */}
@@ -113,6 +102,7 @@ function RegisterForm() {
                         value={firstName}
                         label="Họ"
                         name="firstName"
+                        field="firstName"
                       />
 
                       <ValidateInput
@@ -121,6 +111,7 @@ function RegisterForm() {
                         value={lastName}
                         label="Họ"
                         name="lastName"
+                        field="lastName"
                       />
                     </div>
                     {/* email */}
@@ -129,6 +120,7 @@ function RegisterForm() {
                       onChange={setEmail}
                       value={email}
                       label="Địa chỉ Email"
+                      field="email"
                       name="email"
                     />
                     {/* password */}
@@ -138,6 +130,7 @@ function RegisterForm() {
                       value={password}
                       label="Mật khẩu"
                       name="password"
+                      field="password"
                     />
 
                     {/* repeat password */}
@@ -147,6 +140,7 @@ function RegisterForm() {
                       value={repeatPassword}
                       label="Nhập lại mật khẩu"
                       name="repeatPassword"
+                      field="repeatPassword"
                     />
 
                     <div class="mb-3">

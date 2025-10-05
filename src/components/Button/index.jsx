@@ -27,7 +27,13 @@ function Button({
         className
       )}
       type={type}
-      onClick={() => (to ? navigate(to) : onClick?.())}
+      onClick={(e) => {
+        if (to) {
+          navigate(to);
+        } else {
+          onClick?.(e);
+        }
+      }}
     >
       {icon && (
         <div className={c("icon")}>

@@ -12,7 +12,7 @@ import { ConfirmDialogContext } from "@context/UIContext/ConfirmDialogProvider";
 const c = bindClass(styles);
 
 function CollectionList() {
-  const { loading, collections } = useContext(CollectionListContext);
+  const { loading, myCollections } = useContext(MyCollectionListContext);
   const { handleRemoveCollection } = useCollectionPreview();
   const { handleOpenConfirm } = useContext(ConfirmDialogContext);
 
@@ -20,8 +20,8 @@ function CollectionList() {
 
   return (
     <div className={c("collectionList", "d-flex", "flex-column", "gap-2")}>
-      {collections.length > 0 &&
-        collections.map((d) => {
+      {myCollections?.length > 0 &&
+        myCollections.map((d) => {
           return (
             <CollectionPreview
               key={d.id}

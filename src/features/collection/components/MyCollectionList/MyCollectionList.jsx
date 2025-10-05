@@ -1,43 +1,24 @@
 import { MyCollectionListContext } from "@context/ListContext/MyCollectionProvider";
 import styles from "./MyCollectionList.module.css";
 import { bindClass } from "@utils/classnames";
-import { useContext, useEffect, useRef } from "react";
-import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
+import { useContext } from "react";
 import { ConfirmDialogContext } from "@context/UIContext/ConfirmDialogProvider";
 import CollectionPreview from "../CollectionPreview/CollectionPreview";
 import Loading from "@components/Loading";
+import Button from "@components/Button";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const c = bindClass(styles);
 
 function MyCollectionList() {
-  const { updateMyCollections, myCollections, loading, loadingMore } =
-    useContext(MyCollectionListContext);
-  const { handleRemoveCollection } = useCollectionPreview();
+  const {
+    fetchMyCollections,
+    myCollections,
+    loading,
+    loadingMore,
+    hasMorePage,
+  } = useContext(MyCollectionListContext);
   const { handleOpenConfirm } = useContext(ConfirmDialogContext);
-
-  useEffect(() => {
-    const debounceRef = { current: null };
-
-    const handleScroll = () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-
-      debounceRef.current = setTimeout(() => {
-        if (
-          window.innerHeight + window.scrollY >=
-            document.body.offsetHeight - 100 &&
-          !loadingMore
-        ) {
-          updateMyCollections("loadMore");
-        }
-      }, 200);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [updateMyCollections, loadingMore]);
 
   if (loading) return <Loading />;
 
@@ -52,22 +33,20 @@ function MyCollectionList() {
               onDelete={(e) => {
                 handleOpenConfirm({
                   message: `Bạn muốn xóa bộ sưu tập ${d.name} không?`,
-                  onConfirm: () => handleRemoveCollection(d.id),
+                  onConfirm: () => fetchMyCollections("remove", { id: d.id }),
                 });
               }}
             />
           );
         })}
-      {loadingMore && (
-        <div
-          className="d-flex justify-content-center"
-          style={{ overflow: "hidden" }}
-        >
-          <div
-            className="spinner-border text-primary"
-            role="status"
-            style={{ width: "4rem", height: "4rem" }}
-          ></div>
+      {hasMorePage && (
+        <div className="d-flex justify-content-center">
+          <Button
+            label="Xem thêm"
+            icon={faPlus}
+            onClick={() => fetchMyCollections("loadMore")}
+            isLoading={loadingMore}
+          />
         </div>
       )}
     </div>

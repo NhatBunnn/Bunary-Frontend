@@ -5,13 +5,13 @@ import Button from "@components/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Fragment, useContext, useRef, useState } from "react";
 import { AddToCollectionContext } from "@context/UIContext/AddToCollectionProvider";
-import { CollectionListContext } from "@context/ListContext/CollectionListProvider";
 import Loading from "@components/Loading";
 import CollectionPreview from "../CollectionPreview/CollectionPreview";
 import { CreateCollectContext } from "@context/CreateCollectionProvider";
 import useAddToCollection from "@features/collection/hooks/useAddToCollection";
 import { useNotification } from "@context/NotificationProvider";
 import { useTranslation } from "react-i18next";
+import { MyCollectionListContext } from "@context/ListContext/MyCollectionProvider";
 
 const c = bindClass(styles);
 
@@ -21,7 +21,7 @@ function AddToCollection() {
   const { setOpenDialog, openDialog, wordSet } = useContext(
     AddToCollectionContext
   );
-  const { loading, collections } = useContext(CollectionListContext);
+  const { loading, myCollections } = useContext(MyCollectionListContext);
   const { handleAddToCollection } = useAddToCollection();
   const addToCollectionRef = useRef();
   const { showNotification } = useNotification();
@@ -58,9 +58,9 @@ function AddToCollection() {
             />
             <hr />
             <div className={c("collectionList")}>
-              {collections.length > 0 &&
-                collections.map((d) => {
-                  const isExits = wordSet?.collections?.some(
+              {myCollections.length > 0 &&
+                myCollections.map((d) => {
+                  const isExits = wordSet?.myCollections?.some(
                     (c) => c.id === d.id
                   );
 
