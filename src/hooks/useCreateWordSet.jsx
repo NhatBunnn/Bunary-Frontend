@@ -25,7 +25,7 @@ function useCreateWordSet() {
       const token = await getAccessToken();
 
       if (title === "") {
-        setFieldErrors({ title: "Không để trống email" });
+        setFieldErrors({ title: "Không để trống tiêu đề trống" });
         return;
       }
 

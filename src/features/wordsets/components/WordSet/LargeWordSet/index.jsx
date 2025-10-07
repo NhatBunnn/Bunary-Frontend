@@ -26,7 +26,7 @@ function LargeWordSet({ author, wordSet }) {
       <div className={c("thumbnail")}>
         <div className={c("rating")}>
           <FontAwesomeIcon icon={faStar} className={c("rating__icon")} />
-          <span>9.7</span>
+          <span>9.10</span>
         </div>
         <img src={wordSet.thumbnail} alt="" />
       </div>
