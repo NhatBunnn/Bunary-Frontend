@@ -1,21 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./WordSetForm.module.css";
 import classNames from "classnames/bind";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faEarth, faGear } from "@fortawesome/free-solid-svg-icons";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import TitleSection from "@components/TitleSection";
 import Button from "@components/Button";
 import ValidateInput from "@components/ValidateInput";
-import WordCardCreate from "@pages/CreateWordSet/components/WordCardCreate";
 import { useNotification } from "@context/NotificationProvider";
 import useWordSetForm from "@features/wordsets/hooks/useWordSetForm";
-import { useEffect } from "react";
-import WordInput from "./components/WordInput";
+import { useEffect, useRef, useState } from "react";
+import WordInput from "./components/WordInput/WordInput";
+import { OptionsMenuWrapper } from "@components/index";
+import { EditVisibilityDialog } from "./components/Dialogs";
 
 const c = classNames.bind(styles);
 
 export default function WordSetForm({ type = "CREATE" }) {
   const { showNotification } = useNotification();
+  const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
+
+  const dropdownRef = useRef(null);
 
   const {
     handleCreateWordSet,
@@ -29,6 +33,10 @@ export default function WordSetForm({ type = "CREATE" }) {
     setWordInputs,
     loading,
   } = useWordSetForm();
+
+  const [openDialog, setOpenDialog] = useState({
+    privacy: false,
+  });
 
   useEffect(() => {
     if (type === "UPDATE") {
@@ -71,8 +79,31 @@ export default function WordSetForm({ type = "CREATE" }) {
     setWordInputs(newWordInputs);
   };
 
+  const handleToggleOptionsMenu = (e) => {
+    setOpenOptionsMenu((prev) => !prev);
+  };
+
+  const handleToggleDialog = (type) => {
+    switch (type) {
+      case "privacy":
+        setOpenDialog((prev) => ({ ...prev, privacy: !prev.privacy }));
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <div className={c("wordSetForm")}>
+      {/* dialog */}
+      {openDialog.privacy && (
+        <EditVisibilityDialog
+          onClose={() => handleToggleDialog("privacy")}
+          wordSetInput={wordSetInput}
+          setWordSetInput={setWordSetInput}
+        />
+      )}
       {/* Title */}
       <TitleSection title="Tạo bộ từ vựng mới" onTop={true}>
         <Button
@@ -156,8 +187,18 @@ export default function WordSetForm({ type = "CREATE" }) {
           <Button type="submit" label="Thêm nhiều từ" />
           <Button label="Sửa chính tả" />
         </div>
-        <div className={c("setting")}>
-          <Button icon={faGear} />
+        <div className={c("options")}>
+          <Button icon={faGear} onClick={(e) => handleToggleOptionsMenu(e)} />
+          {openOptionsMenu && (
+            <OptionsMenuWrapper className={c("dropdown")} ref={dropdownRef}>
+              <Button
+                label="Chỉnh sửa đối tượng"
+                icon={faEarth}
+                variant="menu"
+                onClick={() => handleToggleDialog("privacy")}
+              />
+            </OptionsMenuWrapper>
+          )}
         </div>
       </div>
       {/* wordcarslist */}

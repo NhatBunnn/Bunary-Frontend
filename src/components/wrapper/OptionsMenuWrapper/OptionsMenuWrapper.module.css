@@ -1,0 +1,6 @@
+.optionsMenuWrapper{
+    background-color: var(--color-white);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--box-shadow-primary);
+    /* position: absolute; */
+}

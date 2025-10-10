@@ -7,8 +7,8 @@
   cursor: pointer;
   transform: translateY(0);
   transition: 0.3s;
-  width: 326px;
-  max-width: 100%;
+  min-width: 326px;
+  width: 100%;
 }
 
 .largeWordSet:hover {
@@ -25,6 +25,7 @@
   margin-right: 8px;
   position: relative;
   aspect-ratio: 27 / 37;
+  flex: 2;
 }
 
 .thumbnail img {
@@ -56,6 +57,7 @@
 /* Content */
 .content {
   height: 148px;
+  flex: 5;
 }
 
 .head {
@@ -73,8 +75,11 @@
 }
 
 .description {
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-caption);
+  overflow: hidden;
 }
+
+
 
 .author {
   font-size: var(--font-size-caption);

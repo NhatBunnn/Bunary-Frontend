@@ -6,6 +6,16 @@ import { useNavigate } from "react-router-dom";
 
 const c = classNames.bind(styles);
 
+/**
+ * @typedef {"default" | "menu" | "outline"} ButtonVariant
+ */
+
+/**
+ * @param {{
+ *  variant?: ButtonVariant
+ * }} props
+ */
+
 function Button({
   label = "",
   icon,
@@ -14,6 +24,7 @@ function Button({
   isLoading = false,
   to = "",
   className,
+  variant = "default",
 }) {
   const navigate = useNavigate();
 
@@ -34,6 +45,19 @@ function Button({
           onClick?.(e);
         }
       }}
+      style={
+        variant === "default"
+          ? {
+              borderRadius: "var(--radius-round)",
+              boxShadow: "var(--box-shadow-primary)",
+            }
+          : {
+              borderRadius: "var(--radius-small)",
+              boxShadow: "none",
+              border: "none",
+              background: "var(--color-white)",
+            }
+      }
     >
       {icon && (
         <div className={c("icon")}>

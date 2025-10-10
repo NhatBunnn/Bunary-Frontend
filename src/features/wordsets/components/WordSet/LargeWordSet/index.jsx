@@ -1,10 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Image, Images } from "../../../assets/images";
+import { Image, Images } from "@assets/images";
 import styles from "./LargeWordSet.module.css";
 import classNames from "classnames/bind";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 
 const c = classNames.bind(styles);
 

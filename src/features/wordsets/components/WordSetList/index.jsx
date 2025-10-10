@@ -1,11 +1,11 @@
 import { createContext, useState } from "react";
-import WordSet from "../../../../components/WordSet";
 import styles from "./WordSetListWrapper.module.css";
 import classNames from "classnames/bind";
 import { useWordSetListProvider } from "../../../../context/WordSetListProvider";
 import Loading from "../../../../components/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import WordSet from "../WordSet/WordSet";
 
 const c = classNames.bind(styles);
 

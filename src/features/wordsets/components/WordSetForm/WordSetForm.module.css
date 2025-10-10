@@ -43,3 +43,13 @@
 /* toolbar */
 .toolbar {
 }
+
+.toolbar .options{
+  position: relative;
+}
+
+.toolbar .dropdown{
+  position: absolute;
+  right: 0;
+  width: 300px;
+}

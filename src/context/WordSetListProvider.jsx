@@ -1,42 +1,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { API_URL } from "../config/apiConfig";
 import { useAccessToken } from "./AccessTokenProvider";
+import { findAllWordSet } from "@api/wordSetApi";
+import useAppBase from "@hooks/useAppBase";
 
 const WordSetListContext = createContext(null);
 
 export const useWordSetListProvider = () => useContext(WordSetListContext);
 
 function WordSetListProvider({ children }) {
+  const { te, setLoading, showNotification, accessToken } = useAppBase();
+
   const [wordSets, setWordSets] = useState();
-  const { loadingToken, accessToken } = useAccessToken();
 
   useEffect(() => {
     const fetchWordSet = async () => {
+      setLoading(true);
+
       try {
-        if (!accessToken || loadingToken) return;
-
-        const response = await fetch(`${API_URL}/api/v1/wordsets`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
+        const dataReponse = await findAllWordSet(accessToken, {
+          includeUser: true,
+          visibility: "PUBLIC",
         });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.statusCode >= 200 && dataResponse.statusCode < 300) {
-          setWordSets(dataResponse.data);
-        } else {
-          console.log(dataResponse.error);
-        }
-      } catch (error) {
-        console.error(error);
+        setWordSets(dataReponse.data);
+      } catch (e) {
+        showNotification(te(e.errorCode), "error");
+        setLoading(false);
       } finally {
+        setLoading(false);
       }
     };
     fetchWordSet();
-  }, [loadingToken, accessToken]);
+  }, [accessToken]);
 
   const getWordSetById = (wordSetId) => {
     if (!wordSets) return;

@@ -37,6 +37,40 @@ export const findWordSetById = async (token, id, options = {}) => {
   }
 };
 
+export const findAllWordSet = async (token, options = {}) => {
+  if (!token) throw new Error("No access token provided");
+
+  const url = new URL(`${API_URL}/api/v1/wordsets`);
+
+  const includes = [];
+  if (options.includeUser) includes.push("user");
+  if (options.includeCollection) includes.push("collection");
+  if (options.includeWord) includes.push("word");
+  if (options.visibility) {
+    url.searchParams.append("visibility", options.visibility);
+  }
+
+  if (includes.length) {
+    url.searchParams.append("include", includes.join(","));
+  }
+
+  const response = await fetch(url.toString(), {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const dataResponse = await response.json();
+
+  if (response.ok) {
+    return dataResponse;
+  } else {
+    throw dataResponse;
+  }
+};
+
 export const createWordSet = async (token, formData) => {
   console.log("formData", formData);
   const response = await fetch(`${API_URL}/api/v1/wordsets`, {

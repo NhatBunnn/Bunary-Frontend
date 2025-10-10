@@ -18,6 +18,7 @@ function useWordSetForm() {
     name: "",
     description: "",
     thumbnailFile: null,
+    visibility: "PRIVATE",
   });
 
   const [wordInputs, setWordInputs] = useState([
@@ -30,6 +31,8 @@ function useWordSetForm() {
       thumbnail: "",
     },
   ]);
+
+  console.log("wordSetInput ", wordSetInput);
 
   const [removedWordIds, setRemovedWordIds] = useState([]);
 
@@ -72,6 +75,7 @@ function useWordSetForm() {
       const wordSet = {
         title: wordSetInput.name,
         description: wordSetInput.description,
+        visibility: wordSetInput.visibility,
         word: wordInputs,
         removedWordIds,
       };

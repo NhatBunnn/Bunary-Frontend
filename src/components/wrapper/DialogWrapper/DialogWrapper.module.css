@@ -1,0 +1,5 @@
+.dialogWrapper{
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow-primary);
+    border-radius: var(--radius-medium);
+}
