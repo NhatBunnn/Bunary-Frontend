@@ -9,6 +9,7 @@ import CreateCollectionProvider from "./CreateCollectionProvider";
 import CollectionListProvider from "./ListContext/CollectionListProvider";
 import UIProvider from "./UIContext/UIProvider";
 import ListProvider from "./ListContext/ListProvider";
+import WordSetProvider from "./WordSetProvider/WordSetProvider";
 
 function GlobalProfiders({ children }) {
   return (
@@ -22,7 +23,9 @@ function GlobalProfiders({ children }) {
                   <CreateCollectionProvider>
                     <UIProvider>
                       <ListProvider>
-                        <UserProvider>{children}</UserProvider>
+                        <WordSetProvider>
+                          <UserProvider>{children}</UserProvider>
+                        </WordSetProvider>
                       </ListProvider>
                     </UIProvider>
                   </CreateCollectionProvider>

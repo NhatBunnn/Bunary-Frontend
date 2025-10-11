@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Image, Images } from "@assets/images";
 import styles from "./LargeWordSet.module.css";
 import classNames from "classnames/bind";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faEarth, faLock, faStar } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const c = classNames.bind(styles);
@@ -38,20 +38,30 @@ function LargeWordSet({ author, wordSet }) {
         )}
       >
         <div className={c("head")}>
-          <div className={c("title")}>{wordSet.title}</div>
+          <div className={c("title")}>
+            {wordSet.title}
+
+            {wordSet.visibility === "PUBLIC" ? (
+              <FontAwesomeIcon icon={faEarth} />
+            ) : (
+              <FontAwesomeIcon icon={faLock} />
+            )}
+          </div>
           <div className={c("vocab")}>
             <span>147 từ vựng</span>
           </div>
         </div>
         <div className={c("description", "h-100")}>{wordSet.description}</div>
-        <div className={c("author", "d-flex", "align-items-center")}>
-          <Image
-            src={author.avatar || Images.Logo}
-            size="24px"
-            isCircled="true"
-          />
-          <span>{author.fullName}</span>
-        </div>
+        {author && (
+          <div className={c("author", "d-flex", "align-items-center")}>
+            <Image
+              src={author.avatar || Images.Logo}
+              size="24px"
+              isCircled="true"
+            />
+            <span>{author.fullName}</span>
+          </div>
+        )}
       </div>
     </Link>
   );

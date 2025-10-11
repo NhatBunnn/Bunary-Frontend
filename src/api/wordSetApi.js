@@ -37,22 +37,56 @@ export const findWordSetById = async (token, id, options = {}) => {
   }
 };
 
-export const findAllWordSet = async (token, options = {}) => {
+export const findAllWordSet = async (
+  token,
+  options = {},
+  { page = 0, size = 20, sort = "id,asc" } = {}
+) => {
   if (!token) throw new Error("No access token provided");
 
   const url = new URL(`${API_URL}/api/v1/wordsets`);
 
   const includes = [];
   if (options.includeUser) includes.push("user");
-  if (options.includeCollection) includes.push("collection");
-  if (options.includeWord) includes.push("word");
-  if (options.visibility) {
-    url.searchParams.append("visibility", options.visibility);
-  }
+  // if (options.includeCollection) includes.push("collection");
+  // if (options.includeWord) includes.push("word");
 
   if (includes.length) {
     url.searchParams.append("include", includes.join(","));
   }
+
+  url.searchParams.append("page", page);
+  url.searchParams.append("size", size);
+  url.searchParams.append("sort", sort);
+
+  const response = await fetch(url.toString(), {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const dataResponse = await response.json();
+
+  if (response.ok) {
+    return dataResponse;
+  } else {
+    throw dataResponse;
+  }
+};
+
+export const findAllByCurrentUser = async (
+  token,
+  { page = 0, size = 20, sort = "id,asc" } = {}
+) => {
+  if (!token) throw new Error("No access token provided");
+
+  const url = new URL(`${API_URL}/api/v1/wordsets/me`);
+
+  url.searchParams.append("page", page);
+  url.searchParams.append("size", size);
+  url.searchParams.append("sort", sort);
 
   const response = await fetch(url.toString(), {
     method: "GET",
@@ -97,6 +131,26 @@ export const updateWordSet = async (token, wordSetId, formData) => {
       Authorization: `Bearer ${token}`,
     },
     body: formData,
+  });
+
+  const dataResponse = await response.json();
+
+  if (response.ok) {
+    return dataResponse;
+  } else {
+    throw dataResponse;
+  }
+};
+
+export const removeWordSet = async (token, wordSetId) => {
+  if (!token) throw new Error("No access token provided");
+
+  const response = await fetch(`${API_URL}/api/v1/wordsets/${wordSetId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
   });
 
   const dataResponse = await response.json();

@@ -11,17 +11,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../components/Button";
 import Word from "../../components/Word";
-import useWordSetPage from "../../hooks/useWordSetPage";
 import Loading from "../../components/Loading";
 import LearningSetting from "./component/LearningSetting/LearningSetting";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AddToCollectionContext } from "@context/UIContext/AddToCollectionProvider";
 import { useNavigate } from "react-router-dom";
+import useWordSetPage from "./useWordSetPage";
+import { ConfirmDialog } from "@components/index";
 
 const c = classNames.bind(styles);
 
 function WordSetPage() {
-  const { words, wordSet, loadingWords } = useWordSetPage();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const { words, wordSet, loadingWords, handleRemoveWordSet } =
+    useWordSetPage();
   const [openSetting, setOpenSetting] = useState("");
   const { setOpenDialog, setWordSet } = useContext(AddToCollectionContext);
   const [openMoreOptions, setMoreOptions] = useState(false);
@@ -57,6 +60,12 @@ function WordSetPage() {
 
   return (
     <div className={c("wordSetPage")}>
+      <ConfirmDialog
+        isOpen={openConfirmDialog}
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={() => handleRemoveWordSet()}
+      />
+
       {openSetting !== "" && (
         <LearningSetting onClose={handleToggleSetting} wordSetId={wordSet.id} />
       )}
@@ -86,7 +95,7 @@ function WordSetPage() {
                   navigation(`/wordset/${wordSet.id}/edit`);
                 }}
               />
-              <Button label="Xóa" />
+              <Button label="Xóa" onClick={() => setOpenConfirmDialog(true)} />
             </div>
           )}
         </div>

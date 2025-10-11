@@ -47,7 +47,7 @@ const MenuSidebar = forwardRef(({ isSidebarResponsive, onClick }, ref) => {
         <MenuItem icon={faUser} label="Người dùng" to="/profile " />
         <MenuItem icon={faPeopleGroup} label="Cộng đồng" to="/profile " />
         <hr />
-        <MenuItem icon={faBook} label="Học" />
+        <MenuItem icon={faBook} label="Học" to="/learning/learned" />
         <MenuItem icon={faFileWord} label="Từ tích lũy" />
         <MenuItem icon={faFileWord} label="Kho từ quên" />
         <MenuItem icon={faRankingStar} label="Bảng xếp hạng" />

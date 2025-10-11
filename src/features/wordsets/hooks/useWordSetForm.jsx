@@ -32,8 +32,6 @@ function useWordSetForm() {
     },
   ]);
 
-  console.log("wordSetInput ", wordSetInput);
-
   const [removedWordIds, setRemovedWordIds] = useState([]);
 
   const navigate = useNavigate();

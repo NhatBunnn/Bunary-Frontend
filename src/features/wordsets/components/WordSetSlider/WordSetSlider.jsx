@@ -1,5 +1,5 @@
-import { createContext, useState } from "react";
-import styles from "./WordSetListWrapper.module.css";
+import { createContext, useContext, useState } from "react";
+import styles from "./WordSetSlider.module.css";
 import classNames from "classnames/bind";
 import { useWordSetListProvider } from "../../../../context/WordSetListProvider";
 import Loading from "../../../../components/Loading";
@@ -11,8 +11,7 @@ const c = classNames.bind(styles);
 
 export const wordSetValueContext = createContext();
 
-function WordSetList({ className }) {
-  const { wordSets } = useWordSetListProvider();
+function WordSetSlider({ className, wordSets }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   if (!wordSets) return <Loading />;
@@ -29,7 +28,7 @@ function WordSetList({ className }) {
   };
 
   return (
-    <div className={c("wordSetListWrapper", "d-flex", className)}>
+    <div className={c("wordSetSlider", "d-flex", className)}>
       <div className={c("slider-container")}>
         <div className={c("btn-leftArrow")} onClick={() => handleSlide("prev")}>
           <FontAwesomeIcon icon={faAngleLeft} size="lg" />
@@ -50,7 +49,7 @@ function WordSetList({ className }) {
           {wordSets?.map((d, i) => {
             return (
               <div className={c("slider")} key={i}>
-                <WordSet size="large" author={d.author} wordSet={d} />
+                <WordSet size="large" author={d?.author} wordSet={d} />
               </div>
             );
           })}
@@ -60,4 +59,4 @@ function WordSetList({ className }) {
   );
 }
 
-export default WordSetList;
+export default WordSetSlider;

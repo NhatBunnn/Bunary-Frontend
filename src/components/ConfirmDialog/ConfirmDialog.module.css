@@ -1,0 +1,22 @@
+.background{
+    background-color: var(--background-backdrop);
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirmDialog{
+    background-color: var(--color-white);
+    max-width: 350px;
+    border-radius: var(--radius-large);
+    overflow: hidden;
+}
+
+.header{
+    background-color: rgb(255, 40, 40);
+    font-size: var(--font-size-title);
+    color: #fff;
+}
