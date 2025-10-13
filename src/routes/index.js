@@ -15,6 +15,7 @@ import {
   LearningPage,
 } from "@pages/index";
 import WordSetPage from "@pages/WordSetPage/WordSetPage";
+import AdminDashboard from "@pages/AdminDashboard/AdminDashboard";
 
 const publicRoutes = [
   { path: "/", Page: Home, Layout: DefaultLayout },
@@ -42,8 +43,7 @@ const privateRoutes = [
 const adminRoutes = [
   {
     path: "/admin",
-    Page: Home,
-    Layout: DefaultLayout,
+    Page: AdminDashboard,
     roles: ["ADMIN"],
   },
 ];

@@ -1,13 +1,21 @@
+import Loading from "@components/Loading";
 import { useUser } from "@context/UserProvider";
 import { Navigate } from "react-router-dom";
 
 function RoleRoute({ children, allowedRoles = [] }) {
-  const { user } = useUser();
+  const { user, loadingUser } = useUser();
+
+  if (loadingUser) {
+    return <Loading />;
+  }
+
+  console.log("user ", user);
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!allowedRoles.includes(user.role)) {
+  if (!user.roles.some((role) => allowedRoles.includes(role))) {
     return <Navigate to="/" replace />;
   }
 

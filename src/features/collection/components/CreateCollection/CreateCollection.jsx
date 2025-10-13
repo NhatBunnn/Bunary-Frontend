@@ -14,13 +14,9 @@ function CreateCollection() {
   const { openCreateCollect, handleToggleCreateCollect } =
     useContext(CreateCollectContext);
   // const { handleCreateCollection, loading, error } = useCreateCollection();
-  const {
-    fetchMyCollections,
-
-    loading,
-
-    error,
-  } = useContext(MyCollectionListContext);
+  const { fetchMyCollections, loading, error } = useContext(
+    MyCollectionListContext
+  );
   const [name, setName] = useState("");
   const createCollectionRef = useRef(null);
 
