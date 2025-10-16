@@ -9,9 +9,10 @@ import {
 import { useContext, useEffect, useRef } from "react";
 import Avatar from "../Avatar";
 import MessageItem from "./component";
-import { useUser } from "../../context/UserProvider";
+
 import useChatWindow from "../../hooks/useChatWindow";
 import { ChatWindowContext } from "../../context/ChatWindowProvider";
+import { useUser } from "@context/UserProvider/UserContext";
 
 const c = classNames.bind(styles);
 

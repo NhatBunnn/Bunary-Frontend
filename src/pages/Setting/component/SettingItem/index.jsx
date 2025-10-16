@@ -6,7 +6,7 @@ import { Image, Images } from "../../../../assets/images";
 import SettingDialog from "../SettingDialog";
 import DialogOverlay from "../../../../components/wrapper/DialogOverlay";
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "../../../../context/UserProvider";
+import { useUser } from "@context/UserProvider/UserContext";
 
 const c = classNames.bind(styles);
 

@@ -1,4 +1,4 @@
-import { useUser } from "../../context/UserProvider";
+import { useUser } from "@context/UserProvider/UserContext";
 import Loading from "../../components/Loading";
 import TitleSection from "../../components/TitleSection";
 import SettingItem from "./component/SettingItem";

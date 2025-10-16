@@ -1,5 +1,5 @@
 import Loading from "@components/Loading";
-import { useUser } from "@context/UserProvider";
+import { useUser } from "@context/UserProvider/UserContext";
 import { Navigate } from "react-router-dom";
 
 function RoleRoute({ children, allowedRoles = [] }) {

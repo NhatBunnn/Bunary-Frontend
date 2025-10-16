@@ -1,6 +1,6 @@
 import DefaultLayout from "../layouts/DefaultLayout";
 import CreateWordSet from "../pages/CreateWordSet";
-import Home from "../pages/Home";
+import Homepage from "@pages/Homepage/Homepage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import VerifyEmail from "../pages/VerifyEmail";
@@ -18,7 +18,8 @@ import WordSetPage from "@pages/WordSetPage/WordSetPage";
 import AdminDashboard from "@pages/AdminDashboard/AdminDashboard";
 
 const publicRoutes = [
-  { path: "/", Page: Home, Layout: DefaultLayout },
+  { path: "/", Page: Homepage, Layout: DefaultLayout },
+  { path: "/:slug", Page: Homepage, Layout: DefaultLayout },
   { path: "/login", Page: Login },
   { path: "/register", Page: Register },
   { path: "/verify-email", Page: VerifyEmail },

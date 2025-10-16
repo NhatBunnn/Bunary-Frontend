@@ -6,7 +6,7 @@ import { faBars, faStore } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button";
-import { useUser } from "../../../context/UserProvider";
+import { useUser } from "@context/UserProvider/UserContext";
 import useLogout from "../../../hooks/auth/useLogout";
 import Avatar from "../../../components/Avatar";
 import Loading from "../../../components/Loading";

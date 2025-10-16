@@ -19,8 +19,14 @@ export default function ConfirmDialog({
         <div className={c("header", "p-2")}>{title}</div>
         <div className={c("desc", "p-2")}>{message}</div>
         <div className={c("action", "p-2")}>
-          <Button label="Hủy" onClick={onCancel} />
-          <Button label="Xóa" onClick={onConfirm} />
+          <Button label="Hủy" onClick={() => onCancel()} />
+          <Button
+            label="Xóa"
+            onClick={() => {
+              onConfirm();
+              onCancel();
+            }}
+          />
         </div>
       </div>
     </div>

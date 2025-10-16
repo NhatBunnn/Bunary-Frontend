@@ -1,15 +1,13 @@
 import { findWordsByWordSetId } from "@api/wordApi";
 import { findWordSetById, removeWordSet } from "@api/wordSetApi";
-import { MyWordSetListContext } from "@context/WordSetProvider/MyWordSetList";
 import useAppBase from "@hooks/useAppBase";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function useWordSetPage() {
   const { te, setLoading, loading, showNotification, accessToken } =
     useAppBase();
 
-  const { updateWordSets } = useContext(MyWordSetListContext);
   const [words, setWords] = useState([]);
   const [wordSet, setWordSet] = useState("");
 
@@ -42,7 +40,6 @@ function useWordSetPage() {
     try {
       setLoading(true);
       await removeWordSet(accessToken, id);
-      updateWordSets("remove", { id });
       showNotification("Xóa bộ từ vựng thành công", "success");
       setTimeout(() => navigate("/learning/mine"), 300);
     } catch (e) {

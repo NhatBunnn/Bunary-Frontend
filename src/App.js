@@ -6,8 +6,7 @@ import GlobalProfiders from "./context/GlobalProviders";
 import Notification from "./components/Notification";
 import "./i18n";
 import CreateCollection from "@features/collection/components/CreateCollection/CreateCollection";
-import AddToCollection from "@features/collection/components/AddToCollection/AddToCollection";
-import DeleteConfirmation from "@components/DeleteConfirmation/DeleteConfirmation";
+import AddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/AddToCollection";
 import PrivateRoute from "routes/PrivateRoute";
 import RoleRoute from "routes/RoleRoute";
 
@@ -18,7 +17,6 @@ function App() {
         <GlobalProfiders>
           <CreateCollection />
           <AddToCollection />
-          <DeleteConfirmation />
           <Notification />
           <Routes>
             {/* Public routes */}

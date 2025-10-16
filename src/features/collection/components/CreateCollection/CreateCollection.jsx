@@ -6,20 +6,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import ValidateInput from "@components/ValidateInput";
 import Button from "@components/Button";
-import { MyCollectionListContext } from "@context/ListContext/MyCollectionProvider";
+import useCollection from "@features/collection/hooks/useCollection";
 
 const c = bindClass(styles);
 
 function CreateCollection() {
   const { openCreateCollect, handleToggleCreateCollect } =
     useContext(CreateCollectContext);
-  // const { handleCreateCollection, loading, error } = useCreateCollection();
-  const { fetchMyCollections, loading, error } = useContext(
-    MyCollectionListContext
-  );
+  const { createCollection, loading, error } = useCollection();
   const [name, setName] = useState("");
   const createCollectionRef = useRef(null);
-
   useEffect(() => {
     setName("");
     const handleClickOutside = (e) => {
@@ -30,11 +26,9 @@ function CreateCollection() {
         handleToggleCreateCollect(false);
       }
     };
-
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [handleToggleCreateCollect]);
-
   return (
     <Fragment>
       {openCreateCollect && (
@@ -48,7 +42,7 @@ function CreateCollection() {
             <div className={c("d-flex", "gap-2")}>
               <Button
                 label="Tạo"
-                onClick={() => fetchMyCollections("create", { name })}
+                onClick={() => createCollection({ name })}
                 isLoading={loading}
               />
               <Button

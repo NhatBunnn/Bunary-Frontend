@@ -1,70 +1,72 @@
 import { API_URL } from "@config/apiConfig";
+import { fetcher } from "./fetcher";
 
-export const getAllCollections = async (token) => {
-  if (!token) throw new Error("No access token provided");
-
-  const response = await fetch(`${API_URL}/api/v1/collections`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  const dataResponse = await response.json();
-
-  if (response.ok) {
-    return dataResponse;
-  } else {
-    throw dataResponse;
-  }
-};
-
-export const findAllCollectionsByCurrentUser = async (
+export const findAllMyCollections = async ({
   token,
-  { page = 0, size = 10, sort = "id,asc" }
-) => {
+  page = 0,
+  size = 20,
+  sort = "id,asc",
+}) => {
   if (!token) throw new Error("No access token provided");
 
-  const response = await fetch(
-    `${API_URL}/api/v1/collections/me?page=${page}&size=${size}&sort=${sort}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const params = {
+    page,
+    size,
+    sort,
+  };
 
-  const dataResponse = await response.json();
-
-  if (response.ok) {
-    return dataResponse;
-  } else {
-    throw dataResponse;
-  }
+  return await fetcher({
+    url: `/api/v1/collections/me`,
+    method: "GET",
+    token,
+    params,
+  });
 };
 
-export const createCollection = async (token, data) => {
+export const removeCollection = async ({ token, collectionId }) => {
   if (!token) throw new Error("No access token provided");
 
-  const response = await fetch(`${API_URL}/api/v1/collections`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
+  return await fetcher({
+    url: `/api/v1/collections/${collectionId}`,
+    method: "DELETE",
   });
+};
 
-  const dataResponse = await response.json();
+export const findAllCollections = async ({
+  token,
+  include = [],
+  page = 0,
+  size = 20,
+  sort = "id,asc",
+}) => {
+  if (!token) throw new Error("No access token provided");
 
-  if (response.ok) {
-    return dataResponse;
-  } else {
-    throw dataResponse;
+  const params = {
+    page,
+    size,
+    sort,
+  };
+
+  if (include.length) {
+    params.include = include.join(",");
   }
+
+  return await fetcher({
+    url: `/api/v1/collections`,
+    token,
+    params,
+  });
+};
+
+export const createCollection = async ({ token, body }) => {
+  if (!token) throw new Error("No access token provided");
+
+  return await fetcher({
+    url: `/api/v1/collections`,
+    method: "POST",
+    token,
+    body,
+  });
 };
 
 export const getWordsetsByCollectionId = async (token, id) => {
@@ -143,29 +145,6 @@ export const removeCollectionAndWordSet = async (
 
   const response = await fetch(
     `${API_URL}/api/v1/collections/${collectionId}/wordsets/${wordSetId}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  const dataResponse = await response.json();
-
-  if (response.ok) {
-    return dataResponse;
-  } else {
-    throw dataResponse;
-  }
-};
-
-export const removeCollection = async (token, collectionId) => {
-  if (!token) throw new Error("No access token provided");
-
-  const response = await fetch(
-    `${API_URL}/api/v1/collections/${collectionId}`,
     {
       method: "DELETE",
       headers: {

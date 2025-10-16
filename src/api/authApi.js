@@ -1,3 +1,5 @@
+import { API_URL } from "@config/apiConfig";
+
 export const refreshAccessToken = async () => {
   const response = await fetch(`${API_URL}/api/v1/auth/refresh-Token`, {
     method: "GET",

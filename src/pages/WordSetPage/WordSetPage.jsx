@@ -13,11 +13,11 @@ import Button from "../../components/Button";
 import Word from "../../components/Word";
 import Loading from "../../components/Loading";
 import LearningSetting from "./component/LearningSetting/LearningSetting";
-import { useContext, useEffect, useRef, useState } from "react";
-import { AddToCollectionContext } from "@context/UIContext/AddToCollectionProvider";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWordSetPage from "./useWordSetPage";
 import { ConfirmDialog } from "@components/index";
+import { AddToCollection } from "@features/collection/components";
 
 const c = classNames.bind(styles);
 
@@ -26,8 +26,9 @@ function WordSetPage() {
   const { words, wordSet, loadingWords, handleRemoveWordSet } =
     useWordSetPage();
   const [openSetting, setOpenSetting] = useState("");
-  const { setOpenDialog, setWordSet } = useContext(AddToCollectionContext);
   const [openMoreOptions, setMoreOptions] = useState(false);
+
+  const [openAddToCollect, setOpenAddToCollect] = useState(false);
 
   const moreOptionsRef = useRef();
   const navigation = useNavigate();
@@ -60,6 +61,12 @@ function WordSetPage() {
 
   return (
     <div className={c("wordSetPage")}>
+      {/* Dialog: AddToCollection */}
+      <AddToCollection
+        isOpen={openAddToCollect}
+        onCancel={() => setOpenAddToCollect(false)}
+        wordSet={wordSet}
+      />
       <ConfirmDialog
         isOpen={openConfirmDialog}
         onCancel={() => setOpenConfirmDialog(false)}
@@ -80,8 +87,8 @@ function WordSetPage() {
           label="Lưu"
           icon={faBookmark}
           onClick={() => {
-            setOpenDialog(true);
-            setWordSet(wordSet);
+            setOpenAddToCollect(true);
+            // setWordSet(wordSet);
           }}
         />
         <div className={c("moreOptions", "d-inline")} ref={moreOptionsRef}>

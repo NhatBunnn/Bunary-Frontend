@@ -6,9 +6,9 @@ import classNames from "classnames/bind";
 import Button from "../../components/Button";
 import AuthWrapper from "../../components/wrapper/AuthWrapper";
 import SuccessAlert from "../../components/Notification";
-import { useUser } from "../../context/UserProvider";
 import ValidateInput from "../../components/ValidateInput";
 import { API_URL } from "../../config/apiConfig";
+import { useUser } from "@context/UserProvider/UserContext";
 
 const c = classNames.bind(styles);
 

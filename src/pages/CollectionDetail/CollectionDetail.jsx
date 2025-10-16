@@ -2,7 +2,7 @@ import TitleSection from "@components/TitleSection";
 import styles from "./CollectionDetail.module.css";
 import { bindClass } from "@utils/classnames";
 import WordSet from "@components/WordSet";
-import useCollectionDetail from "@features/collection/hooks/useCollectionDetail";
+import useCollectionDetail from "./useCollectionDetail";
 import Loading from "@components/Loading";
 
 const c = bindClass(styles);

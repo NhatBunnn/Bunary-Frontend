@@ -1,6 +1,3 @@
-import useCollectionList, {
-  CollectionListContext,
-} from "@context/ListContext/CollectionListProvider";
 import CollectionPreview from "../CollectionPreview/CollectionPreview";
 import styles from "./CollectionList.module.css";
 import { bindClass } from "@utils/classnames";
@@ -8,11 +5,12 @@ import Loading from "@components/Loading";
 import { useContext } from "react";
 import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
 import { ConfirmDialogContext } from "@context/UIContext/ConfirmDialogProvider";
+import useMyCollectionList from "@features/collection/hooks/useMyCollectionList";
 
 const c = bindClass(styles);
 
 function CollectionList() {
-  const { loading, myCollections } = useContext(MyCollectionListContext);
+  const { loading, myCollections } = useMyCollectionList();
   const { handleRemoveCollection } = useCollectionPreview();
   const { handleOpenConfirm } = useContext(ConfirmDialogContext);
 

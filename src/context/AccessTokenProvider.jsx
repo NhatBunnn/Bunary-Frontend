@@ -10,8 +10,6 @@ function AccessTokenProvider({ children }) {
   const [loadingToken, setLoadingToken] = useState(true);
   const [accessToken, setAccessToken] = useState("");
 
-  console.log("accessToken ", accessToken);
-
   useEffect(() => {
     const initToken = async () => {
       setLoadingToken(true);

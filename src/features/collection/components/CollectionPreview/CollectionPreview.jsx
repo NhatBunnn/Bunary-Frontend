@@ -3,9 +3,6 @@ import styles from "./CollectionPreview.module.css";
 import { bindClass } from "@utils/classnames";
 import { faFolder, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
-import { DeleteConfirmContext } from "@context/UIContext/ConfirmDialogProvider";
 
 const c = bindClass(styles);
 
@@ -17,11 +14,13 @@ function CollectionPreview({
   collectionId,
   isActive = false,
   isHover = true,
+  index,
 }) {
   const currentNavigate = useNavigate();
 
   return (
     <div
+      index={index}
       onClick={() => {
         if (navigate === true)
           currentNavigate(`/collection/${collectionId}/wordsets`);
