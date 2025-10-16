@@ -1,3 +1,4 @@
+import { useFetcher } from "@api/fetcher";
 import { findWordsByWordSetId } from "@api/wordApi";
 import { findWordSetById, removeWordSet } from "@api/wordSetApi";
 import useAppBase from "@hooks/useAppBase";
@@ -13,17 +14,31 @@ function useWordSetPage() {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  const { fetcher } = useFetcher();
 
   useEffect(() => {
     const fetchWords = async () => {
       setLoading(true);
       try {
-        const wordsRes = await findWordsByWordSetId(accessToken, id);
-        setWords(wordsRes.data);
-        const wordSetsRes = await findWordSetById(accessToken, id, {
-          includeUser: true,
-          includeCollection: true,
+        const wordsRes = await fetcher({
+          url: `/api/v1/words/${id}`,
+          method: "GET",
+          params: {
+            page: 0,
+            size: 20,
+            sort: "id,asc",
+          },
         });
+
+        const wordSetsRes = await fetcher({
+          url: `/api/v1/wordsets/${id}`,
+          method: "GET",
+          params: {
+            include: "user, collection",
+          },
+        });
+
+        setWords(wordsRes.data);
         setWordSet(wordSetsRes.data);
       } catch (error) {
         showNotification(te("FETCH_FAILED"), "error");

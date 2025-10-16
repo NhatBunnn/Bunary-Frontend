@@ -106,17 +106,19 @@ export default function WordSetForm({ type = "CREATE" }) {
       )}
       {/* Title */}
       <TitleSection title="Tạo bộ từ vựng mới" onTop={true}>
-        <Button
-          label="Thêm"
-          onClick={() => handleCreateWordSet()}
-          isLoading={loading}
-        />
-        <Button
-          label="Cập nhật"
-          onClick={() => handleUpdateWordSet()}
-          isLoading={loading}
-        />
-        <Button label="Sửa" />
+        {type === "CREATE" ? (
+          <Button
+            label="Thêm"
+            onClick={() => handleCreateWordSet()}
+            isLoading={loading}
+          />
+        ) : (
+          <Button
+            label="Cập nhật"
+            onClick={() => handleUpdateWordSet()}
+            isLoading={loading}
+          />
+        )}
       </TitleSection>
       {/* Input */}
       <div

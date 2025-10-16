@@ -4,7 +4,6 @@ import MenuSidebar from "../components/MenuSidebar";
 import RankingSidebar from "../components/RankingSidebar";
 import styles from "./DefaultLayout.module.css";
 import classNames from "classnames/bind";
-import ChatWindow from "../../components/ChatWindow";
 
 const c = classNames.bind(styles);
 
@@ -53,7 +52,7 @@ function DefaultLayout({ children }) {
           </LowerTablet.Provider>
         </div>
       )}
-      <ChatWindow />
+
       <Header isMenu={isLowerTablet} onMenuClick={handleMenuToggle} />
       <div className={c("container-fluid", "px-0", "content", "d-flex")}>
         {/* MenuSidebar */}
@@ -62,9 +61,7 @@ function DefaultLayout({ children }) {
         </div>
         <div className={c("row", "flex-grow-1", "overflow-auto")}>
           {/* Body */}
-          <div className={c("col")}>
-            <div className={c("col")}>{children}</div>
-          </div>
+          <div className={c("col")}>{children}</div>
         </div>
         {/* RankingSidebar */}
         <div className={c("d-none", "d-xxl-block", "d-flex", "rankingSidebar")}>

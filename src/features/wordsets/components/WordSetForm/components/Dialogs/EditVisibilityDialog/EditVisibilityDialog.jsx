@@ -45,8 +45,7 @@ function EditVisibilityDialog({
           </label>
         </div>
         <div>
-          <Button label="Lưu" />
-          <Button label="Nô" onClick={onClose} />
+          <Button label="Lựa chọn" onClick={onClose} />
         </div>
       </form>
     </DialogWrapper>

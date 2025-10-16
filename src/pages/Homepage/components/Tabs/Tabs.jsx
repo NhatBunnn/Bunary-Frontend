@@ -14,7 +14,7 @@ function Tabs({ active }) {
       <div
         className="p-2 rounded-pill d-flex gap-2 shadow-sm"
         style={{
-          backgroundColor: "#fff", // nền sáng hơn
+          backgroundColor: "#fff",
           paddingRight: "10px",
         }}
       >

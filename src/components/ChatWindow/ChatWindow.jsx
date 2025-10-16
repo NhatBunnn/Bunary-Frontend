@@ -8,9 +8,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useEffect, useRef } from "react";
 import Avatar from "../Avatar";
-import MessageItem from "./component";
+import MessageItem from "./component/MessageItem";
 
-import useChatWindow from "../../hooks/useChatWindow";
+import useChatWindow from "./useChatWindow";
 import { ChatWindowContext } from "../../context/ChatWindowProvider";
 import { useUser } from "@context/UserProvider/UserContext";
 

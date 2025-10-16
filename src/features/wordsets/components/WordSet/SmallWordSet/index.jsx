@@ -1,12 +1,25 @@
 import { useContext } from "react";
 import styles from "./SmallWordSet.module.css";
 import classNames from "classnames/bind";
+import { useNavigate } from "react-router-dom";
+import { Images } from "@assets/images";
 
 const c = classNames.bind(styles);
 
-function SmallWordSet() {
+function SmallWordSet({ wordSet }) {
+  const navigate = useNavigate();
+
   return (
     <div
+      onClick={() =>
+        navigate(
+          `/wordset/${wordSet.id}/${wordSet.title
+            .split(" ")
+            .filter(Boolean)
+            .map((d) => d.toLowerCase())
+            .join("-")}`
+        )
+      }
       className={c(
         "smallWordSet",
         "d-flex",
@@ -15,17 +28,16 @@ function SmallWordSet() {
       )}
     >
       <div className={c("thumbnail")}>
-        <img
-          src="https://wallpapers.com/images/hd/cheems-z7bq2c62esomoun6.jpg"
-          alt=""
-        />
+        <img src={wordSet.thumbnail || Images.Logo} alt="" />
       </div>
       <div className={c("content")}>
-        <div className={c("title", "fw-semibold")}>dsadsad</div>
+        <div className={c("title", "fw-semibold")}>
+          {wordSet.title || "no title"}
+        </div>
         <div className={c("detail", "d-xl-flex")}>
           <span>147 từ vựng</span>
           <span className="d-none d-xl-block"> - </span>
-          <span>Pdsad</span>
+          <span>{wordSet.description || "no desc"}</span>
         </div>
       </div>
     </div>

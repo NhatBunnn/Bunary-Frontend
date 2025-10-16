@@ -9,12 +9,15 @@ import CreateCollection from "@features/collection/components/CreateCollection/C
 import AddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/AddToCollection";
 import PrivateRoute from "routes/PrivateRoute";
 import RoleRoute from "routes/RoleRoute";
+import { ChatWindow } from "./components";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <GlobalProfiders>
+          <ChatWindow />
+
           <CreateCollection />
           <AddToCollection />
           <Notification />

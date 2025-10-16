@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { ChatWindowContext } from "../context/ChatWindowProvider";
-import { getAccessToken } from "../service/apiService";
-import { useWebsocket } from "../context/WebSocketProvider";
-import { API_URL } from "../config/apiConfig";
+import { ChatWindowContext } from "../../context/ChatWindowProvider";
+import { getAccessToken } from "../../service/apiService";
+import { useWebsocket } from "../../context/WebSocketProvider";
+import { API_URL } from "../../config/apiConfig";
 function useChatWindow() {
   const { receiver } = useContext(ChatWindowContext);
   const { sendMessageChat, chatMessages, setChatMessages } = useWebsocket();

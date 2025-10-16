@@ -1,16 +1,15 @@
-import { Fragment } from "react/jsx-runtime";
 import LargeWordSet from "./LargeWordSet";
 import SmallWordSet from "./SmallWordSet";
 
-function WordSet({ size = "small", author, wordSet }) {
+function WordSet({ size = "small", author, wordSet, index }) {
   return (
-    <Fragment>
+    <div key={index}>
       {size === "small" ? (
-        <SmallWordSet />
+        <SmallWordSet wordSet={wordSet} />
       ) : (
         <LargeWordSet author={author} wordSet={wordSet} />
       )}
-    </Fragment>
+    </div>
   );
 }
 

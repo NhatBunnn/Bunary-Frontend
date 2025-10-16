@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCurrentUserId } from "../service/apiService";
 import { WEBSOCKET_URL } from "../config/apiConfig";
-import { useAccessToken } from "./AccessTokenProvider";
+import { useToken } from "./AuthProvider/TokenContext";
 
 const WebSocketContext = createContext(null);
 
@@ -12,16 +12,16 @@ function WebSocketProvider({ children }) {
   const [chatMessages, setChatMessages] = useState({});
   const [notification, setNotification] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const { loadingToken, accessToken } = useAccessToken();
+  const { getToken } = useToken();
 
   useEffect(() => {
     let ws = null;
 
     const createWebSocket = async () => {
-      if (!accessToken || loadingToken) return;
-
       try {
-        ws = new WebSocket(`${WEBSOCKET_URL}/ws?accessToken=${accessToken}`);
+        ws = new WebSocket(
+          `${WEBSOCKET_URL}/ws?accessToken=${await getToken()}`
+        );
 
         ws.onopen = () => {
           console.log("Connected to the server.");
@@ -64,7 +64,7 @@ function WebSocketProvider({ children }) {
         ws.close();
       }
     };
-  }, [loadingToken, accessToken]);
+  }, []);
 
   const sendMessageChat = (receiver, content) => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {

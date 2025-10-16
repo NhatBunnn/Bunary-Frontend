@@ -8,12 +8,7 @@ import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
 import FlashCard from "../pages/Learnings/FlashCard";
 import HeaderOnly from "../layouts/HeaderOnly";
-import {
-  Collection,
-  CollectionDetail,
-  EditWordset,
-  LearningPage,
-} from "@pages/index";
+import { Collection, CollectionDetail, EditWordset } from "@pages/index";
 import WordSetPage from "@pages/WordSetPage/WordSetPage";
 import AdminDashboard from "@pages/AdminDashboard/AdminDashboard";
 
@@ -38,7 +33,6 @@ const privateRoutes = [
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
   { path: "/wordset/:id/edit", Page: EditWordset, Layout: DefaultLayout },
-  { path: "/learning/:slug", Page: LearningPage, Layout: DefaultLayout },
 ];
 
 const adminRoutes = [

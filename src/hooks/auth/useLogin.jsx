@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useAuthBase from "./useAuthBase";
 import { API_URL } from "../../config/apiConfig";
-import { useAccessToken } from "../../context/AccessTokenProvider";
 import { useTranslation } from "react-i18next";
 
 function useLogin() {
@@ -10,8 +9,6 @@ function useLogin() {
 
   const authBase = useAuthBase();
   const navigate = useNavigate();
-
-  const { setAccessToken } = useAccessToken();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,7 +44,6 @@ function useLogin() {
         authBase.setLoading(false);
 
         if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
-          setAccessToken(dataReponse.data.accessToken);
           authBase.setSuccess(ts("AUTH_LOGIN_SUCCESS"));
           navigate(`/`);
         } else {

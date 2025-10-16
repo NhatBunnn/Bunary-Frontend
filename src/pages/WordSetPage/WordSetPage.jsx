@@ -33,6 +33,8 @@ function WordSetPage() {
   const moreOptionsRef = useRef();
   const navigation = useNavigate();
 
+  console.log("wordSet ", wordSet);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -96,13 +98,18 @@ function WordSetPage() {
           {openMoreOptions && (
             <div className={c("dropdown", "p-3", "gap-2")}>
               <Button
+                variant="menu"
                 label="Chỉnh sửa"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigation(`/wordset/${wordSet.id}/edit`);
                 }}
               />
-              <Button label="Xóa" onClick={() => setOpenConfirmDialog(true)} />
+              <Button
+                variant="menu"
+                label="Xóa"
+                onClick={() => setOpenConfirmDialog(true)}
+              />
             </div>
           )}
         </div>

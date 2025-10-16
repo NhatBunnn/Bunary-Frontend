@@ -1,6 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { API_URL } from "../config/apiConfig";
-import { useAccessToken } from "./AccessTokenProvider";
 import { findAllWordSet } from "@api/wordSetApi";
 import useAppBase from "@hooks/useAppBase";
 
