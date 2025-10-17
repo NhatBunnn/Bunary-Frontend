@@ -22,12 +22,7 @@ function useFlashCard() {
 
         const dataResponse = response;
 
-        if (dataResponse.statusCode >= 200 && dataResponse.statusCode < 300) {
-          setWords(dataResponse.data);
-        } else {
-          showNotification(dataResponse.error, "error");
-          console.log(dataResponse.error);
-        }
+        setWords(dataResponse.data);
       } catch (error) {
         console.log(error);
         showNotification(error, "error");

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const c = classNames.bind(styles);
 
 function Homepage() {
-  const { user, loadingUser } = useUser();
+  const { user, loading } = useUser();
   const { slug } = useParams();
 
   const [active, setActive] = useState("route");
@@ -29,7 +29,7 @@ function Homepage() {
     }
   }, [slug]);
 
-  if (loadingUser) {
+  if (loading) {
     return <Loading />;
   }
 

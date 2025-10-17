@@ -11,17 +11,17 @@ function GlobalProfiders({ children }) {
   return (
     <NotificationProvider>
       <AllAuthProviders>
-        <WebSocketProvider>
-          <ChatWindowProvider>
-            <WordSetListProvider>
-              <CreateCollectionProvider>
-                <UIProvider>
-                  <AllUserProviders>{children}</AllUserProviders>
-                </UIProvider>
-              </CreateCollectionProvider>
-            </WordSetListProvider>
-          </ChatWindowProvider>
-        </WebSocketProvider>
+        <AllUserProviders>
+          <WebSocketProvider>
+            <ChatWindowProvider>
+              <WordSetListProvider>
+                <CreateCollectionProvider>
+                  <UIProvider>{children}</UIProvider>
+                </CreateCollectionProvider>
+              </WordSetListProvider>
+            </ChatWindowProvider>
+          </WebSocketProvider>
+        </AllUserProviders>
       </AllAuthProviders>
     </NotificationProvider>
   );

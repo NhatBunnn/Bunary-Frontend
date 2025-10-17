@@ -81,7 +81,7 @@ function FlashCardSetting({ onClose, wordSetId }) {
         </div>
       </div>
       <div className={c("d-flex", "justify-content-center", "mt-3")}>
-        <Button label="Học" to={`/flashcard/${wordSetId}`} />
+        <Button label="Học" to={`/learning/${wordSetId}/flashcard`} />
       </div>
     </div>
   );

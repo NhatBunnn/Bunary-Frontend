@@ -33,8 +33,6 @@ function WordSetPage() {
   const moreOptionsRef = useRef();
   const navigation = useNavigate();
 
-  console.log("wordSet ", wordSet);
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (

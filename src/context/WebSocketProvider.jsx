@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCurrentUserId } from "../service/apiService";
 import { WEBSOCKET_URL } from "../config/apiConfig";
 import { useToken } from "./AuthProvider/TokenContext";
+import { useUser } from "./UserProvider/UserContext";
 
 const WebSocketContext = createContext(null);
 
@@ -13,6 +13,7 @@ function WebSocketProvider({ children }) {
   const [notification, setNotification] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { getToken } = useToken();
+  const { user } = useUser();
 
   useEffect(() => {
     let ws = null;
@@ -74,7 +75,7 @@ function WebSocketProvider({ children }) {
 
     let msg = {
       type: "chatMessage",
-      senderId: getCurrentUserId(),
+      senderId: user.id,
       receiverId: receiver.id,
       messageContent: content,
       timestamp: new Date().toISOString(),

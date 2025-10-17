@@ -1,3 +1,4 @@
+import { useFetcher } from "@api/fetcher";
 import { createWordSet, findWordSetById, updateWordSet } from "@api/wordSetApi";
 import useAppBase from "@hooks/useAppBase";
 import { useEffect, useState } from "react";
@@ -36,18 +37,23 @@ function useWordSetForm() {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  const { fetcher } = useFetcher();
 
   useEffect(() => {}, [accessToken, setLoading]);
 
   const handleFindWordSetById = async () => {
     setLoading(true);
     try {
-      const reponse = await findWordSetById(accessToken, id, {
-        includeWord: true,
+      const response = await fetcher({
+        url: `/api/v1/wordsets/${id}`,
+        method: "GET",
+        params: {
+          include: "word",
+        },
       });
 
-      setWordSetInput({ name: reponse.data.title, ...reponse.data });
-      setWordInputs(reponse.data.words);
+      setWordSetInput({ name: response.data.title, ...response.data });
+      setWordInputs(response.data.words);
     } catch (e) {
       showNotification(te(e.errorCode) || e, "error");
       setLoading(false);
@@ -84,7 +90,11 @@ function useWordSetForm() {
       if (wordSetInput.thumbnailFile)
         formData.append("thumbnailFile", wordSetInput.thumbnailFile);
 
-      const response = await updateWordSet(accessToken, id, formData);
+      const response = await fetcher({
+        url: `/api/v1/wordsets/${id}`,
+        method: "PUT",
+        data: formData,
+      });
 
       showNotification("Cập nhật bộ từ vựng thành công", "success");
       navigate(

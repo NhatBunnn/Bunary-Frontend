@@ -1,14 +1,20 @@
 import { useFetcher } from "@api/fetcher";
+import { useUser } from "@context/UserProvider/UserContext";
 import useAppBase from "@hooks/useAppBase";
 import { useEffect, useState } from "react";
 
 function useUserList() {
   const { setLoading, loading } = useAppBase();
+
   const { fetcher } = useFetcher();
 
   const [userList, setUserList] = useState([]);
 
+  const { user, loading: userLoading } = useUser();
+
   useEffect(() => {
+    if (userLoading) return;
+
     const fetch = async () => {
       setLoading(true);
       try {
@@ -31,7 +37,7 @@ function useUserList() {
     fetch();
   }, []);
 
-  return { userList, loading };
+  return { userList, loading, user };
 }
 
 export default useUserList;

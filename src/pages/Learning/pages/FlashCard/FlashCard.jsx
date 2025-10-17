@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Button from "../../../components/Button";
+import Button from "@components/Button";
 import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
-import useFlashCard from "../../../hooks/learnings/useFlashCard";
-import Loading from "../../../components/Loading";
+import useFlashCard from "./useFlashCard";
+import Loading from "@components/Loading";
 
 const c = classNames.bind(styles);
 
@@ -29,7 +29,7 @@ function FlashCard() {
   };
 
   return (
-    <div className={c("flashCard", "")}>
+    <div className={c("flashCard")}>
       <div className={c("content")}>
         <div
           className={c(

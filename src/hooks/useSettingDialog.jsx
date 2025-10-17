@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import { getAccessToken, getCurrentUserId } from "../service/apiService";
 import { useNotification } from "../context/NotificationProvider";
-import { API_URL } from "../config/apiConfig";
+import { useFetcher } from "@api/fetcher";
+import { useUser } from "@context/UserProvider/UserContext";
 
 function useSettingDialog(initialValue = "", initialField = "") {
   const [errors, setErrors] = useState([]);
@@ -15,6 +15,9 @@ function useSettingDialog(initialValue = "", initialField = "") {
 
   const { showNotification } = useNotification();
 
+  const { fetcher } = useFetcher();
+  const { user } = useUser();
+
   const handleSaveInfo = async () => {
     setErrors("");
 
@@ -26,8 +29,6 @@ function useSettingDialog(initialValue = "", initialField = "") {
     setLoading(true);
 
     try {
-      const token = await getAccessToken();
-
       const formData = new FormData();
       formData.append([field], value);
 
@@ -35,17 +36,11 @@ function useSettingDialog(initialValue = "", initialField = "") {
         formData.append("avatarFile", avatarFile);
       }
 
-      const response = await fetch(
-        `${API_URL}/api/v1/users/${getCurrentUserId()}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-          credentials: "include",
-        }
-      );
+      const response = await fetcher({
+        url: `/api/v1/users/${user.id}`,
+        method: "PUT",
+        data: formData,
+      });
 
       const dataResponse = await response.json();
 

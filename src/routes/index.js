@@ -6,9 +6,13 @@ import Register from "../pages/Register";
 import VerifyEmail from "../pages/VerifyEmail";
 import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
-import FlashCard from "../pages/Learnings/FlashCard";
 import HeaderOnly from "../layouts/HeaderOnly";
-import { Collection, CollectionDetail, EditWordset } from "@pages/index";
+import {
+  Collection,
+  CollectionDetail,
+  EditWordset,
+  Learning,
+} from "@pages/index";
 import WordSetPage from "@pages/WordSetPage/WordSetPage";
 import AdminDashboard from "@pages/AdminDashboard/AdminDashboard";
 
@@ -19,7 +23,7 @@ const publicRoutes = [
   { path: "/register", Page: Register },
   { path: "/verify-email", Page: VerifyEmail },
   { path: "/wordset/:id/:slug", Page: WordSetPage, Layout: DefaultLayout },
-  { path: "/flashcard/:id", Page: FlashCard, Layout: HeaderOnly },
+
   {
     path: "/collection/:id/wordsets",
     Page: CollectionDetail,
@@ -33,6 +37,7 @@ const privateRoutes = [
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
   { path: "/wordset/:id/edit", Page: EditWordset, Layout: DefaultLayout },
+  { path: "/learning/:id/:mode", Page: Learning, Layout: HeaderOnly },
 ];
 
 const adminRoutes = [
