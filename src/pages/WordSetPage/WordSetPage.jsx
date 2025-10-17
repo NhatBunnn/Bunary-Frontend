@@ -12,12 +12,12 @@ import {
 import Button from "../../components/Button";
 import Word from "../../components/Word";
 import Loading from "../../components/Loading";
-import LearningSetting from "./component/LearningSetting/LearningSetting";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWordSetPage from "./useWordSetPage";
-import { ConfirmDialog } from "@components/index";
+import { ConfirmDialog, DialogWrapper } from "@components/index";
 import { AddToCollection } from "@features/collection/components";
+import FlashCardSetting from "./dialogs/FlashCardSetting/FlashCardSetting";
 
 const c = classNames.bind(styles);
 
@@ -25,7 +25,7 @@ function WordSetPage() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const { words, wordSet, loadingWords, handleRemoveWordSet } =
     useWordSetPage();
-  const [openSetting, setOpenSetting] = useState("");
+  const [openSetting, setOpenSetting] = useState({ flashCard: false });
   const [openMoreOptions, setMoreOptions] = useState(false);
 
   const [openAddToCollect, setOpenAddToCollect] = useState(false);
@@ -67,14 +67,24 @@ function WordSetPage() {
         onCancel={() => setOpenAddToCollect(false)}
         wordSet={wordSet}
       />
+      {/* Dialog: Remove Wordset */}
       <ConfirmDialog
         isOpen={openConfirmDialog}
         onCancel={() => setOpenConfirmDialog(false)}
         onConfirm={() => handleRemoveWordSet()}
       />
 
-      {openSetting !== "" && (
-        <LearningSetting onClose={handleToggleSetting} wordSetId={wordSet.id} />
+      {/* Dialog: Setting */}
+      {openSetting.flashCard !== "" && (
+        <DialogWrapper
+          onClose={() =>
+            setOpenSetting((prev) => ({ ...prev, flashCard: false }))
+          }
+          isOpen={openSetting.flashCard}
+          title="Cài đặt thẻ ghi nhớ"
+        >
+          <FlashCardSetting wordSetId={wordSet.id} />
+        </DialogWrapper>
       )}
 
       {/* Title */}
@@ -131,7 +141,9 @@ function WordSetPage() {
         <Button
           label="Thẻ ghi nhớ"
           icon={faIdCard}
-          onClick={() => handleToggleSetting("flashCard")}
+          onClick={() =>
+            setOpenSetting((prev) => ({ ...prev, flashCard: true }))
+          }
         />
         <Button label="Trắc nghiệm" icon={faIdCard} />
         <Button label="Kiểm tra" icon={faIdCard} />

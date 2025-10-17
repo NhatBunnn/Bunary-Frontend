@@ -1,24 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "../../../../../components/Button";
-import TitleSection from "../../../../../components/TitleSection";
+import Button from "@components/Button";
 import styles from "./FlashCardSetting.module.css";
 import classNames from "classnames/bind";
 import { faClose, faEye } from "@fortawesome/free-solid-svg-icons";
-import FlashCard from "./component/FlashCard";
+import FlashCard from "./FlashCard/FlashCard";
 
 const c = classNames.bind(styles);
 
-function FlashCardSetting({ onClose, wordSetId }) {
+function FlashCardSetting({ wordSetId }) {
   return (
     <div className={c("flashCardSetting", "p-3")}>
-      <TitleSection title="Cài đặt thẻ ghi nhớ">
-        <Button
-          icon={faClose}
-          onClick={() => {
-            onClose();
-          }}
-        />
-      </TitleSection>
       <div className={c("row")}>
         <div className={c("col-7", "p-0", "p-sm-3", "col-sm-6")}>
           <div className={c("preview")}>
