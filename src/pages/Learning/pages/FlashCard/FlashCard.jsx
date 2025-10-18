@@ -8,11 +8,20 @@ import Loading from "@components/Loading";
 const c = classNames.bind(styles);
 
 function FlashCard() {
-  const { words, loading } = useFlashCard();
+  const { words, loading, settings } = useFlashCard();
   const [isFlip, setIsFlip] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
 
   if (loading) return <Loading />;
+
+  const flashCardFields = [
+    { key: "term" },
+    { key: "ipa" },
+    { key: "meaning" },
+    { key: "partOfSpeech" },
+  ];
+
+  const flashCardSides = [{ side: "front" }, { side: "back" }];
 
   const handleSlideNext = () => {
     setCurrentCard((prev) => (prev >= words.length - 1 ? 0 : prev + 1));
@@ -37,23 +46,26 @@ function FlashCard() {
             "d-flex",
             "justify-content-center",
             "align-items-center",
-            "cursor-pointer",
             isFlip ? "flipped" : ""
           )}
           onClick={handleFlip}
         >
-          <div className={c("front")}>
-            <div className={c("image")}>
-              <img src={words[currentCard]?.thumbnail} alt="" />
+          {flashCardSides.map((flashCardSide, i) => (
+            <div className={c(flashCardSide.side)}>
+              {settings[flashCardSide.side].image === true && (
+                <div className={c("image")}>
+                  <img src={words[currentCard]?.thumbnail} alt="" />
+                </div>
+              )}
+              {flashCardFields?.map((field, i) => (
+                <>
+                  {settings?.[flashCardSide.side]?.[field.key] && (
+                    <div>{words[currentCard][field.key]}</div>
+                  )}
+                </>
+              ))}
             </div>
-            <div>
-              {words[currentCard]?.term} {words[currentCard]?.partOfSpeech}
-            </div>
-          </div>
-          <div className={c("back")}>
-            <div>{words[currentCard]?.ipa}</div>
-            <div>{words[currentCard]?.meaning}</div>
-          </div>
+          ))}
         </div>
         <div className={c("action")}>
           <div className={c("control-btn")}>

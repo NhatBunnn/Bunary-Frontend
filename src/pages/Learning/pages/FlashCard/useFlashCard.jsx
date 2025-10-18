@@ -11,6 +11,44 @@ function useFlashCard() {
   const { id } = useParams();
   const { fetcher } = useFetcher();
 
+  const [settings, setSettings] = useState({
+    front: {
+      term: true,
+      ipa: true,
+      partOfSpeech: true,
+      meaning: true,
+      image: true,
+    },
+    back: {
+      term: true,
+      ipa: true,
+      partOfSpeech: true,
+      meaning: true,
+      image: true,
+    },
+  });
+
+  console.log("settings ", settings);
+
+  useEffect(() => {
+    const fetch = async () => {
+      setLoading(true);
+      try {
+        const response = await fetcher({
+          url: `/api/v1/settings/flashcard`,
+          method: "GET",
+        });
+
+        setSettings(response.data.settings);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
   useEffect(() => {
     const fetchWords = async () => {
       setLoading(true);
@@ -33,7 +71,7 @@ function useFlashCard() {
     fetchWords();
   }, [id, showNotification, setLoading]);
 
-  return { words, loading };
+  return { words, loading, settings };
 }
 
 export default useFlashCard;

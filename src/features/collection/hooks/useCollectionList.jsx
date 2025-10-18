@@ -11,7 +11,6 @@ function useCollectionList() {
       setLoading(true);
       try {
         const response = await findAllCollections({ token: await getToken() });
-        console.log("response ", response.data);
       } catch (error) {
         console.log(error);
       } finally {
