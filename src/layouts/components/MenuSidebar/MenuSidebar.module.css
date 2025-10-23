@@ -1,7 +1,13 @@
 .menuSidebar {
-  height: 300vh;
+  flex: 0 0 217px;
+  transition: all 0.3s ease;
+}
+
+.content {
   background-color: var(--color-white);
   position: fixed;
+  width: 217px;
+  height: 100%;
 }
 
 .menuSidebar hr {
@@ -20,6 +26,22 @@
   margin-top: 5px;
 }
 
-.content {
+.menuItem-list {
   padding: 0 12px 12px 12px;
+}
+
+.menuSidebar.collapsed {
+  flex: 0 0 60px;
+}
+
+.menuSidebar.collapsed .content {
+  position: fixed;
+  width: 60px;
+}
+
+.menuSidebar.collapsed .menuItem-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

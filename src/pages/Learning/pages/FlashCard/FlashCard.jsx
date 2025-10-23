@@ -39,6 +39,9 @@ function FlashCard() {
 
   return (
     <div className={c("flashCard")}>
+      <div className={c("card-counter")}>
+        {currentCard + 1}/{words.length}
+      </div>
       <div className={c("content")}>
         <div
           className={c(
@@ -60,7 +63,7 @@ function FlashCard() {
               {flashCardFields?.map((field, i) => (
                 <>
                   {settings?.[flashCardSide.side]?.[field.key] && (
-                    <div>{words[currentCard][field.key]}</div>
+                    <div>{words?.[currentCard]?.[field.key]}</div>
                   )}
                 </>
               ))}

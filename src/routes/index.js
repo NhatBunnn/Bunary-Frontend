@@ -1,4 +1,4 @@
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout";
 import CreateWordSet from "../pages/CreateWordSet";
 import Homepage from "@pages/Homepage/Homepage";
 import Login from "../pages/Login";

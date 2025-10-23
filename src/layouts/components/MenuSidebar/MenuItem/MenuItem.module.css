@@ -17,11 +17,9 @@
 .icon {
   font-size: 23px;
   width: 23px;
-  margin-right: 12px;
+  /* margin-right: 12px; */
+  display: flex;
+  justify-content: center;
 }
 
-@media (max-width: 1200px) {
-  .icon-mr {
-    margin-right: 0;
-  }
-}
+

@@ -53,7 +53,7 @@ function TokenProvider({ children }) {
 
   if (loading) {
     return <Loading />;
-  }
+  } 
 
   return (
     <TokenContext.Provider value={value}>{children}</TokenContext.Provider>

@@ -55,7 +55,7 @@ function useWordSetForm() {
       setWordSetInput({ name: response.data.title, ...response.data });
       setWordInputs(response.data.words);
     } catch (e) {
-      showNotification(te(e.errorCode) || e, "error");
+      showNotification(te(e.errorCode) || e.message, "error");
       setLoading(false);
     } finally {
       setLoading(false);
@@ -105,7 +105,7 @@ function useWordSetForm() {
           .join("-")}`
       );
     } catch (e) {
-      showNotification(te(e.errorCode) || e, "error");
+      showNotification(te(e.errorCode) || e.message, "error");
       setLoading(false);
     } finally {
       setLoading(false);
@@ -138,7 +138,11 @@ function useWordSetForm() {
       if (wordSetInput.thumbnailFile)
         formData.append("thumbnailFile", wordSetInput.thumbnailFile);
 
-      const response = await createWordSet(accessToken, formData);
+      const response = await fetcher({
+        url: `/api/v1/wordsets`,
+        method: "POST",
+        data: formData,
+      });
 
       showNotification("Tạo bộ từ vựng thành công", "success");
       navigate(
@@ -149,7 +153,7 @@ function useWordSetForm() {
           .join("-")}`
       );
     } catch (e) {
-      showNotification(te(e.errorCode) || e, "error");
+      showNotification(te(e.errorCode) || e.message, "error");
       setLoading(false);
     } finally {
       setLoading(false);

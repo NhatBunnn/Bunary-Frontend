@@ -21,7 +21,7 @@ function useWordSetPage() {
       setLoading(true);
       try {
         const wordsRes = await fetcher({
-          url: `/api/v1/words/${id}`,
+          url: `/api/v1/wordsets/${id}/words`,
           method: "GET",
           params: {
             page: 0,

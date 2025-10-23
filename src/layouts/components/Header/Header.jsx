@@ -15,7 +15,7 @@ import Search from "./component/Search/Search";
 
 const c = classNames.bind(styles);
 
-function Header({ isMenu = false, onMenuClick, onRankingMenu }) {
+function Header({ onMenuClick, onRankingMenu }) {
   const [openDropDown, setOpenDropDown] = useState(false);
   const { user, loadingUser } = useUser();
   const { handleSubmit } = useLogout();
@@ -54,11 +54,14 @@ function Header({ isMenu = false, onMenuClick, onRankingMenu }) {
       )}
     >
       {/* Menu-sidebar */}
-      {isMenu && (
-        <div className={c("toggle", "cursor-pointer")} onClick={onMenuClick}>
-          <FontAwesomeIcon icon={faBars} style={{ fontSize: "22px" }} />
-        </div>
-      )}
+
+      <div
+        className={c("toggle", "cursor-pointer", "d-lg-none")}
+        onClick={onMenuClick}
+      >
+        <FontAwesomeIcon icon={faBars} style={{ fontSize: "22px" }} />
+      </div>
+
       {/* Logo */}
       <Link className={c("logo")} to={"/"}>
         <Image src={Images.Logo} width="40px" height="40px" />

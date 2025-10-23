@@ -28,8 +28,6 @@ function useFlashCard() {
     },
   });
 
-  console.log("settings ", settings);
-
   useEffect(() => {
     const fetch = async () => {
       setLoading(true);
@@ -54,8 +52,13 @@ function useFlashCard() {
       setLoading(true);
       try {
         const response = await fetcher({
-          url: `/api/v1/words/${id}`,
+          url: `/api/v1/wordsets/${id}/words`,
           method: "GET",
+          params: {
+            page: 0,
+            size: 300,
+            sort: "id,asc",
+          },
         });
 
         const dataResponse = response;

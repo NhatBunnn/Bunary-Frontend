@@ -10,7 +10,7 @@ import { useNotification } from "@context/NotificationProvider";
 import useWordSetForm from "@features/wordsets/hooks/useWordSetForm";
 import { useEffect, useRef, useState } from "react";
 import WordInput from "./components/WordInput/WordInput";
-import { OptionsMenuWrapper } from "@components/index";
+import { DialogWrapper, OptionsMenuWrapper } from "@components/index";
 import { EditVisibilityDialog } from "./components/Dialogs";
 
 const c = classNames.bind(styles);
@@ -97,13 +97,16 @@ export default function WordSetForm({ type = "CREATE" }) {
   return (
     <div className={c("wordSetForm")}>
       {/* dialog */}
-      {openDialog.privacy && (
+      <DialogWrapper
+        title="Chỉnh sửa quyền riêng tư"
+        onClose={() => handleToggleDialog("privacy")}
+        isOpen={openDialog.privacy}
+      >
         <EditVisibilityDialog
-          onClose={() => handleToggleDialog("privacy")}
           wordSetInput={wordSetInput}
           setWordSetInput={setWordSetInput}
         />
-      )}
+      </DialogWrapper>
       {/* Title */}
       <TitleSection title="Tạo bộ từ vựng mới" onTop={true}>
         {type === "CREATE" ? (
