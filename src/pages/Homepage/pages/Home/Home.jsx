@@ -3,13 +3,16 @@ import styles from "./Home.module.css";
 import { bindClass } from "@utils/classnames";
 import TitleSection from "@components/TitleSection";
 import { UserList } from "@features/user/components";
+import Button from "@components/Button/Button";
 
 const c = bindClass(styles);
 
 function Home() {
   return (
     <div className={c("home")}>
-      <TitleSection title="Bộ từ vựng phổ biến" onTop={true} />
+      <TitleSection title="Bộ từ vựng phổ biến" onTop={true}>
+        <Button label="Xem chi tiết" to="/popular_wordsets" variant="default" />
+      </TitleSection>
       <WordSetList />
       <TitleSection title="Gợi ý bạn bè" onTop={true} />
       <UserList />

@@ -8,8 +8,10 @@ import {
   faStar,
   faChartColumn,
   faIdCard,
+  faUser,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../components/Button";
+import Button from "../../components/Button/Button";
 import Word from "../../components/Word";
 import Loading from "@components/Loading";
 import { useEffect, useRef, useState } from "react";
@@ -18,17 +20,26 @@ import useWordSetPage from "./useWordSetPage";
 import { ConfirmDialog, DialogWrapper } from "@components/index";
 import { AddToCollection } from "@features/collection/components";
 import FlashCardSetting from "./dialogs/FlashCardSetting/FlashCardSetting";
+import Avatar from "@components/Avatar";
 
 const c = classNames.bind(styles);
 
 function WordSetPage() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const { words, wordSet, loadingWords, handleRemoveWordSet } =
-    useWordSetPage();
+  const {
+    words,
+    wordSet,
+    loadingWords,
+    handleRemoveWordSet,
+    handleRatingWordSet,
+    ratingValue,
+    setRatingValue,
+  } = useWordSetPage();
   const [openSetting, setOpenSetting] = useState({ flashCard: false });
   const [openMoreOptions, setMoreOptions] = useState(false);
-
   const [openAddToCollect, setOpenAddToCollect] = useState(false);
+  const [userRating, setUserRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
 
   const moreOptionsRef = useRef();
   const navigation = useNavigate();
@@ -98,7 +109,6 @@ function WordSetPage() {
           icon={faBookmark}
           onClick={() => {
             setOpenAddToCollect(true);
-            // setWordSet(wordSet);
           }}
         />
         <div className={c("moreOptions", "d-inline")} ref={moreOptionsRef}>
@@ -136,8 +146,8 @@ function WordSetPage() {
         </div>
       </div>
 
-      {/* action bar */}
-      <div className={c("action-bar", "f-flex", "mb-3")}>
+      {/* Action bar */}
+      <div className={c("action-bar", "d-flex", "mb-3")}>
         <Button
           label="Thẻ ghi nhớ"
           icon={faIdCard}
@@ -149,29 +159,124 @@ function WordSetPage() {
         <Button label="Kiểm tra" icon={faIdCard} />
       </div>
 
-      {/* wordcard */}
-      <div className={c("wordcard", "d-flex", "justify-content-between")}>
-        <div className="row">
-          <div className={c("col-12 col-sm-4", "h-100", "thumil")}>
-            <div className={c("thumbnail")}>
-              <img src={wordSet.thumbnail} alt="" />
-            </div>
+      {/* Wordcard */}
+      <div className={c("wordcard", "mb-4")}>
+        <div className="row w-100 h-100">
+          <div className={c("col-12 col-md-6 col-lg-5", "thumbnail")}>
+            <img src={wordSet.thumbnail} alt={wordSet.title} />
           </div>
-          <div className={c("col", "h-100")}>
-            <div className={c("word-lists")}>
-              <div className="row">
-                {words.map((word, i) => (
-                  <div className="col-12 col-md-6 px-2" key={i}>
-                    <Word word={word} />
-                  </div>
-                ))}
-              </div>
+          <div className={c("col-12 col-md-6 col-lg-7", "word-lists")}>
+            <div className="row">
+              {words.map((word, i) => (
+                <div className="col-12 col-xl-6 px-2 mb-2" key={i}>
+                  <Word word={word} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* author (làm sau) */}
+      {/* Author Section */}
+      <div className={c("author-section", "mb-4")}>
+        <TitleSection title="Tác giả" />
+        <div className={c("author-info", "d-flex", "align-items-center")}>
+          <Avatar size="40px" isCircled={true} src={wordSet.author?.avatar} />
+          <div className={c("author-details")}>
+            <span className={c("author-name")}>
+              {wordSet.author?.fullName || "Unknown Author"}
+            </span>
+            <span className={c("author-bio")}>
+              {wordSet.author?.email || "Không có thông tin về tác giả."}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Rating Section */}
+      <div className={c("rating-section", "mb-4")}>
+        <TitleSection title="Đánh giá" />
+        <div className={c("rating-container", "p-3", "rounded")}>
+          <div
+            className={c(
+              "rating-overview",
+              "d-flex",
+              "align-items-center",
+              "mb-3"
+            )}
+          >
+            <FontAwesomeIcon icon={faStar} className={c("star-icon")} />
+            <span className={c("rating-score")}>9.7 / 10</span>
+            <span className={c("rating-count")}>(12 đánh giá)</span>
+          </div>
+          <div
+            className={c(
+              "rating-input",
+              "d-flex",
+              "align-items-center",
+              "gap-3"
+            )}
+          >
+            <div className={c("star-rating")}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FontAwesomeIcon
+                  key={star}
+                  icon={faStar}
+                  className={c("star", {
+                    active: star <= (ratingValue || userRating),
+                    hover: star <= hoverRating,
+                  })}
+                  onClick={() => setRatingValue(star)}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                />
+              ))}
+            </div>
+            <span className={c("rating-text")}>
+              {userRating > 0 ? `${userRating}/5` : "Chọn số sao"}
+            </span>
+          </div>
+          <Button
+            label="Gửi đánh giá"
+            className={c("submit-rating", { disabled: userRating === 0 })}
+            disabled={userRating === 0}
+            onClick={() => {
+              handleRatingWordSet();
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Comment Section */}
+      <div className={c("comment-section")}>
+        <TitleSection title="Bình luận" />
+        <div className={c("comment-input", "mb-3")}>
+          <textarea
+            placeholder="Viết bình luận của bạn..."
+            className={c("comment-textarea")}
+          />
+          <Button label="Gửi bình luận" className={c("submit-comment")} />
+        </div>
+        <div className={c("comment-list")}>
+          {wordSet.comments?.length > 0 ? (
+            wordSet.comments.map((comment, i) => (
+              <div key={i} className={c("comment-item", "d-flex", "mb-2")}>
+                <FontAwesomeIcon
+                  icon={faComment}
+                  className={c("comment-icon")}
+                />
+                <div className={c("comment-content")}>
+                  <span className={c("comment-author")}>{comment.author}</span>
+                  <p className={c("comment-text")}>{comment.text}</p>
+                  <span className={c("comment-date")}>{comment.date}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className={c("no-comments")}>Chưa có bình luận nào.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

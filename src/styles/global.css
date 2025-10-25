@@ -33,7 +33,7 @@
 }
 
 .outline-primary {
-  outline: 1px solid var(--color-gray-500);
+  outline: 1px solid var(--color-gray-400);
 }
 
 .divider-bottom {

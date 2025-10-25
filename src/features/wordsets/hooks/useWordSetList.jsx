@@ -13,10 +13,13 @@ function useWordSetList() {
       setLoading(true);
       try {
         const response = await fetcher({
-          url: "/api/v1/wordsets",
+          url: "/api/v1/wordsets/stats?sort=popularityScore,desc",
           method: "GET",
           params: {
             include: "user",
+            visibility: "PUBLIC",
+            page: 0,
+            size: 20,
           },
         });
 

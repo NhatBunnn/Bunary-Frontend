@@ -1,7 +1,7 @@
 import TitleSection from "@components/TitleSection";
 import styles from "./Collection.module.css";
 import { bindClass } from "@utils/classnames";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import { useContext } from "react";
 import { CreateCollectContext } from "@context/CreateCollectionProvider";
 import MyCollectionList from "@features/collection/components/MyCollectionList/MyCollectionList";

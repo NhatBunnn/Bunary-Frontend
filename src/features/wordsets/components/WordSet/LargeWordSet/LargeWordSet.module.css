@@ -7,7 +7,7 @@
   cursor: pointer;
   transform: translateY(0);
   transition: 0.3s;
-  min-width: 326px;
+  /* min-width: 326px; */
   width: 100%;
 }
 
@@ -78,8 +78,6 @@
   font-size: var(--font-size-caption);
   overflow: hidden;
 }
-
-
 
 .author {
   font-size: var(--font-size-caption);

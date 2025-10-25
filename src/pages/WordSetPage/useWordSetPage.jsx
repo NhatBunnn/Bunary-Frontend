@@ -11,6 +11,7 @@ function useWordSetPage() {
 
   const [words, setWords] = useState([]);
   const [wordSet, setWordSet] = useState("");
+  const [ratingValue, setRatingValue] = useState(5);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -64,7 +65,29 @@ function useWordSetPage() {
     }
   };
 
-  return { words, wordSet, handleRemoveWordSet, loading };
+  const handleRatingWordSet = async () => {
+    try {
+      const res = await fetcher({
+        url: `/api/v1/wordsets/${wordSet.id}/ratings`,
+        method: "POST",
+        data: { value: ratingValue },
+      });
+    } catch (e) {
+      showNotification(te(e?.errorCode), "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    words,
+    wordSet,
+    handleRemoveWordSet,
+    handleRatingWordSet,
+    ratingValue,
+    setRatingValue,
+    loading,
+  };
 }
 
 export default useWordSetPage;

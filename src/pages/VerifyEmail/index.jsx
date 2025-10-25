@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import styles from "./VerifyEmail.module.css";
 import classNames from "classnames/bind";
-import Button from "../../components/Button";
+import Button from "../../components/Button/Button";
 import AuthWrapper from "../../components/wrapper/AuthWrapper";
 import SuccessAlert from "../../components/Notification";
 import ValidateInput from "../../components/ValidateInput";

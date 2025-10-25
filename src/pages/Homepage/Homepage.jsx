@@ -7,6 +7,7 @@ import Home from "./pages/Home/Home";
 import MyWordSets from "./pages/MyWordSets/MyWordSets";
 import Tabs from "./components/Tabs/Tabs";
 import { useEffect, useState } from "react";
+import PopularWordSet from "./pages/PopularWordSet/PopularWordSet";
 
 const c = classNames.bind(styles);
 
@@ -19,6 +20,7 @@ function Homepage() {
   const tabComponents = {
     home: <Home />,
     MyWordSets: <MyWordSets />,
+    popular_wordsets: <PopularWordSet />,
   };
 
   useEffect(() => {

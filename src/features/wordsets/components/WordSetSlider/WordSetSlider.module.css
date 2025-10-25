@@ -1,9 +1,12 @@
-.wordSetSlider{}
+.wordSetSlider {
+  width: 100%;
+}
 
 .slider-container {
   width: 100%;
   position: relative;
   overflow: hidden;
+  padding: 10px;
 }
 
 .slider-track {
@@ -44,12 +47,12 @@
 
 @media (max-width: 1200px) {
   .slider {
-    flex: 0 0 calc(((100% - 30px) / 2));
+    flex: 0 0 calc(((100% - 15px) / 2));
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   .slider {
-    flex: 0 0 calc(((100% - 30px)));
+    flex: 0 0 calc(((100%)));
   }
 }

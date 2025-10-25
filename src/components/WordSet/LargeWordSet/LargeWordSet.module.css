@@ -7,7 +7,6 @@
   cursor: pointer;
   transform: translateY(0);
   transition: 0.3s;
-  min-width: 326px;
   width: 100%;
 }
 

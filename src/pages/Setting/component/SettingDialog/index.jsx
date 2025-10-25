@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "../../../../components/Button";
+import Button from "../../../../components/Button/Button";
 import ValidateInput from "../../../../components/ValidateInput";
 import styles from "./SettingDialog.module.css";
 import classNames from "classnames/bind";

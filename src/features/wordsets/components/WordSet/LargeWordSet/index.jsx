@@ -14,7 +14,8 @@ function LargeWordSet({ author, wordSet }) {
         "largeWordSet",
         "d-flex",
         "justify-content-left",
-        "link-no-style"
+        "link-no-style",
+        "outline-primary"
       )}
       to={`/wordset/${wordSet.id}/${wordSet.title
         .split(" ")

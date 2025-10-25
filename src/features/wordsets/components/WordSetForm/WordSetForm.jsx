@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import { faEarth, faGear } from "@fortawesome/free-solid-svg-icons";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import TitleSection from "@components/TitleSection";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import ValidateInput from "@components/ValidateInput";
 import { useNotification } from "@context/NotificationProvider";
 import useWordSetForm from "@features/wordsets/hooks/useWordSetForm";

@@ -5,7 +5,7 @@ import { CreateCollectContext } from "@context/CreateCollectionProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import ValidateInput from "@components/ValidateInput";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import useCollection from "@features/collection/hooks/useCollection";
 
 const c = bindClass(styles);

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import styles from "./FlashCardSetting.module.css";
 import classNames from "classnames/bind";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";

@@ -7,6 +7,11 @@ function Tabs({ active }) {
   const tabs = [
     { id: "home", label: "Trang chủ", path: "/" },
     { id: "MyWordSets", label: "Bộ từ vựng của tôi", path: "/MyWordSets" },
+    {
+      id: "popular_wordsets",
+      label: "Phổ biến",
+      path: "/popular_wordsets",
+    },
   ];
 
   return (

@@ -1,7 +1,7 @@
 import TitleSection from "@components/TitleSection";
 import styles from "./AddToCollection.module.css";
 import { bindClass } from "@utils/classnames";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import Loading from "@components/Loading";

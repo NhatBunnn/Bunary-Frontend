@@ -1,15 +1,15 @@
-import LargeWordSet from "./LargeWordSet";
-import SmallWordSet from "./SmallWordSet";
+import LargeWordSet from './LargeWordSet';
+import SmallWordSet from './SmallWordSet';
 
-function WordSet({ size = "small", author, wordSet, index }) {
+function WordSet({ size = 'small', author, wordSet, index }) {
   return (
-    <div key={index}>
-      {size === "small" ? (
+    <>
+      {size === 'small' ? (
         <SmallWordSet wordSet={wordSet} />
       ) : (
         <LargeWordSet author={author} wordSet={wordSet} />
       )}
-    </div>
+    </>
   );
 }
 

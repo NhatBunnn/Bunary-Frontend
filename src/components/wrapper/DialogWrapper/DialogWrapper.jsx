@@ -1,7 +1,7 @@
 import TitleSection from "@components/TitleSection";
 import styles from "./DialogWrapper.module.css";
 import { bindClass } from "@utils/classnames";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import { useEffect, useRef } from "react";
 
 const c = bindClass(styles);

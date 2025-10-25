@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { Image } from "../../../../assets/images";
-import Button from "../../../../components/Button";
+import Button from "../../../../components/Button/Button";
 
 const c = classNames.bind(styles);
 

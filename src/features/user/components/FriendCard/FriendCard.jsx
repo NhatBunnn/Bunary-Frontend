@@ -1,6 +1,6 @@
 import styles from "./FriendCard.module.css";
 import classNames from "classnames/bind";
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
 import { faMessage, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Image, Images } from "@assets/images";
 
