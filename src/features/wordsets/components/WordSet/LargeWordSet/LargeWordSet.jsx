@@ -26,7 +26,7 @@ function LargeWordSet({ author, wordSet }) {
       <div className={c("thumbnail")}>
         <div className={c("rating")}>
           <FontAwesomeIcon icon={faStar} className={c("rating__icon")} />
-          <span>9.10</span>
+          <span>{wordSet.stat.ratingAvg}</span>
         </div>
         <img src={wordSet.thumbnail} alt="" />
       </div>
@@ -49,7 +49,7 @@ function LargeWordSet({ author, wordSet }) {
             )}
           </div>
           <div className={c("vocab")}>
-            <span>147 từ vựng</span>
+            <span>{`${wordSet.stat?.wordCount} từ vựng`}</span>
           </div>
         </div>
         <div className={c("description", "h-100")}>{wordSet.description}</div>

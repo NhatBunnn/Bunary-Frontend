@@ -22,7 +22,7 @@ function useWordSetPage() {
       setLoading(true);
       try {
         const wordsRes = await fetcher({
-          url: `/api/v1/wordsets/${id}/words`,
+          url: `/api/v1/words/${id}`,
           method: "GET",
           params: {
             page: 0,
@@ -34,9 +34,6 @@ function useWordSetPage() {
         const wordSetsRes = await fetcher({
           url: `/api/v1/wordsets/${id}`,
           method: "GET",
-          params: {
-            include: "user, collection",
-          },
         });
 
         setWords(wordsRes.data);
@@ -55,9 +52,12 @@ function useWordSetPage() {
   const handleRemoveWordSet = async () => {
     try {
       setLoading(true);
-      await removeWordSet(accessToken, id);
-      showNotification("Xóa bộ từ vựng thành công", "success");
-      setTimeout(() => navigate("/learning/mine"), 300);
+      await fetcher({
+        url: `/api/v1/wordsets/${id}`,
+        method: "DELETE",
+      });
+
+      setTimeout(() => navigate("/MyWordSets"), 300);
     } catch (e) {
       showNotification(te(e.errorCode), "error");
     } finally {

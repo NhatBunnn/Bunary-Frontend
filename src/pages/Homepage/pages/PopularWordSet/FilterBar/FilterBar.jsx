@@ -4,19 +4,18 @@ import { bindClass } from "@utils/classnames";
 
 const c = bindClass(styles);
 
-const FilterBar = () => {
+const FilterBar = ({ queryParams, setQueryParams, onSubmit, className }) => {
+  const handleSort = (e) => {
+    setQueryParams({ ...queryParams, sort: e.target.value });
+  };
+
   return (
-    <div className={c("filter-bar")}>
+    <div className={c("filter-bar", className)}>
       <div className={c("filter-group")}>
         <label htmlFor="sort">Sắp xếp</label>
-        <select id="sort">
-          <option value="">-- Chọn --</option>
-          <option value="views">Lượt xem</option>
-          <option value="learned">Lượt học</option>
-          <option value="avgRating">Đánh giá trung bình</option>
-          <option value="popularity">Điểm phổ biến</option>
-          <option value="newest">Mới nhất</option>
-          <option value="oldest">Cũ nhất</option>
+        <select id="sort" value={queryParams?.sort || ""} onChange={handleSort}>
+          <option value="popularityScore,desc">Phổ biến</option>
+          <option value="popularityScore,asc">Ít phổ biến</option>
         </select>
       </div>
 
@@ -63,7 +62,9 @@ const FilterBar = () => {
         </select>
       </div>
 
-      <button className={c("apply-btn")}>Áp dụng</button>
+      <button className={c("apply-btn")} onClick={onSubmit}>
+        Áp dụng
+      </button>
     </div>
   );
 };

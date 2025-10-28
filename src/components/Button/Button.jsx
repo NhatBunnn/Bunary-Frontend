@@ -29,12 +29,13 @@ function Button({
   const navigate = useNavigate();
 
   return (
-    <button
+    <div
       className={c(
         "button",
         "d-inline-flex",
         "cursor-pointer",
         "link-no-style",
+        "outline-primary",
         className
       )}
       type={type}
@@ -70,7 +71,7 @@ function Button({
           <FontAwesomeIcon icon={faSpinner} className="ms-2 fa-spin" />
         )}
       </div>
-    </button>
+    </div>
   );
 }
 

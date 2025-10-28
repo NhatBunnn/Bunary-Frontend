@@ -24,7 +24,8 @@ function SmallWordSet({ wordSet }) {
         "smallWordSet",
         "d-flex",
         "justify-content-left",
-        "align-items-center"
+        "align-items-center",
+        "outline-primary"
       )}
     >
       <div className={c("thumbnail")}>

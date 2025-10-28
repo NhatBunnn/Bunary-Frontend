@@ -12,7 +12,6 @@ import PopularWordSet from "./pages/PopularWordSet/PopularWordSet";
 const c = classNames.bind(styles);
 
 function Homepage() {
-  const { user, loading } = useUser();
   const { slug } = useParams();
 
   const [active, setActive] = useState("route");
@@ -31,13 +30,8 @@ function Homepage() {
     }
   }, [slug]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <div className={c("Homepage", "w-100")}>
-      {user && <h3>Hello bạn: {user.fullName}</h3>}
       <Tabs active={active} />
 
       {tabComponents[active] || <Home />}

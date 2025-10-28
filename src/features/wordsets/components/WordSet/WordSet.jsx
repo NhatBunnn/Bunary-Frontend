@@ -1,10 +1,10 @@
-import LargeWordSet from './LargeWordSet';
-import SmallWordSet from './SmallWordSet';
+import LargeWordSet from "./LargeWordSet/LargeWordSet";
+import SmallWordSet from "./SmallWordSet/SmallWordSet";
 
-function WordSet({ size = 'small', author, wordSet, index }) {
+function WordSet({ size = "small", author, wordSet, index }) {
   return (
     <>
-      {size === 'small' ? (
+      {size === "small" ? (
         <SmallWordSet wordSet={wordSet} />
       ) : (
         <LargeWordSet author={author} wordSet={wordSet} />

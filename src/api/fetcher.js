@@ -2,7 +2,14 @@ import { API_URL } from "@config/apiConfig";
 import axiosClient from "./axiosClient";
 import { useToken } from "@context/AuthProvider/TokenContext";
 
-export const fetcher = async ({ url, method = "GET", token, params, body }) => {
+export const fetcher = async ({
+  url,
+  method = "GET",
+  token,
+  params,
+  body,
+  credentials,
+}) => {
   const query = params ? `?${new URLSearchParams(params).toString()}` : "";
 
   const response = await fetch(`${API_URL}${url}${query}`, {
@@ -11,6 +18,7 @@ export const fetcher = async ({ url, method = "GET", token, params, body }) => {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
+    credentials: credentials || "same-origin",
   });
 
   const dataResponse = await response.json();

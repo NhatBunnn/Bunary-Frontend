@@ -1,5 +1,4 @@
-import { findMyAccount } from "@api/userApi";
-import { useToken } from "@context/AuthProvider/TokenContext";
+import { useFetcher } from "@api/fetcher";
 import useAppBase from "@hooks/useAppBase";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -9,7 +8,8 @@ export const useUser = () => useContext(UserContext);
 
 function UserProvider({ children }) {
   const { setLoading, loading } = useAppBase();
-  const { getToken } = useToken();
+
+  const { fetcher } = useFetcher();
 
   const [user, setUser] = useState({});
 
@@ -17,7 +17,11 @@ function UserProvider({ children }) {
     const fetch = async () => {
       setLoading(true);
       try {
-        const response = await findMyAccount(await getToken());
+        const response = await fetcher({
+          url: `/api/v1/users/me`,
+          method: "GET",
+        });
+
         setUser(response.data);
       } catch (e) {
         console.error(e);

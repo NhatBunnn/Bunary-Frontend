@@ -1,0 +1,56 @@
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  align-items: flex-end;
+  font-family: 'Inter', sans-serif;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  flex: 1 1 150px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.filter-group select:focus,
+.filter-group input[type="date"]:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  outline: none;
+}
+
+.apply-btn {
+  padding: 10px 20px;
+  background-color: #4f46e5;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.apply-btn:hover {
+  background-color: #3730a3;
+  transform: translateY(-2px);
+}

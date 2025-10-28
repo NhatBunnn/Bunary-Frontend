@@ -8,11 +8,10 @@ import {
   faStar,
   faChartColumn,
   faIdCard,
-  faUser,
   faComment,
 } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../components/Button/Button";
-import Word from "../../components/Word";
+import Button from "@components/Button/Button";
+import Word from "@components/Word";
 import Loading from "@components/Loading";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -138,11 +137,11 @@ function WordSetPage() {
       <div className={c("info", "d-flex", "align-items-center", "mb-3")}>
         <div className={c("learners-count")}>
           <FontAwesomeIcon icon={faChartColumn} />
-          <span>12 người đã học</span>
+          <span>{`${wordSet.stat.studyCount} người đã học`}</span>
         </div>
         <div className={c("rating")}>
           <FontAwesomeIcon icon={faStar} />
-          <span>9.7</span>
+          <span>{`${wordSet.stat.ratingAvg} / 5`}</span>
         </div>
       </div>
 
@@ -204,11 +203,7 @@ function WordSetPage() {
               "align-items-center",
               "mb-3"
             )}
-          >
-            <FontAwesomeIcon icon={faStar} className={c("star-icon")} />
-            <span className={c("rating-score")}>9.7 / 10</span>
-            <span className={c("rating-count")}>(12 đánh giá)</span>
-          </div>
+          ></div>
           <div
             className={c(
               "rating-input",

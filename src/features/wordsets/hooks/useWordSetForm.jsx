@@ -44,16 +44,18 @@ function useWordSetForm() {
   const handleFindWordSetById = async () => {
     setLoading(true);
     try {
-      const response = await fetcher({
+      const wordSetRes = await fetcher({
         url: `/api/v1/wordsets/${id}`,
         method: "GET",
-        params: {
-          include: "word",
-        },
       });
 
-      setWordSetInput({ name: response.data.title, ...response.data });
-      setWordInputs(response.data.words);
+      const wordsRes = await fetcher({
+        url: `/api/v1/words/${id}`,
+        method: "GET",
+      });
+
+      setWordSetInput({ name: wordSetRes.data.title, ...wordSetRes.data });
+      setWordInputs(wordsRes.data);
     } catch (e) {
       showNotification(te(e.errorCode) || e.message, "error");
       setLoading(false);
