@@ -29,6 +29,7 @@ function ValidateInput({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        style={{ backgroundColor: "var(--color-gray-100)" }}
       />
       <div className="invalid-feedback">
         {fieldErrors && fieldErrors[field]}

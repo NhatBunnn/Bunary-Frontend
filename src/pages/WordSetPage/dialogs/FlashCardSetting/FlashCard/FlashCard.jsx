@@ -9,18 +9,18 @@ function FlashCard({ setting, className }) {
       {!!setting?.image && (
         <div className={c("image", "mb-2")}>
           <img
-            src="https://res.cloudinary.com/dlzp33vgj/image/upload/v1757930519/ydfmlchevqpoxn5fhxjb.jpg"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5BS7L8T5q9izKFhcQ4z6ZunTH7kTAfri3pg&s"
             alt=""
           />
         </div>
       )}
       <div className={c("text")}>
-        {!!setting?.term && <div className={c("term")}>manufacturer</div>}
-        {!!setting?.ipa && <div className={c("ipa")}>/ˌmæn.jəˈfæk.tʃɚ.ɚ/</div>}
+        {!!setting?.term && <div className={c("term")}>Apple</div>}
+        {!!setting?.ipa && <div className={c("ipa")}>/ˈæp.əl/</div>}
         {!!setting?.partOfSpeech && (
           <div className={c("partOfSpeech")}>{`(noun)`}</div>
         )}
-        {!!setting?.meaning && <div className={c("meaning")}>Nhà sản xuất</div>}
+        {!!setting?.meaning && <div className={c("meaning")}>Quả táo</div>}
       </div>
     </div>
   );

@@ -52,7 +52,7 @@ function useFlashCard() {
       setLoading(true);
       try {
         const response = await fetcher({
-          url: `/api/v1/wordsets/${id}/words`,
+          url: `/api/v1/words/${id}`,
           method: "GET",
           params: {
             page: 0,
