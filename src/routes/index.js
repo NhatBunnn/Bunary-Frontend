@@ -1,8 +1,8 @@
 import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout";
 import CreateWordSet from "../pages/CreateWordSet";
 import Homepage from "@pages/Homepage/Homepage";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Login from "../pages/Login/Login";
+import Register from "../pages/Register/Register";
 import VerifyEmail from "../pages/VerifyEmail";
 import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
@@ -14,7 +14,10 @@ import {
   Learning,
 } from "@pages/index";
 import WordSetPage from "@pages/WordSetPage/WordSetPage";
-import AdminDashboard from "@pages/AdminDashboard/AdminDashboard";
+import AdminHome from "@pages/AdminDashboard/AdminHome/AdminHome";
+import AdminLayout from "@layouts/AdminLayout/AdminLayout";
+import NotFound from "@pages/FallBack/NotFound/NotFound";
+import Forbidden from "@pages/FallBack/Forbidden/Forbidden";
 
 const publicRoutes = [
   { path: "/", Page: Homepage, Layout: DefaultLayout },
@@ -29,6 +32,10 @@ const publicRoutes = [
     Page: CollectionDetail,
     Layout: DefaultLayout,
   },
+
+  // FallBack
+  { path: "/*", Page: NotFound },
+  { path: "/403", Page: Forbidden },
 ];
 
 const privateRoutes = [
@@ -43,7 +50,8 @@ const privateRoutes = [
 const adminRoutes = [
   {
     path: "/admin",
-    Page: AdminDashboard,
+    Page: AdminHome,
+    Layout: AdminLayout,
     roles: ["ADMIN"],
   },
 ];

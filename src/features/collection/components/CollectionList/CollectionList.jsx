@@ -1,7 +1,7 @@
 import CollectionPreview from "../CollectionPreview/CollectionPreview";
 import styles from "./CollectionList.module.css";
 import { bindClass } from "@utils/classnames";
-import Loading from "@components/Loading";
+import Loading from "@components/Loading/Loading";
 import { useContext } from "react";
 import useCollectionPreview from "@features/collection/hooks/useCollectionPreview";
 import { ConfirmDialogContext } from "@context/UIContext/ConfirmDialogProvider";

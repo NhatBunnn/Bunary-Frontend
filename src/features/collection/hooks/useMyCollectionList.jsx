@@ -1,4 +1,3 @@
-import { findAllMyCollections } from "@api/collectionApi";
 import { useFetcher } from "@api/fetcher";
 import useAppBase from "@hooks/useAppBase";
 import { useEffect, useState } from "react";

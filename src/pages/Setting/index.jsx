@@ -1,5 +1,5 @@
 import { useUser } from "@context/UserProvider/UserContext";
-import Loading from "../../components/Loading";
+import Loading from "../../components/Loading/Loading";
 import TitleSection from "../../components/TitleSection";
 import SettingItem from "./component/SettingItem";
 import SettingPanel from "./component/SettingPanel";

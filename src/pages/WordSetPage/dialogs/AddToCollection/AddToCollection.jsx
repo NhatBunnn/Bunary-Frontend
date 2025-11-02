@@ -3,9 +3,9 @@ import styles from "./AddToCollection.module.css";
 import { bindClass } from "@utils/classnames";
 import Button from "@components/Button/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
-import Loading from "@components/Loading";
-import CollectionPreview from "../../../../features/collection/components/CollectionPreview/CollectionPreview";
+import { useContext, useEffect, useRef } from "react";
+import Loading from "@components/Loading/Loading";
+import CollectionPreview from "@features/collection/components/CollectionPreview/CollectionPreview";
 import { CreateCollectContext } from "@context/CreateCollectionProvider";
 import useAddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/useAddToCollection";
 import { useNotification } from "@context/NotificationProvider";
@@ -17,7 +17,7 @@ const c = bindClass(styles);
 function AddToCollection({ isOpen, onCancel, wordSet }) {
   const { t: te } = useTranslation("error");
   const { handleToggleCreateCollect } = useContext(CreateCollectContext);
-  const { loading, myCollectionList } = useMyCollectionList();
+  // const { loading, myCollectionList } = useMyCollectionList();
   const { handleAddToCollection } = useAddToCollection();
   const addToCollectionRef = useRef();
   const { showNotification } = useNotification();
@@ -37,7 +37,7 @@ function AddToCollection({ isOpen, onCancel, wordSet }) {
 
   if (!isOpen) return null;
 
-  if (loading) return <Loading />;
+  // if (loading) return <Loading />;
 
   return (
     <div className={c("addToCollection")} ref={addToCollectionRef}>
@@ -53,7 +53,7 @@ function AddToCollection({ isOpen, onCancel, wordSet }) {
         />
         <hr />
         <div className={c("collectionList")}>
-          {myCollectionList.length > 0 &&
+          {/* {myCollectionList.length > 0 &&
             myCollectionList.map((d) => {
               const isExits = wordSet?.myCollectionList?.some(
                 (c) => c.id === d.id
@@ -76,7 +76,7 @@ function AddToCollection({ isOpen, onCancel, wordSet }) {
                   isActive={isExits}
                 />
               );
-            })}
+            })} */}
         </div>
         <hr />
         <div className={c("d-flex", "gap-2")}>

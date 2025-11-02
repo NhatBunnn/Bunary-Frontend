@@ -9,7 +9,7 @@ import Button from "../../../components/Button/Button";
 import { useUser } from "@context/UserProvider/UserContext";
 import useLogout from "../../../hooks/auth/useLogout";
 import Avatar from "../../../components/Avatar";
-import Loading from "../../../components/Loading";
+import Loading from "../../../components/Loading/Loading";
 import Notify from "./component/Notify/Notify";
 import Search from "./component/Search/Search";
 

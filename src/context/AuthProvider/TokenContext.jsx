@@ -6,9 +6,9 @@ import {
   useMemo,
   useState,
 } from "react";
-import Loading from "@components/Loading";
-import { parseJwt } from "@api/apiService";
-import { refreshAccessToken } from "@api/authApi";
+import { API_URL } from "@config/apiConfig";
+import Loading from "@components/Loading/Loading";
+import { decodeJWT } from "@service/jwtService";
 
 const TokenContext = createContext(null);
 
@@ -19,27 +19,58 @@ function TokenProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   async function getToken() {
-    let accessToken = tokenRef.current;
+    let token = tokenRef.current;
 
-    if (accessToken) {
-      const decoded = parseJwt(accessToken);
+    if (token) {
+      let base64Url = token.split(".")[1];
+      let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      let jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+      const decoded = JSON.parse(jsonPayload);
       const expiresAt = decoded?.exp * 1000;
 
       if (expiresAt && new Date().getTime() < expiresAt) {
-        return accessToken;
+        return token;
       }
     }
 
-    const response = await refreshAccessToken();
-    const newToken = response.data.accessToken;
-    tokenRef.current = newToken;
-    return newToken;
+    try {
+      const response = await fetch(`${API_URL}/api/v1/auth/refresh-Token`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const newToken = data.data.accessToken;
+        tokenRef.current = newToken;
+
+        return newToken;
+      } else {
+        console.log("Không lấy được Token");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    return;
+  }
+
+  function setToken(token) {
+    tokenRef.current = token;
   }
 
   useEffect(() => {
     const init = async () => {
       try {
-        await getToken();
+        const response = await getToken();
+
+        console.log("response ", response);
       } catch (err) {
         console.error("Error initializing token:", err);
       } finally {
@@ -49,7 +80,23 @@ function TokenProvider({ children }) {
     init();
   }, []);
 
-  const value = useMemo(() => ({ getToken }), []);
+  async function getRoles() {
+    const token = await getToken();
+    if (!token) return [];
+
+    const decoded = decodeJWT(token);
+    return decoded?.roles || [];
+  }
+
+  async function getScope() {
+    const token = await getToken();
+    if (!token) return "";
+
+    const decoded = decodeJWT(token);
+    return decoded?.scope || "";
+  }
+
+  const value = useMemo(() => ({ getToken, setToken, getRoles }), []);
 
   if (loading) {
     return <Loading />;

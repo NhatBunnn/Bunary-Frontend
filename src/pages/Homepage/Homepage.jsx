@@ -1,7 +1,5 @@
 import styles from "./Homepage.module.css";
 import classNames from "classnames/bind";
-import Loading from "@components/Loading";
-import { useUser } from "@context/UserProvider/UserContext";
 import { useParams } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import MyWordSets from "./pages/MyWordSets/MyWordSets";

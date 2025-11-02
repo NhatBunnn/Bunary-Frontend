@@ -3,7 +3,7 @@ import Button from "@components/Button/Button";
 import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
 import useFlashCard from "./useFlashCard";
-import Loading from "@components/Loading";
+import Loading from "@components/Loading/Loading";
 
 const c = classNames.bind(styles);
 

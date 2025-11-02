@@ -1,22 +1,36 @@
-import Loading from "@components/Loading";
+import { useEffect, useState } from "react";
+import { useToken } from "@context/AuthProvider/TokenContext";
 import { useUser } from "@context/UserProvider/UserContext";
 import { Navigate } from "react-router-dom";
+import Loading from "@components/Loading/Loading";
 
 function RoleRoute({ children, allowedRoles = [] }) {
-  const { user, loadingUser } = useUser();
+  const { user, loading: userLoading } = useUser();
+  const { getRoles } = useToken();
+  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  if (loadingUser) {
+  useEffect(() => {
+    const fetchRoles = async () => {
+      if (user) {
+        const userRoles = await getRoles();
+        setRoles(userRoles);
+      }
+      setLoading(false);
+    };
+    fetchRoles();
+  }, [user, getRoles]);
+
+  if (userLoading || loading) {
     return <Loading />;
   }
-
-  console.log("user ", user);
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.roles.some((role) => allowedRoles.includes(role))) {
-    return <Navigate to="/" replace />;
+  if (!roles.some((role) => allowedRoles.includes(role))) {
+    return <Navigate to="/403" replace />;
   }
 
   return children;

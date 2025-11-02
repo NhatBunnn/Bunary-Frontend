@@ -1,0 +1,20 @@
+.transition-width {
+  transition: width 0.3s ease;
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease;
+}
+
+.transition-colors {
+  transition: background-color 0.2s ease;
+}
+
+.collapsed .nav-link span {
+  width: 0 !important;
+  opacity: 0 !important;
+}
+
+.hover-bg-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}

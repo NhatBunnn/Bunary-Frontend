@@ -9,7 +9,7 @@ import { WordSet } from "@features/wordsets/components";
 const c = bindClass(styles);
 
 function PopularWordSet() {
-  const { wordSetList, queryParams, setQueryParams, fetchWordSetList } =
+  const { wordSetList, queryParams, setQueryParams, handleFetchWordSetList } =
     useWordSetList("popularityScore,desc");
 
   return (
@@ -19,7 +19,7 @@ function PopularWordSet() {
         className="mb-3"
         queryParams={queryParams}
         setQueryParams={setQueryParams}
-        onSubmit={fetchWordSetList} // submit trực tiếp
+        onSubmit={handleFetchWordSetList}
       />
       <div className="row">
         {wordSetList?.map((d, i) => (

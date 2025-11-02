@@ -1,28 +1,6 @@
 import { API_URL } from "@config/apiConfig";
 import { fetcher } from "./fetcher";
 
-export const findAllMyCollections = async ({
-  token,
-  page = 0,
-  size = 20,
-  sort = "id,asc",
-}) => {
-  if (!token) throw new Error("No access token provided");
-
-  const params = {
-    page,
-    size,
-    sort,
-  };
-
-  return await fetcher({
-    url: `/api/v1/collections/me`,
-    method: "GET",
-    token,
-    params,
-  });
-};
-
 export const removeCollection = async ({ token, collectionId }) => {
   if (!token) throw new Error("No access token provided");
 

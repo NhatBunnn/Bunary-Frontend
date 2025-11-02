@@ -3,7 +3,7 @@ import styles from "./CollectionDetail.module.css";
 import { bindClass } from "@utils/classnames";
 import WordSet from "@components/WordSet";
 import useCollectionDetail from "./useCollectionDetail";
-import Loading from "@components/Loading";
+import Loading from "@components/Loading/Loading";
 
 const c = bindClass(styles);
 

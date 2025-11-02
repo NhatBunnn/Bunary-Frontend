@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useRef } from "react";
 import styles from "./WordSetSlider.module.css";
 import classNames from "classnames/bind";
-import Loading from "@components/Loading";
+import Loading from "@components/Loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import WordSet from "../WordSet/WordSet";

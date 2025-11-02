@@ -2,7 +2,7 @@ import styles from "./MyCollectionList.module.css";
 import { bindClass } from "@utils/classnames";
 import { useState } from "react";
 import CollectionPreview from "../CollectionPreview/CollectionPreview";
-import Loading from "@components/Loading";
+import Loading from "@components/Loading/Loading";
 import useMyCollectionList from "@features/collection/hooks/useMyCollectionList";
 import { ConfirmDialog } from "@components/index";
 import useCollection from "@features/collection/hooks/useCollection";

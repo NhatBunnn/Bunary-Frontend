@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "@components/Button/Button";
 import Word from "@components/Word";
-import Loading from "@components/Loading";
+import Loading from "@components/Loading/Loading";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWordSetPage from "./useWordSetPage";

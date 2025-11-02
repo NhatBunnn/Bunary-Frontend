@@ -24,7 +24,8 @@
 }
 
 .filter-group select,
-.filter-group input[type="date"] {
+.filter-group input[type="date"],
+.filter-group input[type="text"] {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -33,7 +34,8 @@
 }
 
 .filter-group select:focus,
-.filter-group input[type="date"]:focus {
+.filter-group input[type="date"]:focus,
+.filter-group input[type="text"]:focus {
   border-color: #4f46e5;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
   outline: none;
@@ -53,4 +55,16 @@
 .apply-btn:hover {
   background-color: #3730a3;
   transform: translateY(-2px);
+}
+
+.filter-group input[type="text"]::placeholder {
+  color: #999;
+}
+
+.filter-group input[type="text"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: 10px center;
+  padding-left: 34px;
 }
