@@ -5,6 +5,7 @@ import TitleSection from "@components/TitleSection";
 import { UserList } from "@features/user/components";
 import Button from "@components/Button/Button";
 import WordSet from "@components/WordSet";
+import { MyRecentWordSetList } from "@features/wordsets/components";
 
 const c = bindClass(styles);
 
@@ -32,9 +33,7 @@ function Home() {
       <TitleSection title="Đã học gần đây" onTop={true}>
         <Button label="Xem chi tiết" to="/popular_wordsets" variant="default" />
       </TitleSection>
-      <WordSet size="small" wordSet={ws} />
-      <WordSet size="small" wordSet={ws} />
-      <WordSet size="small" wordSet={ws} />
+      <MyRecentWordSetList />
       <TitleSection title="Phổ biến nhất" onTop={true}>
         <Button label="Xem chi tiết" to="/popular_wordsets" variant="default" />
       </TitleSection>

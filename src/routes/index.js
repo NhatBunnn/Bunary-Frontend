@@ -35,6 +35,7 @@ const publicRoutes = [
 
   // FallBack
   { path: "/*", Page: NotFound },
+  { path: "/404", Page: NotFound },
   { path: "/403", Page: Forbidden },
 ];
 

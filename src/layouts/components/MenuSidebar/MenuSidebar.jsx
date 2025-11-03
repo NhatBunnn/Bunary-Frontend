@@ -1,72 +1,38 @@
+import { Link } from "react-router-dom";
 import {
-  faFile,
-  faFileWord,
-  faFolder,
-  faHouse,
-  faStar,
-  faUser,
-} from "@fortawesome/free-regular-svg-icons";
-import MenuItem from "./MenuItem/MenuItem";
+  Home,
+  User,
+  Users,
+  FileText,
+  Trophy,
+  Folder,
+  ShoppingCart,
+  Sparkles,
+  X,
+  Hash,
+  Library,
+} from "lucide-react";
 import styles from "./MenuSidebar.module.css";
 import classNames from "classnames/bind";
-import {
-  faCartShopping,
-  faClose,
-  faPeopleGroup,
-  faRankingStar,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const c = classNames.bind(styles);
 
-function MenuSidebar({ collapsed, className, onClose }) {
-  const menuItems = [
-    {
-      icon: faHouse,
-      label: "Trang chủ",
-      to: "/",
-    },
-    {
-      icon: faUser,
-      label: "Người dùng",
-      to: "/profile",
-    },
-    {
-      icon: faPeopleGroup,
-      label: "Cộng đồng",
-      to: "/community",
-    },
-    { hr: true },
-    {
-      icon: faFileWord,
-      label: "Hộp chứa từ",
-    },
-    {
-      icon: faRankingStar,
-      label: "Xếp hạng",
-    },
-    { hr: true },
-    {
-      icon: faFile,
-      label: "Thẻ ghi nhớ",
-      to: "/createwordset",
-    },
-    {
-      icon: faFolder,
-      label: "Bộ sưu tập",
-      to: "/collection",
-    },
-    { hr: true },
-    {
-      icon: faCartShopping,
-      label: "Cửa hàng",
-    },
-    {
-      icon: faStar,
-      label: "ChatGPT",
-    },
-  ];
+const menuItems = [
+  { icon: Home, label: "Trang chủ", to: "/" },
+  { icon: User, label: "Người dùng", to: "/profile" },
+  { icon: Users, label: "Cộng đồng", to: "/community" },
+  { hr: true },
+  { icon: FileText, label: "Hộp chứa từ" },
+  { icon: Trophy, label: "Xếp hạng" },
+  { hr: true },
+  { icon: Hash, label: "Thẻ ghi nhớ", to: "/createwordset" },
+  { icon: Library, label: "Bộ sưu tập", to: "/collection" },
+  { hr: true },
+  { icon: ShoppingCart, label: "Cửa hàng" },
+  { icon: Sparkles, label: "ChatGPT" },
+];
 
+function MenuSidebar({ collapsed, className, onClose }) {
   return (
     <div
       className={c("menuSidebar", className, { collapsed })}
@@ -84,26 +50,45 @@ function MenuSidebar({ collapsed, className, onClose }) {
             )}
           >
             <div>Bunnary.site</div>
-            <FontAwesomeIcon
-              icon={faClose}
+            <X
+              size={20}
               className={c("icon", "cursor-pointer")}
               onClick={onClose}
             />
           </div>
         )}
+
         <div className={c("menuItem-list")}>
           {menuItems.map((item, index) =>
             item.hr ? (
               <hr key={index} />
             ) : (
-              <MenuItem
-                onClick={onClose}
+              <Link
                 key={index}
-                collapsed={collapsed}
-                icon={item.icon}
-                label={item.label}
-                to={item.to}
-              />
+                to={item.to || "#"}
+                onClick={onClose}
+                className={c(
+                  "menuItem",
+                  "d-flex",
+                  "align-items-center",
+                  "link-no-style"
+                )}
+              >
+                <div
+                  className={c("item-content", "d-flex", "align-items-center")}
+                >
+                  <item.icon
+                    size={collapsed ? 22 : 20}
+                    className={c("icon")}
+                    strokeWidth={2}
+                  />
+                  {!collapsed && (
+                    <span className={c("label", "ms-3", "font-medium")}>
+                      {item.label}
+                    </span>
+                  )}
+                </div>
+              </Link>
             )
           )}
         </div>

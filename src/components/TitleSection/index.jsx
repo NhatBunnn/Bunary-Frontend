@@ -15,7 +15,7 @@ function TitleSection({ title = "", onTop = false, style = {}, children }) {
       )}
       style={style}
     >
-      <div className={c("title", "fw-semibold")}>{title}</div>
+      <div className={c("title", "font-medium")}>{title}</div>
 
       <div className={c("button")}>{children}</div>
     </div>

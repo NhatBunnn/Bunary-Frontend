@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNotification } from "@context/NotificationProvider";
 import { useFetcher } from "@api/fetcher";
+import useAppBase from "@hooks/useAppBase";
 
 function useFlashCard() {
-  const [words, setWords] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { te, setLoading, loading, showNotification } = useAppBase();
 
-  const { showNotification } = useNotification();
+  const [words, setWords] = useState([]);
+
   const { id } = useParams();
   const { fetcher } = useFetcher();
 
@@ -74,7 +74,18 @@ function useFlashCard() {
     fetchWords();
   }, [id, showNotification, setLoading]);
 
-  return { words, loading, settings };
+  const handleRecordStudy = async () => {
+    try {
+      const response = await fetcher({
+        url: `/api/v1/wordsets/${id}/history`,
+        method: "POST",
+      });
+    } catch (e) {
+      showNotification(te(e.errorCode) || e.message, "error");
+    }
+  };
+
+  return { words, loading, settings, handleRecordStudy };
 }
 
 export default useFlashCard;

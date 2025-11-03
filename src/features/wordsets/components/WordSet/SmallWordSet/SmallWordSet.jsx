@@ -32,7 +32,7 @@ function SmallWordSet({ wordSet }) {
         <img src={wordSet.thumbnail || Images.Logo} alt="" />
       </div>
       <div className={c("content")}>
-        <div className={c("title", "fw-semibold")}>
+        <div className={c("title", "font-medium")}>
           {wordSet.title || "no title"}
         </div>
         <div className={c("detail", "d-xl-flex")}>

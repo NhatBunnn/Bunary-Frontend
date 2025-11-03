@@ -39,15 +39,7 @@ function LargeWordSet({ author, wordSet }) {
         )}
       >
         <div className={c("head")}>
-          <div className={c("title")}>
-            {wordSet.title}
-
-            {wordSet.visibility === "PUBLIC" ? (
-              <FontAwesomeIcon icon={faEarth} />
-            ) : (
-              <FontAwesomeIcon icon={faLock} />
-            )}
-          </div>
+          <div className={c("title", "font-medium")}>{wordSet.title}</div>
           <div className={c("vocab")}>
             <span>{`${wordSet.stat?.wordCount} từ vựng`}</span>
           </div>

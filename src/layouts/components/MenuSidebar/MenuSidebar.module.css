@@ -8,10 +8,13 @@
   position: fixed;
   width: 217px;
   height: 100%;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .menuSidebar hr {
   margin: 12px 0;
+  border: none;
+  border-top: 1px solid var(--border-color, #eee);
   width: 100%;
 }
 
@@ -20,28 +23,77 @@
   padding: 12px 12px 0 12px;
   font-size: var(--font-size-title);
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .icon {
-  margin-top: 5px;
+  transition: color 0.2s;
+}
+
+.icon:hover {
+  color: var(--primary);
 }
 
 .menuItem-list {
   padding: 0 12px 12px 12px;
 }
 
+/* Menu Item */
+.menuItem {
+  height: 40px;
+  border-radius: var(--radius-medium);
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.item-content {
+  width: 100%;
+  height: 100%;
+  padding: 0 12px;
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+}
+
+.item-content:hover {
+  background: var(--background-hover);
+}
+
+.item-content:hover .icon {
+  color: var(--primary);
+}
+
+.item-content:hover .label {
+  color: var(--primary);
+}
+
+.label {
+  font-size: 16px;
+
+  color: var(--text-primary);
+  transition: color 0.2s;
+}
+
+/* Collapsed Mode */
 .menuSidebar.collapsed {
   flex: 0 0 60px;
 }
 
 .menuSidebar.collapsed .content {
-  position: fixed;
   width: 60px;
 }
 
 .menuSidebar.collapsed .menuItem-list {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  padding: 0 8px;
+}
+
+.menuSidebar.collapsed .item-content {
+  padding: 0;
+  justify-content: center;
+}
+
+.menuSidebar.collapsed .label {
+  display: none;
 }
