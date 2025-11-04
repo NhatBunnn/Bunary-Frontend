@@ -1,132 +1,126 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   faBookmark,
   faUsers,
-  faBookOpen,
-  faBrain,
-  faFile,
+  faEllipsisVertical,
+  faIdCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Star } from "lucide-react"; // chỉ dùng Star
 import styles from "./WordSetPage.module.css";
 import classNames from "classnames/bind";
+import useWordSetPage from "./useWordSetPage";
+import Loading from "@components/Loading/Loading";
+import { DialogWrapper } from "@components/index";
+import FlashCardSetting from "./dialogs/FlashCardSetting/FlashCardSetting";
+import TitleSection from "@components/TitleSection";
+import Button from "@components/Button/Button";
+import { useNavigate } from "react-router-dom";
+import { AddToCollection } from "@features/collection/components";
 
 const c = classNames.bind(styles);
 
-const wordSetData = {
-  title: "Essential English Vocabulary - Advanced Level",
-  learners: 12543,
-  rating: 4.8,
-  reviews: 2341,
-  author: "Emily Thompson",
-  authorTitle: "English Teacher & Curriculum Developer",
-};
-
-const vocabularyWords = [
-  {
-    word: "Eloquent",
-    partOfSpeech: "adjective",
-    pronunciation: "ˈel.ə.kwənt",
-    meaning: "Hùng biện, diễn đạt trôi chảy và thuyết phục",
-    illustration: "🗣️",
-  },
-  {
-    word: "Perseverance",
-    partOfSpeech: "noun",
-    pronunciation: "ˌpɜː.sɪˈvɪə.rəns",
-    meaning: "Sự kiên trì, bền bỉ trong việc đạt được mục tiêu",
-    illustration: "💪",
-  },
-  {
-    word: "Contemplate",
-    partOfSpeech: "verb",
-    pronunciation: "ˈkɒn.təm.pleɪt",
-    meaning: "Suy ngẫm, cân nhắc kỹ lưỡng về một vấn đề",
-    illustration: "🤔",
-  },
-  {
-    word: "Ambiguous",
-    partOfSpeech: "adjective",
-    pronunciation: "æmˈbɪɡ.ju.əs",
-    meaning: "Mơ hồ, có thể hiểu theo nhiều cách khác nhau",
-    illustration: "❓",
-  },
-  {
-    word: "Diligent",
-    partOfSpeech: "adjective",
-    pronunciation: "ˈdɪl.ɪ.dʒənt",
-    meaning: "Chăm chỉ, cẩn thận và chu đáo trong công việc",
-    illustration: "📚",
-  },
-  {
-    word: "Profound",
-    partOfSpeech: "adjective",
-    pronunciation: "prəˈfaʊnd",
-    meaning: "Sâu sắc, có ý nghĩa to lớn hoặc sâu xa",
-    illustration: "🌊",
-  },
-  {
-    word: "Resilient",
-    partOfSpeech: "adjective",
-    pronunciation: "rɪˈzɪl.i.ənt",
-    meaning: "Kiên cường, có khả năng phục hồi sau khó khăn",
-    illustration: "🌱",
-  },
-  {
-    word: "Integrity",
-    partOfSpeech: "noun",
-    pronunciation: "ɪnˈteɡ.rə.ti",
-    meaning: "Tính chính trực, trung thực và có nguyên tắc đạo đức",
-    illustration: "⚖️",
-  },
-];
-
 const WordSetPage = () => {
-  const [selectedMode, setSelectedMode] = useState("flashcards");
-  const [userRating, setUserRating] = useState(0);
+  // Toggle UI
+  const [openSetting, setOpenSetting] = useState({ flashCard: false });
+  const [openMoreOptions, setMoreOptions] = useState(false);
+  const [openAddToCollect, setOpenAddToCollect] = useState(false);
+
+  // Data
+  const {
+    words,
+    wordSet,
+    loadingWords,
+    rating,
+    setRating,
+    ratingList,
+    handleFindAllWordSet,
+    handleRemoveWordSet,
+    handleRatingWordSet,
+  } = useWordSetPage();
+
   const [hoverRating, setHoverRating] = useState(0);
 
-  const modes = [
-    { id: "flashcards", label: "Flashcards", icon: faBookOpen },
-    { id: "multiple", label: "Multiple Choice", icon: faBrain },
-    { id: "test", label: "Test", icon: faFile },
-  ];
+  const navigation = useNavigate();
+
+  if (loadingWords || !wordSet) {
+    return <Loading />;
+  }
 
   return (
     <div className={c("container")}>
-      {/* Header */}
+      {/* Dialog */}
+
+      <AddToCollection
+        isOpen={openAddToCollect}
+        onCancel={() => setOpenAddToCollect(false)}
+        wordSet={wordSet}
+      />
+      <DialogWrapper
+        onClose={() =>
+          setOpenSetting((prev) => ({ ...prev, flashCard: false }))
+        }
+        isOpen={openSetting.flashCard}
+        title="Cài đặt thẻ ghi nhớ"
+      >
+        <FlashCardSetting wordSetId={wordSet.id} />
+      </DialogWrapper>
+      {/* Title */}
+      <TitleSection
+        title={wordSet.title}
+        onTop={true}
+        style={{ marginBottom: "8px" }}
+      >
+        <Button
+          label="Lưu"
+          icon={faBookmark}
+          onClick={() => {
+            setOpenAddToCollect(true);
+          }}
+        />
+        <div className={c("moreOptions", "d-inline")}>
+          <Button
+            icon={faEllipsisVertical}
+            onClick={() => setMoreOptions((prev) => !prev)}
+          />
+          {openMoreOptions && (
+            <div className={c("dropdown", "p-3", "gap-2")}>
+              <Button
+                variant="menu"
+                label="Chỉnh sửa"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigation(`/wordset/${wordSet.id}/edit`);
+                }}
+              />
+            </div>
+          )}
+        </div>
+      </TitleSection>
+
+      {/* info */}
       <div className={c("header")}>
         <div>
-          <h1 className={c("title")}>{wordSetData.title}</h1>
-
           <div className={c("stats")}>
             <div>
-              <FontAwesomeIcon icon={faUsers} />{" "}
-              {wordSetData.learners.toLocaleString()} người đã học
+              <FontAwesomeIcon icon={faUsers} /> {wordSet.stat.studyCount} người
+              đã học
             </div>
-            <div>
-              ⭐ {wordSetData.rating} / 5 ({wordSetData.reviews} reviews)
-            </div>
+            <div>⭐ {wordSet.stat.ratingAvg} / 5 (10 reviews)</div>
           </div>
 
-          <div className={c("modeButtons")}>
-            {modes.map((mode) => (
-              <div
-                key={mode.id}
-                className={c("modeButton", {
-                  selected: selectedMode === mode.id,
-                })}
-                onClick={() => setSelectedMode(mode.id)}
-              >
-                <FontAwesomeIcon icon={mode.icon} />
-                {mode.label}
-              </div>
-            ))}
+          {/* Action bar */}
+          <div className={c("action-bar", "d-flex", "mb-3")}>
+            <Button
+              label="Thẻ ghi nhớ"
+              icon={faIdCard}
+              onClick={() =>
+                setOpenSetting((prev) => ({ ...prev, flashCard: true }))
+              }
+            />
+            <Button label="Trắc nghiệm" icon={faIdCard} />
+            <Button label="Kiểm tra" icon={faIdCard} />
           </div>
-        </div>
-
-        <div className={c("saveButton")}>
-          <FontAwesomeIcon icon={faBookmark} /> Lưu
         </div>
       </div>
 
@@ -134,8 +128,8 @@ const WordSetPage = () => {
       <div className={c("mainGrid")}>
         <div className={c("thumbnail")}>
           <img
-            src="https://ss-images.saostar.vn/wp700/2024/9/20/pc/1726831752471/k66wco74wv1-kr55vy75sf2-82k69ihrwt3.jpg"
-            alt="Vocabulary Hero"
+            src={wordSet?.thumbnail}
+            alt={wordSet?.title}
             style={{
               width: "100%",
               height: "100%",
@@ -146,14 +140,26 @@ const WordSetPage = () => {
         </div>
 
         <div className={c("wordGrid")}>
-          {vocabularyWords.map((word, idx) => (
+          {words.map((word, idx) => (
             <div key={idx} className={c("wordCard")}>
-              <div className={c("wordCardLeft")}>{word.illustration}</div>
+              <div className={c("wordCardLeft")}>
+                <img
+                  src={word?.thumbnail}
+                  alt={word?.term}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+              </div>
+
               <div className={c("wordCardRight")}>
                 <div>
-                  <strong>{word.word}</strong> ({word.partOfSpeech})
+                  <strong>{word?.term}</strong> ({word?.partOfSpeech})
                 </div>
-                <div>/{word.pronunciation}/</div>
+                <div>/{word.ipa}/</div>
                 <div>{word.meaning}</div>
               </div>
             </div>
@@ -167,8 +173,7 @@ const WordSetPage = () => {
       <div className={c("authorSection")}>
         <div className={c("avatar")}>
           <img
-            src="https://randomuser.me/api/portraits/women/44.jpg"
-            alt="BusinessEnglishPro"
+            src={wordSet.author?.avatar}
             style={{
               width: "100%",
               height: "100%",
@@ -181,7 +186,8 @@ const WordSetPage = () => {
           <div
             style={{ fontSize: "0.875rem", color: "#555", marginBottom: "4px" }}
           >
-            Created by <strong>BusinessEnglishPro</strong>
+            Created by{" "}
+            <strong> {wordSet.author?.fullName || "Unknown Author"}</strong>
           </div>
           <div style={{ fontSize: "0.75rem", color: "#888" }}>
             Updated 2 weeks ago
@@ -214,11 +220,13 @@ const WordSetPage = () => {
         >
           <div style={{ display: "flex", gap: "4px" }}>
             {[1, 2, 3, 4, 5].map((star) => {
-              const filled = star <= (hoverRating || userRating);
+              const filled = star <= (hoverRating || rating.value);
               return (
                 <div
                   key={star}
-                  onClick={() => setUserRating(star)}
+                  onClick={(e) =>
+                    setRating((prev) => ({ ...prev, value: star }))
+                  }
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
                   style={{
@@ -238,14 +246,18 @@ const WordSetPage = () => {
             })}
           </div>
           <span style={{ color: "#666", fontSize: "0.875rem" }}>
-            {userRating > 0
-              ? `You rated ${userRating} star${userRating > 1 ? "s" : ""}`
+            {rating.value > 0
+              ? `You rated ${rating.value} star${rating.value > 1 ? "s" : ""}`
               : "Click to rate"}
           </span>
         </div>
 
         {/* Textarea + Submit */}
         <textarea
+          value={rating.comment}
+          onChange={(e) =>
+            setRating((prev) => ({ ...prev, comment: e.target.value }))
+          }
           placeholder="Write your review here..."
           style={{
             width: "100%",
@@ -260,48 +272,62 @@ const WordSetPage = () => {
           }}
         />
 
-        <button className={c("submitButton")} style={{ padding: "10px 20px" }}>
+        <button
+          className={c("submitButton")}
+          style={{ padding: "10px 20px" }}
+          onClick={() => handleRatingWordSet()}
+        >
           Submit Review
         </button>
 
         {/* Sample Review */}
-        <div style={{ marginTop: "32px", display: "flex", gap: "12px" }}>
-          <img
-            src="https://randomuser.me/api/portraits/women/68.jpg"
-            alt="Sarah T."
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-          <div>
-            <div
+        {ratingList?.map((rating, i) => (
+          <div
+            style={{ marginTop: "32px", display: "flex", gap: "12px" }}
+            key={i}
+          >
+            <img
+              src={rating.user.avatar}
+              alt={rating.user.fullName}
               style={{
-                fontWeight: "600",
-                fontSize: "0.9375rem",
-                marginBottom: "4px",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                objectFit: "cover",
               }}
-            >
-              Sarah T.{" "}
-              <span style={{ color: "#ffc107", marginLeft: "6px" }}>
-                ⭐⭐⭐⭐⭐
-              </span>
-            </div>
-            <div
-              style={{ fontSize: "0.875rem", color: "#333", lineHeight: "1.5" }}
-            >
-              This is exactly what I needed for my MBA program. The translations
-              are accurate and the examples are helpful.
-            </div>
-            <div
-              style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}
-            >
-              2 days ago
+            />
+            <div>
+              <div
+                style={{
+                  fontWeight: "600",
+                  fontSize: "0.9375rem",
+                  marginBottom: "4px",
+                }}
+              >
+                {rating.user.fullName}{" "}
+                <span style={{ color: "#ffc107", marginLeft: "6px" }}>
+                  {[...Array(rating.value)].map((_, i) => (
+                    <span key={i}>⭐</span>
+                  ))}
+                </span>
+              </div>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#333",
+                  lineHeight: "1.5",
+                }}
+              >
+                {rating.comment}
+              </div>
+              <div
+                style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}
+              >
+                {rating.createdAt}
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

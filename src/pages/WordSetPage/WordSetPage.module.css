@@ -177,3 +177,18 @@
   color: #fff;
   cursor: pointer;
 }
+/* bo xung */
+.moreOptions{
+  position: relative;
+}
+
+.moreOptions .dropdown{
+  position: absolute;
+  right: 0;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  box-shadow: var(--box-shadow-primary);
+  border-radius: var(--radius-small);
+}
