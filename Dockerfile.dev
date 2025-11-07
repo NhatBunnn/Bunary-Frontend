@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy file cấu hình để install trước (tăng tốc build)
+COPY package*.json ./
+
+RUN npm install
+
+# Copy toàn bộ source vào container
+COPY . .
+
+# Mở port Vite (5173) hoặc CRA (3000)
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

@@ -7,8 +7,9 @@ import Notification from "./components/Notification";
 import "./i18n";
 import CreateCollection from "@features/collection/components/CreateCollection/CreateCollection";
 import AddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/AddToCollection";
-import PrivateRoute from "routes/PrivateRoute";
-import RoleRoute from "routes/RoleRoute";
+
+import PrivateRoute from "@routes/PrivateRoute.jsx";
+import RoleRoute from "@routes/RoleRoute";
 import { ChatWindow } from "./components";
 
 function App() {
