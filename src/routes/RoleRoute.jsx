@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useToken } from "@context/AuthProvider/TokenContext";
-import { useUser } from "@context/UserProvider/UserContext";
+import { useUser } from "@context/UserProvider/UserProvider";
 import { Navigate } from "react-router-dom";
 import Loading from "@components/Loading/Loading";
 

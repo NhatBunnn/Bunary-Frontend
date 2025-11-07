@@ -12,7 +12,7 @@ function MyRecentWordSetList() {
     <div className={c("myRecentWordSetList")}>
       <div className="row">
         {recentWordSetList?.map((d, i) => (
-          <div className="col-12 col-lg-6 mb-2 px-1">
+          <div className="col-12 col-lg-6 mb-2 px-1" key={i}>
             <WordSet size="small" wordSet={d} />
           </div>
         ))}

@@ -1,88 +1,107 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { WEBSOCKET_URL } from "../config/apiConfig";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from "react";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 import { useToken } from "./AuthProvider/TokenContext";
-import { useUser } from "./UserProvider/UserContext";
 
 const WebSocketContext = createContext(null);
-
 export const useWebsocket = () => useContext(WebSocketContext);
 
-function WebSocketProvider({ children }) {
-  const [socket, setSocket] = useState(null);
+export const WebSocketProvider = ({ children }) => {
   const [chatMessages, setChatMessages] = useState({});
-  const [notification, setNotification] = useState([]);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const stompClientRef = useRef(null);
   const { getToken } = useToken();
-  const { user } = useUser();
+
+  console.log("chatMessages ", chatMessages);
 
   useEffect(() => {
-    let ws = null;
+    let client = null;
 
-    const createWebSocket = async () => {
-      try {
-        ws = new WebSocket(
-          `${WEBSOCKET_URL}/ws?accessToken=${await getToken()}`
-        );
-
-        ws.onopen = () => {
-          console.log("Connected to the server.");
-        };
-
-        ws.onmessage = (e) => {
-          const data = JSON.parse(e.data);
-
-          switch (data.type) {
-            case "chatMessage":
-              setChatMessages((prev) => ({
-                ...prev,
-                [data.senderId]: [...(prev[data.senderId] || []), data],
-              }));
-              break;
-            case "notification":
-              setNotification((prev) => [...prev, data]);
-              break;
-            case "onlineUsers":
-              setOnlineUsers(data.users);
-              break;
-            default:
-              console.error("bủn lmao");
-          }
-        };
-      } catch (error) {
-        console.error("Lỗi khi tạo WebSocket:", error);
+    const connect = async () => {
+      const token = await getToken();
+      if (!token) {
+        console.error("Không có token để kết nối WebSocket");
+        return;
       }
 
-      ws.onclose = () => console.log("WebSocket closed");
-      ws.onerror = (err) => console.error("WebSocket error:", err);
+      const socket = new SockJS(`http://localhost:8080/ws?token=${token}`);
 
-      setSocket(ws);
+      client = new Client({
+        webSocketFactory: () => socket,
+        debug: (str) => console.log("[STOMP]", str),
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+      });
+
+      client.onConnect = (frame) => {
+        setIsConnected(true);
+        stompClientRef.current = client;
+
+        client.subscribe("/user/queue/messages", (message) => {
+          console.log(" Received message!");
+          console.log(" Raw:", message);
+          console.log(" Body:", message.body);
+
+          const curMessage = JSON.parse(message.body);
+
+          setChatMessages((prev) => ({
+            ...prev,
+            [curMessage.senderId]: [
+              ...(prev[curMessage.senderId] || []),
+              curMessage,
+            ],
+          }));
+        });
+      };
+
+      client.onStompError = (frame) => {
+        console.error("STOMP error:", frame.headers["message"]);
+        console.error("Body:", frame.body);
+        setIsConnected(false);
+      };
+
+      client.onDisconnect = () => {
+        console.log(" WebSocket disconnected");
+        setIsConnected(false);
+      };
+
+      client.activate();
     };
 
-    createWebSocket();
+    connect();
 
     return () => {
-      if (ws && ws.readyState !== WebSocket.CLOSED) {
-        ws.close();
+      if (client && client.active) {
+        console.log("Disconnecting WebSocket...");
+        client.deactivate();
       }
     };
-  }, []);
+  }, [getToken]);
 
-  const sendMessageChat = (receiver, content) => {
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.warn("Socket not ready");
+  const sendMessageChat = (receiver, sender, messageContent) => {
+    const client = stompClientRef.current;
+    if (!client || !client.connected) {
+      console.warn("WebSocket chưa kết nối");
       return;
     }
 
-    let msg = {
-      type: "chatMessage",
-      senderId: user.id,
+    const msg = {
+      senderId: sender.id,
       receiverId: receiver.id,
-      messageContent: content,
-      timestamp: new Date().toISOString(),
-      status: "sent",
+      messageContent,
     };
 
-    socket.send(JSON.stringify(msg));
+    client.publish({
+      destination: "/app/chat.send",
+      body: JSON.stringify(msg),
+    });
 
     setChatMessages((prev) => ({
       ...prev,
@@ -90,37 +109,15 @@ function WebSocketProvider({ children }) {
     }));
   };
 
-  const updateChatWindowStatus = (status = false, receiver) => {
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.warn("Socket not ready");
-      return;
-    }
-
-    const chatWindowStatus = {
-      type: "chatWindowStatus",
-      receiverId: receiver,
-      isOpen: status,
-      isNotify: false,
-    };
-
-    socket.send(JSON.stringify(chatWindowStatus));
-  };
-
   return (
     <WebSocketContext.Provider
       value={{
-        setChatMessages,
         chatMessages,
         sendMessageChat,
-        updateChatWindowStatus,
-        notification,
-        setNotification,
-        onlineUsers,
+        isConnected,
       }}
     >
       {children}
     </WebSocketContext.Provider>
   );
-}
-
-export default WebSocketProvider;
+};

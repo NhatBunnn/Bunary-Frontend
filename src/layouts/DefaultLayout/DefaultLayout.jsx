@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useLayoutEffect, useState } from "react";
 import Header from "../components/Header/Header";
 import MenuSidebar from "../components/MenuSidebar/MenuSidebar";
 import styles from "./DefaultLayout.module.css";

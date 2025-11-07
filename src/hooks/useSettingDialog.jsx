@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNotification } from "../context/NotificationProvider";
 import { useFetcher } from "@api/fetcher";
-import { useUser } from "@context/UserProvider/UserContext";
+import { useUser } from "@context/UserProvider/UserProvider";
 
 function useSettingDialog(initialValue = "", initialField = "") {
   const [errors, setErrors] = useState([]);

@@ -7,7 +7,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { forwardRef } from "react";
 import useSettingDialog from "../../../../hooks/useSettingDialog";
 import { Image, Images } from "../../../../assets/images";
-import { useUser } from "@context/UserProvider/UserContext";
+import { useUser } from "@context/UserProvider/UserProvider";
 
 const c = classNames.bind(styles);
 

@@ -1,5 +1,5 @@
 import { useFetcher } from "@api/fetcher";
-import { useUser } from "@context/UserProvider/UserContext";
+import { useUser } from "@context/UserProvider/UserProvider";
 import useAppBase from "@hooks/useAppBase";
 import { useEffect, useState } from "react";
 

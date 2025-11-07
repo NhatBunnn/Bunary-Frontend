@@ -3,7 +3,7 @@ import { Background, Image, Images } from "../../assets/images";
 import styles from "./ProfileCard.module.css";
 import classNames from "classnames/bind";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { useUser } from "@context/UserProvider/UserContext";
+import { useUser } from "@context/UserProvider/UserProvider";
 
 const c = classNames.bind(styles);
 

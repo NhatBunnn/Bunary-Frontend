@@ -9,7 +9,7 @@ function BadgeIconWrapper({ children }) {
 
   return (
     <div className={c("badgeIconWrapper")}>
-      {notification.length > 0 && (
+      {notification?.length > 0 && (
         <div className={c("icon")}>{notification.length}</div>
       )}
       {children}

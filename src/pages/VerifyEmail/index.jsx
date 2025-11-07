@@ -8,7 +8,7 @@ import AuthWrapper from "../../components/wrapper/AuthWrapper";
 import SuccessAlert from "../../components/Notification";
 import ValidateInput from "../../components/ValidateInput";
 import { API_URL } from "../../config/apiConfig";
-import { useUser } from "@context/UserProvider/UserContext";
+import { useUser } from "@context/UserProvider/UserProvider";
 
 const c = classNames.bind(styles);
 

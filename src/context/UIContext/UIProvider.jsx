@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import AddToCollectionProvider from "./AddToCollectionProvider";
 import DeleteConfirmationProvider from "./ConfirmDialogProvider";
+import ChatWindowToggleProvider from "./ChatWindowToggleProvider";
 
 export const UIContext = createContext(null);
 
@@ -10,7 +11,9 @@ function UIProvider({ children }) {
   return (
     <UIContext.Provider value={{}}>
       <DeleteConfirmationProvider>
-        <AddToCollectionProvider>{children}</AddToCollectionProvider>
+        <ChatWindowToggleProvider>
+          <AddToCollectionProvider>{children}</AddToCollectionProvider>
+        </ChatWindowToggleProvider>
       </DeleteConfirmationProvider>
     </UIContext.Provider>
   );
