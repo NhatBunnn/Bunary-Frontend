@@ -12,10 +12,6 @@ function useWordSetList(initialSort = "popularityScore,desc") {
   const handleFetchWordSetList = async () => {
     setLoading(true);
     try {
-      const filteredParams = Object.fromEntries(
-        Object.entries(queryParams).filter(([_, v]) => v != null && v !== "")
-      );
-
       const response = await fetcher({
         url: `/api/v1/wordsets`,
         method: "GET",
@@ -23,7 +19,7 @@ function useWordSetList(initialSort = "popularityScore,desc") {
           visibility: "PUBLIC",
           page: 0,
           size: 20,
-          ...filteredParams,
+          ...queryParams,
         },
       });
 

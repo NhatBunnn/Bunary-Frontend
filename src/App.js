@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { adminRoutes, privateRoutes, publicRoutes } from "./routes";
+import { adminRoutes, privateRoutes, publicRoutes } from "./routes/routes";
 import { Fragment } from "react/jsx-runtime";
 import GlobalProfiders from "./context/GlobalProviders";
 

@@ -18,6 +18,8 @@ import AdminHome from "@pages/AdminDashboard/AdminHome/AdminHome";
 import AdminLayout from "@layouts/AdminLayout/AdminLayout";
 import NotFound from "@pages/FallBack/NotFound/NotFound";
 import Forbidden from "@pages/FallBack/Forbidden/Forbidden";
+import UserDashboard from "@pages/AdminDashboard/UserDashboard/UserDashboard";
+import WordSetDashboard from "@pages/AdminDashboard/WordSetDashboard/WordSetDashboard";
 
 const publicRoutes = [
   { path: "/", Page: Homepage, Layout: DefaultLayout },
@@ -52,6 +54,19 @@ const adminRoutes = [
   {
     path: "/admin",
     Page: AdminHome,
+    Layout: AdminLayout,
+    roles: ["ADMIN"],
+  },
+  {
+    path: "/admin/user",
+    Page: UserDashboard,
+    Layout: AdminLayout,
+    roles: ["ADMIN"],
+  },
+
+  {
+    path: "/admin/wordset",
+    Page: WordSetDashboard,
     Layout: AdminLayout,
     roles: ["ADMIN"],
   },

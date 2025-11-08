@@ -27,7 +27,7 @@ function AdminHome() {
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between">
                 <div>
-                  <h4 className="mb-1 fw-bold">32,450,000 ₫</h4>
+                  <h4 className="mb-1 fw-bold">0₫</h4>
                   <p className="mb-0 text-muted small">Doanh thu hôm nay</p>
                 </div>
                 <div className="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">

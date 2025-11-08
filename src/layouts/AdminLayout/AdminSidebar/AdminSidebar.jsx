@@ -21,20 +21,13 @@ import { bindClass } from "@utils/classnames";
 const c = bindClass(styles);
 
 const menuItems = [
-  { label: "Statistics", icon: faChartBar, path: "/admin" },
-  { label: "Invoices", icon: faFileInvoice, path: "/admin/invoices" },
+  { label: "Thống kê", icon: faChartBar, path: "/admin" },
+  { label: "Người dùng", icon: faFileInvoice, path: "/admin/user" },
   {
-    label: "Table Reservations",
+    label: "Bộ từ vựng",
     icon: faCalendarCheck,
-    path: "/admin/reservations",
+    path: "/admin/wordset",
   },
-  { label: "Items", icon: faUtensils, path: "/admin/items" },
-  { label: "Menu", icon: faBook, path: "/admin/menu" },
-  { label: "Combos", icon: faBox, path: "/admin/combos" },
-  { label: "Employees", icon: faUsers, path: "/admin/employees" },
-  { label: "Customers", icon: faUserFriends, path: "/admin/customers" },
-  { label: "System", icon: faCogs, path: "/admin/system" },
-  { label: "Restaurant Settings", icon: faStore, path: "/admin/settings" },
 ];
 
 function AdminSidebar() {
