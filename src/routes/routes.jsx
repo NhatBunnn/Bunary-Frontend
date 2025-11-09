@@ -1,6 +1,5 @@
 import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout";
 import CreateWordSet from "../pages/CreateWordSet";
-import Homepage from "@pages/Homepage/Homepage";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import VerifyEmail from "../pages/VerifyEmail";
@@ -20,10 +19,17 @@ import NotFound from "@pages/FallBack/NotFound/NotFound";
 import Forbidden from "@pages/FallBack/Forbidden/Forbidden";
 import UserDashboard from "@pages/AdminDashboard/UserDashboard/UserDashboard";
 import WordSetDashboard from "@pages/AdminDashboard/WordSetDashboard/WordSetDashboard";
+import Homepage from "@pages/Homepage/Homepage/Homepage";
+import MyWordSets from "@pages/Homepage/MyWordSets/MyWordSets";
+import WordSetList from "@pages/Homepage/WordSetList/WordSetList";
 
 const publicRoutes = [
+  // Homepage
   { path: "/", Page: Homepage, Layout: DefaultLayout },
-  { path: "/:slug", Page: Homepage, Layout: DefaultLayout },
+  { path: "/my-wordsets", Page: MyWordSets, Layout: DefaultLayout },
+  { path: "/wordsets", Page: WordSetList, Layout: DefaultLayout },
+
+  // Authentication
   { path: "/login", Page: Login },
   { path: "/register", Page: Register },
   { path: "/verify-email", Page: VerifyEmail },

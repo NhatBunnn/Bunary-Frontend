@@ -21,7 +21,7 @@ function useMyRecentWordSetList(initialSort = "popularityScore,desc") {
         method: "GET",
         params: {
           page: 0,
-          size: 20,
+          size: 6,
           //   ...filteredParams,
         },
       });

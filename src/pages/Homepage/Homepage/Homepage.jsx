@@ -1,35 +1,18 @@
 import WordSetList from "@features/wordsets/components/WordSetList/WordSetList";
-import styles from "./Home.module.css";
+import styles from "./Homepage.module.css";
 import { bindClass } from "@utils/classnames";
 import TitleSection from "@components/TitleSection";
 import { UserList } from "@features/user/components";
 import Button from "@components/Button/Button";
-import WordSet from "@components/WordSet";
 import { MyRecentWordSetList } from "@features/wordsets/components";
+import Tabs from "../components/Tabs/Tabs";
 
 const c = bindClass(styles);
 
-function Home() {
-  const ws = {
-    id: 1,
-    title: "Basic English Vocabulary",
-    description: "Learn 100 essential English words for beginners.",
-    visibility: "PUBLIC",
-    thumbnail:
-      "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg",
-    createdAt: "2025-10-31T10:00:00Z",
-    updatedAt: "2025-11-01T15:00:00Z",
-    user: {
-      id: 1,
-      name: "Nhật Bủn",
-      avatar: "https://i.pravatar.cc/150?img=3",
-    },
-    wordCount: 100,
-    rating: 4.8,
-  };
-
+function Homepage() {
   return (
-    <div className={c("home")}>
+    <div className={c("Homepage")}>
+      <Tabs />
       <TitleSection title="Đã học gần đây" onTop={true}>
         <Button label="Xem chi tiết" to="/popular_wordsets" variant="default" />
       </TitleSection>
@@ -48,4 +31,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Homepage;

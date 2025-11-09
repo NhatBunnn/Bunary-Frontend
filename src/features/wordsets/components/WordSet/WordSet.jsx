@@ -1,7 +1,7 @@
 import LargeWordSet from "./LargeWordSet/LargeWordSet";
 import SmallWordSet from "./SmallWordSet/SmallWordSet";
 
-function WordSet({ size = "small", author, wordSet, index }) {
+function WordSet({ size = "small", author, wordSet }) {
   return (
     <>
       {size === "small" ? (

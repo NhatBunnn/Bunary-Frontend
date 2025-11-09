@@ -69,8 +69,6 @@ function TokenProvider({ children }) {
     const init = async () => {
       try {
         const response = await getToken();
-
-        console.log("response ", response);
       } catch (err) {
         console.error("Error initializing token:", err);
       } finally {
