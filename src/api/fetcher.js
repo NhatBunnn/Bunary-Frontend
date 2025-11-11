@@ -1,7 +1,6 @@
 import { API_URL } from "@config/apiConfig";
 import axiosClient from "./axiosClient";
 import { useToken } from "@context/AuthProvider/TokenContext";
-import { useNavigate } from "react-router-dom";
 
 export const fetcher = async ({
   url,
@@ -33,7 +32,6 @@ export const fetcher = async ({
 
 export const useFetcher = () => {
   const { getToken } = useToken();
-  const navigate = useNavigate();
 
   const fetcher = async ({ url, method = "get", params, data, signal }) => {
     try {
@@ -50,13 +48,7 @@ export const useFetcher = () => {
       });
       return response.data;
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        navigate("/404");
-        return;
-      }
-
-      console.error("API error:", error);
-      throw error;
+      throw error.response.data;
     }
   };
 

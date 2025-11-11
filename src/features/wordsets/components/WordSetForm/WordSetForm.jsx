@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import WordInput from "./components/WordInput/WordInput";
 import { DialogWrapper, OptionsMenuWrapper } from "@components/index";
 import { EditVisibilityDialog } from "./components/Dialogs";
-import BulkImport from "./components/Dialogs/BulkImport/BulkImport"; // Đảm bảo đường dẫn đúng
+import BulkImport from "./components/Dialogs/BulkImport/BulkImport";
 
 const c = classNames.bind(styles);
 
@@ -70,7 +70,7 @@ export default function WordSetForm({ type = "CREATE" }) {
     setWordInputs((prev) => prev.filter((data) => data !== word));
   };
 
-  const handleChange = (index, field, value) => {
+  const handleChangeWordInputs = (index, field, value) => {
     const newWordInputs = [...wordInputs];
     newWordInputs[index][field] = value;
     setWordInputs(newWordInputs);
@@ -237,7 +237,7 @@ export default function WordSetForm({ type = "CREATE" }) {
             key={word.id || index}
             index={index}
             word={word}
-            onChange={handleChange}
+            onChangeWord={handleChangeWordInputs}
             onRemove={() => removeWordCard(word)}
           />
         ))}
