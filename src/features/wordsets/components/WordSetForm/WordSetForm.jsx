@@ -43,6 +43,8 @@ export default function WordSetForm({ type = "CREATE" }) {
 
   const [openDialog, setOpenDialog] = useState({ privacy: false });
 
+  console.log("wordInputs", wordInputs);
+
   useEffect(() => {
     if (type === "UPDATE") {
       handleFindWordSetById();

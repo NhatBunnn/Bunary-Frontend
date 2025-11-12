@@ -6,6 +6,7 @@ import useFlashCard from "./useFlashCard";
 import Loading from "@components/Loading/Loading";
 import FinishScreen from "../FinishScreen/FinishScreen";
 import { useNavigate } from "react-router-dom";
+import { getThumbnailUrl } from "@utils/getThumbnailUrl";
 
 const c = classNames.bind(styles);
 
@@ -76,7 +77,10 @@ function FlashCard() {
                 <div key={i} className={c(flashCardSide.side)}>
                   {settings[flashCardSide.side].image === true && (
                     <div className={c("image")}>
-                      <img src={words[currentCard]?.thumbnail} alt="" />
+                      <img
+                        src={getThumbnailUrl(words[currentCard]?.thumbnail)}
+                        alt=""
+                      />
                     </div>
                   )}
                   {flashCardFields.map((field, j) =>

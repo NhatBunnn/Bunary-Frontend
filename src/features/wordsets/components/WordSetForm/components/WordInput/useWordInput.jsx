@@ -15,21 +15,21 @@ function useWordInput() {
     setLoading(true);
     try {
       const response = await fetcher({
-        url: "/api/v1/terms/search",
+        url: "/api/v1/wordresources/search",
         method: "GET",
         params: {
           keyword: searchKeyword,
         },
       });
 
-      let termMedias = [];
+      let result = [];
       response.data.forEach((item) => {
-        if (item.termMedias) {
-          termMedias = [...termMedias, ...item.termMedias];
+        if (item.images) {
+          result = [...result, ...item.images];
         }
       });
 
-      setSearchResults(termMedias);
+      setSearchResults(result);
     } catch (e) {
       showNotification(te(e.errorCode), "error");
     } finally {

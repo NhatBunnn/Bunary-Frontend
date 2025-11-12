@@ -17,6 +17,7 @@ import TitleSection from "@components/TitleSection";
 import Button from "@components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { AddToCollection } from "@features/collection/components";
+import { getThumbnailUrl } from "@utils/getThumbnailUrl";
 
 const c = classNames.bind(styles);
 
@@ -34,8 +35,6 @@ const WordSetPage = () => {
     rating,
     setRating,
     ratingList,
-    handleFindAllWordSet,
-    handleRemoveWordSet,
     handleRatingWordSet,
   } = useWordSetPage();
 
@@ -144,7 +143,7 @@ const WordSetPage = () => {
             <div key={idx} className={c("wordCard")}>
               <div className={c("wordCardLeft")}>
                 <img
-                  src={word?.thumbnail}
+                  src={getThumbnailUrl(word?.thumbnail)}
                   alt={word?.term}
                   style={{
                     width: "100%",

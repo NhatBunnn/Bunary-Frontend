@@ -144,12 +144,16 @@ export default function WordInput({ word, onChangeWord, onRemove, index }) {
                     <strong>{searchKeyword}</strong>"
                   </p>
                 ) : (
-                  // Nếu có ảnh, hiển thị danh sách
                   <div className={c("image-list")}>
                     {searchResults.map((image) => (
-                      <div onClick={() => alert("abc" + image.url.id)}>
+                      <div
+                        key={image.id}
+                        className={c("image-item-wrapper")}
+                        onClick={() => {
+                          onChangeWord(index, "thumbnail", image.url);
+                        }}
+                      >
                         <img
-                          key={image.id}
                           src={`${API_URL}${image.url}`}
                           alt="term media"
                           className={c("image-item")}

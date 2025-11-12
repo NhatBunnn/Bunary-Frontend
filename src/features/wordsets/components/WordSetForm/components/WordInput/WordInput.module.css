@@ -271,6 +271,36 @@
   text-align: right;
 }
 
+/*.image-list   */
+.image-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 5px 0;
+  scroll-behavior: smooth;
+
+  /* Ẩn thanh cuộn (tùy chọn) */
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+}
+
+.image-item-wrapper {
+  flex: 0 0 auto; /* Giữ kích thước cố định khi scroll */
+}
+
+.image-item {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .wordCardInput {
@@ -318,3 +348,4 @@
 
   .image-option { height: 90px; }
 }
+
