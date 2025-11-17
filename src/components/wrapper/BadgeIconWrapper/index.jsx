@@ -4,14 +4,10 @@ import classNames from "classnames/bind";
 
 const c = classNames.bind(styles);
 
-function BadgeIconWrapper({ children }) {
-  const { notification } = useWebsocket();
-
+function BadgeIconWrapper({ count, children }) {
   return (
     <div className={c("badgeIconWrapper")}>
-      {notification?.length > 0 && (
-        <div className={c("icon")}>{notification.length}</div>
-      )}
+      {count > 0 && <div className={c("icon")}>{count}</div>}
       {children}
     </div>
   );

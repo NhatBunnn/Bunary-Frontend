@@ -10,7 +10,7 @@ import { useUser } from "@context/UserProvider/UserProvider";
 import useLogout from "../../../hooks/auth/useLogout";
 import Avatar from "../../../components/Avatar";
 import Loading from "../../../components/Loading/Loading";
-import Notify from "./component/Notify/Notify";
+import Notify from "./Notify/Notify";
 import Search from "./Search/Search";
 
 const c = classNames.bind(styles);

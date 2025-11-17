@@ -27,7 +27,7 @@ function ChatWindow({
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
-  }, [chatMessages]); // thêm dependency để scroll khi có tin mới
+  }, [chatMessages]);
 
   const canSend = messageContent.trim().length > 0;
 

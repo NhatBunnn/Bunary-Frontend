@@ -14,11 +14,11 @@ export const useWebsocket = () => useContext(WebSocketContext);
 
 export const WebSocketProvider = ({ children }) => {
   const [chatMessages, setChatMessages] = useState({});
+  const [notifications, setNotifications] = useState([]);
+
   const [isConnected, setIsConnected] = useState(false);
   const stompClientRef = useRef(null);
   const { getToken } = useToken();
-
-  console.log("chatMessages ", chatMessages);
 
   useEffect(() => {
     let client = null;
@@ -45,10 +45,6 @@ export const WebSocketProvider = ({ children }) => {
         stompClientRef.current = client;
 
         client.subscribe("/user/queue/messages", (message) => {
-          console.log(" Received message!");
-          console.log(" Raw:", message);
-          console.log(" Body:", message.body);
-
           const curMessage = JSON.parse(message.body);
 
           setChatMessages((prev) => ({
@@ -58,6 +54,13 @@ export const WebSocketProvider = ({ children }) => {
               curMessage,
             ],
           }));
+        });
+
+        // Subscribe notification riêng
+        client.subscribe("/user/queue/notifications", (message) => {
+          const notification = JSON.parse(message.body);
+
+          setNotifications((prev) => [notification, ...prev]);
         });
       };
 
@@ -114,6 +117,7 @@ export const WebSocketProvider = ({ children }) => {
       value={{
         chatMessages,
         sendMessageChat,
+        notifications,
         isConnected,
       }}
     >
