@@ -2,14 +2,13 @@ import styles from "./UserList.module.css";
 import { bindClass } from "@utils/classnames";
 import { FriendCard } from "@features/user/components";
 import useUserList from "@features/user/hooks/useUserList";
-import { useChatWindowToggle } from "@context/UIContext/ChatWindowToggleProvider";
-import { useChatReceiver } from "@context/ChatReceiverContext";
+import { useChatWindow } from "@context/ChatWindowProvider";
 
 const c = bindClass(styles);
 
 function UserList() {
-  const { setReceiver } = useChatReceiver();
-  const { handelToggleChatWindow } = useChatWindowToggle();
+  const { openChatWindow } = useChatWindow();
+
   const { userList, user, loading } = useUserList();
 
   if (loading) return <>Loading....</>;
@@ -18,12 +17,7 @@ function UserList() {
     <div className={c("userList")}>
       {userList.map((d, i) =>
         d.id === user.id ? null : (
-          <FriendCard
-            key={i}
-            user={d}
-            setReceiver={setReceiver}
-            handelToggleChatWindow={handelToggleChatWindow}
-          />
+          <FriendCard openChatWindow={openChatWindow} key={i} user={d} />
         )
       )}
     </div>

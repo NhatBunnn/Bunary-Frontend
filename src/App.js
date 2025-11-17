@@ -11,13 +11,14 @@ import AddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/AddToCol
 import PrivateRoute from "@routes/PrivateRoute.jsx";
 import RoleRoute from "@routes/RoleRoute";
 import { ChatWindow } from "./components";
+import ChatWindowContainer from "@components/ChatWindowContainer/ChatWindowContainer";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <GlobalProfiders>
-          <ChatWindow />
+          <ChatWindowContainer />
 
           <CreateCollection />
           <AddToCollection />

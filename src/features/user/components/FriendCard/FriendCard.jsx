@@ -6,7 +6,7 @@ import { Image, Images } from "@assets/images";
 
 const c = classNames.bind(styles);
 
-function FriendCard({ user, setReceiver, handelToggleChatWindow, className }) {
+function FriendCard({ user, openChatWindow, className }) {
   return (
     <div className={c("friendCard", className)}>
       <Image src={user?.avatar || Images.avatar} size="180px" />
@@ -17,12 +17,7 @@ function FriendCard({ user, setReceiver, handelToggleChatWindow, className }) {
           label="Nhắn tin"
           icon={faMessage}
           onClick={() => {
-            setReceiver({
-              fullName: user?.fullName,
-              avatar: user?.avatar,
-              id: user?.id,
-            });
-            handelToggleChatWindow(true);
+            openChatWindow(user);
           }}
         />
       </div>

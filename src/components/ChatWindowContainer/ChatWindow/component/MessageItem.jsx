@@ -1,4 +1,4 @@
-import { Image } from "../../../assets/images";
+import { Image } from "@assets/images";
 import styles from "./MessageItem.module.css";
 import classNames from "classnames/bind";
 

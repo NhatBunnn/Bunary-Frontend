@@ -1,0 +1,127 @@
+.chatWindow {
+  width: 328px;
+  height: 455px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header */
+.chatHeader {
+  padding: 12px 14px;
+  background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.headerAvatar {
+  position: relative;
+}
+.headerAvatar::after {
+  content: "";
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 14px; height: 14px;
+  background: #4ade80;
+  border: 3px solid white;
+  border-radius: 50%;
+}
+
+.headerInfo .name {
+  font-weight: 600;
+  font-size: 15px;
+}
+.headerInfo .status {
+  font-size: 12.5px;
+  opacity: 0.9;
+}
+
+.headerActions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.iconBtn {
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.iconBtn:hover {
+  background: rgba(255,255,255,0.2);
+}
+.iconBtn.close {
+  font-size: 20px;
+}
+
+/* Body */
+.chatBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 8px;
+  background: #f0f2f5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23e8ebee' fill-opacity='0.4'%3E%3Cpath d='M0 0h80v80H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Input */
+.chatInput {
+  padding: 10px 14px;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #e4e6eb;
+}
+
+.chatInput input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: #f0f2f5;
+  padding: 0 16px;
+  height: 40px;
+  border-radius: 20px;
+  font-size: 14.5px;
+  transition: all 0.2s;
+}
+.chatInput input:focus {
+  background: white;
+  box-shadow: 0 0 0 2px #667eea;
+}
+
+.sendBtn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e6eb;
+  color: #65676b;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.sendBtn.active {
+  background: #667eea;
+  color: white;
+  transform: rotate(-30deg);
+}
+.sendBtn:hover {
+  transform: scale(1.08);
+}
+
+/* Scrollbar */
+.chatBody::-webkit-scrollbar { width: 5px; }
+.chatBody::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
