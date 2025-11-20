@@ -59,9 +59,18 @@ function MenuSidebar({ collapsed, className, onClose }) {
         )}
 
         <div className={c("menuItem-list")}>
+          {!collapsed && (
+            <div className={c("menuHeader", "d-flex", "align-items-center")}>
+              <span className={c("menuTitle")}>Menu</span>
+            </div>
+          )}
+
           {menuItems.map((item, index) =>
             item.hr ? (
-              <hr key={index} />
+              <hr
+                key={index}
+                // style={{ border: "1px solid var(--color-gray-500)" }}
+              />
             ) : (
               <Link
                 key={index}

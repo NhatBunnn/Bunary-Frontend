@@ -26,38 +26,40 @@
 }
 
 
-/* ⚡ Shimmer loading universal */
 .shimmer {
   position: relative;
   overflow: hidden;
-  background-color: #e0e0e0; /* màu nền cơ bản */
+  background: #e0e0e0;           /* nền xám gốc */
   border-radius: 8px;
 }
 
 .shimmer::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: -150%;
-  width: 150%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0) 100%
+    #e0e0e0 0%,
+    #ededed 20%,
+    #fafafa 50%,
+    #ededed 80%,
+    #e0e0e0 100%
   );
-  animation: shimmerMove 1.5s infinite;
+  background-size: 200% 100%;
+  animation: shimmerMove 1.6s infinite linear;
+  pointer-events: none;
+  border-radius: 8px;
 }
 
 @keyframes shimmerMove {
   0% {
-    left: -150%;
+    background-position: -200% 0;
   }
   100% {
-    left: 150%;
+    background-position: 200% 0;
   }
 }
+
 
 .button-active{
   background-color: var(--background-hover) !important;

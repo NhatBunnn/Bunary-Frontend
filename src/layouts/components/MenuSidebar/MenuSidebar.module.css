@@ -97,3 +97,21 @@
 .menuSidebar.collapsed .label {
   display: none;
 }
+
+.menuHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 12px;
+}
+
+.menuTitle {
+  margin-top: 10px;
+  margin-left: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+

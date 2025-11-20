@@ -6,14 +6,15 @@ import { Images } from "@assets/images";
 
 const c = classNames.bind(styles);
 
-function SmallWordSet({ wordSet }) {
+function SmallWordSet({ wordSet, style }) {
   const navigate = useNavigate();
 
   return (
     <div
+      style={style}
       onClick={() =>
         navigate(
-          `/wordset/${wordSet.id}/${wordSet.title
+          `/wordset/${wordSet?.id}/${wordSet?.title
             .split(" ")
             .filter(Boolean)
             .map((d) => d.toLowerCase())
@@ -29,16 +30,18 @@ function SmallWordSet({ wordSet }) {
       )}
     >
       <div className={c("thumbnail")}>
-        <img src={wordSet.thumbnail || Images.Logo} alt="" />
+        <img src={wordSet?.thumbnail || Images.Logo} alt="" />
       </div>
       <div className={c("content")}>
         <div className={c("title", "font-medium")}>
-          {wordSet.title || "no title"}
+          {wordSet?.title || "no title"}
         </div>
         <div className={c("detail", "d-xl-flex")}>
-          <span>147 từ vựng</span>
-          <span className="d-none d-xl-block"> - </span>
-          <span>{wordSet.description || "no desc"}</span>
+          <span className={c("wordCount")}>147 từ vựng</span>
+          <span className={c("separator")}> - </span>
+          <span className={c("description")}>
+            {wordSet?.description || "Không có mô tả"}
+          </span>
         </div>
       </div>
     </div>

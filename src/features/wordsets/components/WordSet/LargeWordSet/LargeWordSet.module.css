@@ -11,11 +11,10 @@
   width: 100%;
 }
 
-.largeWordSet:hover {
+/* .largeWordSet:hover {
   transform: translateY(-5px);
-  background-color: var(--background-hover);
   box-shadow: var(--box-shadow-secondary);
-}
+} */
 
 /* Thumbnail */
 .thumbnail {

@@ -11,11 +11,29 @@ function MyRecentWordSetList() {
   return (
     <div className={c("myRecentWordSetList")}>
       <div className="row">
-        {recentWordSetList?.map((d, i) => (
-          <div className="col-12 col-lg-6 mb-2 px-1" key={i}>
-            <WordSet size="small" wordSet={d} />
+        {/* LOADING: shimmer */}
+        {loading &&
+          [...Array(6)].map((_, i) => (
+            <div key={i} className="col-12 col-lg-6 mb-2 px-1 shimmer">
+              <WordSet size="small" />
+            </div>
+          ))}
+
+        {!loading && (!recentWordSetList || recentWordSetList.length < 1) && (
+          <div className="col-12 text-center py-4">
+            <p className="text-muted" style={{ fontSize: "14px" }}>
+              Bạn chưa học bộ từ vựng nào.
+            </p>
           </div>
-        ))}
+        )}
+
+        {/* CÓ DỮ LIỆU */}
+        {!loading &&
+          recentWordSetList?.map((d, i) => (
+            <div className="col-12 col-lg-6 mb-2 px-1" key={i}>
+              <WordSet size="small" wordSet={d} />
+            </div>
+          ))}
       </div>
     </div>
   );
