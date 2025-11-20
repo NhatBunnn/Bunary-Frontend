@@ -1,12 +1,11 @@
 import { useChatWindow } from "@context/ChatWindowProvider";
 import { useUser } from "@context/UserProvider/UserProvider";
-import { useWebsocket } from "@context/WebSocketProvider";
-import { Fragment } from "react";
 import ChatWindow from "./ChatWindow/ChatWindow";
+import { useChatMessage } from "@context/WebSocketProvider/ChatMessageProvider";
 
 function ChatWindowContainer() {
-  const { openReceivers, openChatWindow, closeChatWindow } = useChatWindow();
-  const { sendMessageChat, chatMessages } = useWebsocket();
+  const { openReceivers, closeChatWindow } = useChatWindow();
+  const { sendMessageChat, chatMessages, fetchMessagesById } = useChatMessage();
   const { user } = useUser();
 
   return (
@@ -22,11 +21,13 @@ function ChatWindowContainer() {
     >
       {openReceivers?.map((receiver, index) => (
         <ChatWindow
+          key={index}
           onClose={closeChatWindow}
           sender={user}
           receiver={receiver}
           sendMessageChat={sendMessageChat}
           chatMessages={chatMessages}
+          fetchMessagesById={fetchMessagesById}
         />
       ))}
     </div>

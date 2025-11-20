@@ -1,4 +1,4 @@
-import { useWebsocket } from "../../../context/WebSocketProvider";
+import { useWebsocket } from "../../../context/WebSocketProvider/WebSocketProvider";
 import styles from "./BadgeIconWrapper.module.css";
 import classNames from "classnames/bind";
 

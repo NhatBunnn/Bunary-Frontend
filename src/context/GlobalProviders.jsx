@@ -3,22 +3,25 @@ import CreateCollectionProvider from "./CreateCollectionProvider";
 import UIProvider from "./UIContext/UIProvider";
 import AllAuthProviders from "./AuthProvider/AllAuthProviders";
 import UserProviderWrapper from "./UserProvider/UserProviderWrapper";
-import { WebSocketProvider } from "./WebSocketProvider";
+import { WebSocketProvider } from "./WebSocketProvider/WebSocketProvider";
 import ChatWindowProvider from "./ChatWindowProvider";
+import WebSocketProviderWrapper from "./WebSocketProvider/WebSocketProviderWrapper";
 
 function GlobalProfiders({ children }) {
   return (
     <NotificationProvider>
       <AllAuthProviders>
-        <ChatWindowProvider>
-          <UserProviderWrapper>
-            <WebSocketProvider>
-              <CreateCollectionProvider>
-                <UIProvider>{children}</UIProvider>
-              </CreateCollectionProvider>
-            </WebSocketProvider>
-          </UserProviderWrapper>
-        </ChatWindowProvider>
+        <WebSocketProviderWrapper>
+          <ChatWindowProvider>
+            <UserProviderWrapper>
+              <WebSocketProvider>
+                <CreateCollectionProvider>
+                  <UIProvider>{children}</UIProvider>
+                </CreateCollectionProvider>
+              </WebSocketProvider>
+            </UserProviderWrapper>
+          </ChatWindowProvider>
+        </WebSocketProviderWrapper>
       </AllAuthProviders>
     </NotificationProvider>
   );

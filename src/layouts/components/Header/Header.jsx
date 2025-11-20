@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import { useUser } from "@context/UserProvider/UserProvider";
 import useLogout from "../../../hooks/auth/useLogout";
-import Avatar from "../../../components/Avatar";
 import Loading from "../../../components/Loading/Loading";
 import Notify from "./Notify/Notify";
 import Search from "./Search/Search";
@@ -85,7 +84,7 @@ function Header({ onMenuClick, onRankingMenu }) {
             </div>
             <Notify />
             <div className={c("avatar")} ref={dropDownRef}>
-              <Avatar
+              <Image
                 src={user.avatar || Images.avatar}
                 size="40px"
                 isCircled="true"

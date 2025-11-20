@@ -3,14 +3,14 @@ import styles from "./Notify.module.css";
 import { bindClass } from "@utils/classnames";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useWebsocket } from "@context/WebSocketProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { useNotification } from "@context/WebSocketProvider/NotificationProvider";
 
 const c = bindClass(styles);
 
 function Notify() {
-  const { notifications } = useWebsocket();
+  const { notifications } = useNotification();
 
   const [openDropDown, setOpenDropDown] = useState(false);
 

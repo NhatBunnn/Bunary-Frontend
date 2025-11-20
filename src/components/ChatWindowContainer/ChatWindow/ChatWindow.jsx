@@ -8,8 +8,8 @@ import {
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
-import Avatar from "@components/Avatar";
 import MessageItem from "./component/MessageItem";
+import { Image } from "@assets/images";
 
 const c = classNames.bind(styles);
 
@@ -19,6 +19,7 @@ function ChatWindow({
   sendMessageChat,
   chatMessages,
   onClose,
+  fetchMessagesById,
 }) {
   const [messageContent, setMessageContent] = useState("");
   const chatBodyRef = useRef(null);
@@ -29,18 +30,26 @@ function ChatWindow({
     }
   }, [chatMessages]);
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        await fetchMessagesById(receiver.id);
+      } catch (error) {}
+    };
+    fetch();
+  }, []);
+
   const canSend = messageContent.trim().length > 0;
 
   return (
     <div className={c("chatWindow")}>
       {/* Header – đẹp hơn */}
       <div className={c("chatHeader")}>
-        <Avatar
+        <Image
           src={receiver.avatar}
           size="40px"
           isCircled={true}
           className={c("headerAvatar")}
-          online={true}
         />
         <div className={c("headerInfo")}>
           <div className={c("name")}>{receiver.fullName}</div>

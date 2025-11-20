@@ -7,13 +7,12 @@ import React, {
 } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import { useToken } from "./AuthProvider/TokenContext";
+import { useToken } from "../AuthProvider/TokenContext";
 
 const WebSocketContext = createContext(null);
 export const useWebsocket = () => useContext(WebSocketContext);
 
 export const WebSocketProvider = ({ children }) => {
-  const [chatMessages, setChatMessages] = useState({});
   const [notifications, setNotifications] = useState([]);
 
   const [isConnected, setIsConnected] = useState(false);
@@ -43,25 +42,6 @@ export const WebSocketProvider = ({ children }) => {
       client.onConnect = (frame) => {
         setIsConnected(true);
         stompClientRef.current = client;
-
-        client.subscribe("/user/queue/messages", (message) => {
-          const curMessage = JSON.parse(message.body);
-
-          setChatMessages((prev) => ({
-            ...prev,
-            [curMessage.senderId]: [
-              ...(prev[curMessage.senderId] || []),
-              curMessage,
-            ],
-          }));
-        });
-
-        // Subscribe notification riêng
-        client.subscribe("/user/queue/notifications", (message) => {
-          const notification = JSON.parse(message.body);
-
-          setNotifications((prev) => [notification, ...prev]);
-        });
       };
 
       client.onStompError = (frame) => {
@@ -88,37 +68,11 @@ export const WebSocketProvider = ({ children }) => {
     };
   }, [getToken]);
 
-  const sendMessageChat = (receiver, sender, messageContent) => {
-    const client = stompClientRef.current;
-    if (!client || !client.connected) {
-      console.warn("WebSocket chưa kết nối");
-      return;
-    }
-
-    const msg = {
-      senderId: sender.id,
-      receiverId: receiver.id,
-      messageContent,
-    };
-
-    client.publish({
-      destination: "/app/chat.send",
-      body: JSON.stringify(msg),
-    });
-
-    setChatMessages((prev) => ({
-      ...prev,
-      [receiver.id]: [...(prev[receiver.id] || []), msg],
-    }));
-  };
-
   return (
     <WebSocketContext.Provider
       value={{
-        chatMessages,
-        sendMessageChat,
-        notifications,
         isConnected,
+        stompClientRef,
       }}
     >
       {children}
