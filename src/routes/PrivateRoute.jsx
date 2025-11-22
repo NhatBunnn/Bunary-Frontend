@@ -1,5 +1,5 @@
 import { useToken } from "@context/AuthProvider/TokenContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function PrivateRoute({ children }) {

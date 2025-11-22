@@ -37,7 +37,7 @@ function Register() {
         {/* LEFT: IMAGE - Ẩn trên mobile */}
         <div className={c("imageSection")}>
           <img
-            src="https://eaut.edu.vn/wp-content/uploads/2020/04/truong.jpg"
+            src={Images.imageForm}
             alt="Register background"
             className={c("authImage")}
           />

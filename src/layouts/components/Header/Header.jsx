@@ -16,7 +16,7 @@ const c = classNames.bind(styles);
 
 function Header({ onMenuClick, onRankingMenu }) {
   const [openDropDown, setOpenDropDown] = useState(false);
-  const { user, loadingUser } = useUser();
+  const { user, loading: loadingUser } = useUser();
   const { handleSubmit } = useLogout();
 
   const dropDownRef = useRef();
@@ -40,6 +40,8 @@ function Header({ onMenuClick, onRankingMenu }) {
   const handleToggleDropDown = (e) => {
     openDropDown ? setOpenDropDown(false) : setOpenDropDown(true);
   };
+
+  console.log("user ", user);
 
   return (
     <header
@@ -71,13 +73,13 @@ function Header({ onMenuClick, onRankingMenu }) {
 
       {/* Actions */}
       <div className={c("actions")}>
-        {!user && (
+        {Object.keys(user).length === 0 && (
           <div className={c("not-logged-in")}>
             <Button label="Đăng kí" to="/register" />
             <Button label="Đăng nhập" to="/login" />
           </div>
         )}
-        {user && (
+        {Object.keys(user).length !== 0 && (
           <div className={c("logged-in", "d-flex", "align-items-center")}>
             <div className={c("store")}>
               <FontAwesomeIcon icon={faStore} />

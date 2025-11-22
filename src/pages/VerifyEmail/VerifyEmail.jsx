@@ -5,17 +5,13 @@ import styles from "./VerifyEmail.module.css";
 import classNames from "classnames/bind";
 import Button from "../../components/Button/Button";
 import AuthWrapper from "../../components/wrapper/AuthWrapper";
-import SuccessAlert from "../../components/Notification";
 import ValidateInput from "../../components/ValidateInput";
-import { API_URL } from "../../config/apiConfig";
-import { useUser } from "@context/UserProvider/UserProvider";
+import { useFetcher } from "@api/fetcher";
+import useAppBase from "@hooks/useAppBase";
 
 const c = classNames.bind(styles);
 
 function VerifyEmail() {
-  const [success, setSuccess] = useState("");
-  const [errors, setErrors] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [countDown, setCountDown] = useState(0);
   const [code, setCode] = useState("");
   // const [isCorrectCode, setIsCorrectCode] = useState(true) nào rảnh tổi ưu sau
@@ -25,80 +21,64 @@ function VerifyEmail() {
   const params = new URLSearchParams(location.search);
   const email = params.get("email");
 
-  const { setUser } = useUser();
+  const { loading, setLoading, te, ts, showNotification, setError, error } =
+    useAppBase();
+  const { fetcher } = useFetcher();
 
-  const handelSendCode = (e) => {
-    setErrors([]);
+  const handelSendCode = async (e) => {
+    setError("");
     setLoading(true);
 
-    fetch(`${API_URL}/api/v1/auth/send-code`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    })
-      .then((response) => response.json())
-      .then((dataReponse) => {
-        if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
-          setErrors([]);
-          setCountDown(30);
-
-          setSuccess("Gửi mã thành công về email " + email);
-        } else {
-          if (dataReponse.error) {
-            setErrors(dataReponse.error);
-          }
-        }
-      })
-      .catch((error) => {
-        setErrors([error.message]);
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      const response = await fetcher({
+        url: "/api/v1/auth/send-code",
+        method: "POST",
+        data: { email },
       });
+
+      setError("");
+      setCountDown(30);
+
+      showNotification("Gửi mã thành công về email " + email, "success");
+    } catch (e) {
+      showNotification(te(e.errorCode), "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleVerifyCode = async (e) => {
     e.preventDefault();
 
-    setErrors([]);
-    setLoading(true);
+    try {
+      setError("");
+      setLoading(true);
 
-    if (code === "") {
-      setErrors(["Vui lòng điền mã xác thực"]);
-      return;
-    }
+      if (code === "") {
+        setError("Vui lòng điền mã xác thực");
+        return;
+      }
 
-    const data = {
-      email,
-      code,
-    };
+      const data = {
+        email,
+        code,
+      };
 
-    fetch(`${API_URL}/api/v1/auth/verify-email`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((dataReponse) => {
-        if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
-          sessionStorage.setItem("access_token", dataReponse.data.accessToken);
-          setUser(dataReponse.data.user);
-          navigate(`/`);
-          setSuccess("Xác thực thành công thành công");
-        } else {
-          if (dataReponse.error) {
-            const response = dataReponse.error;
-            setErrors(...response);
-          }
-        }
-      })
-      .catch((error) => {
-        setErrors([error.message]);
-      })
-      .finally(() => {
-        setLoading(false);
+      const response = await fetcher({
+        url: "/api/v1/auth/verify-email",
+        method: "POST",
+        data,
       });
+
+      navigate(`/login`);
+
+      showNotification("Xác thực thành công", "success");
+    } catch (e) {
+      showNotification(te(e.errorCode), "error");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -113,7 +93,6 @@ function VerifyEmail() {
 
   return (
     <AuthWrapper>
-      {success && <SuccessAlert message={success} />}
       <div className={c("verify-email", "align-items-center p-5")}>
         <div className={c("header", "d-flex justify-content-center")}>
           Xác minh tài khoản
@@ -124,7 +103,7 @@ function VerifyEmail() {
             Chúng tôi đã gửi mã xác minh đền tài khoản:
             <span>{email}</span>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleVerifyCode}>
             <div
               className={c(
                 "otp",
@@ -133,7 +112,7 @@ function VerifyEmail() {
                 "justify-content-center"
               )}
             >
-              <ValidateInput value={code} onChange={setCode} errors={errors} />
+              <ValidateInput value={code} onChange={setCode} error={error} />
             </div>
             <hr />
             <div className="d-flex justify-content-end">
@@ -147,6 +126,7 @@ function VerifyEmail() {
                 type="button"
               />
               <Button
+                onClick={handleVerifyCode}
                 label="Xác minh"
                 type="submit"
                 isLoading={loading ? true : false}

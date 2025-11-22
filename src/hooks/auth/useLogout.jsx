@@ -1,39 +1,33 @@
-import { API_URL } from "../../config/apiConfig";
-import { getAccessToken } from "../../service/apiService";
+import useAppBase from "@hooks/useAppBase";
 import useAuthBase from "./useAuthBase";
+import { useFetcher } from "@api/fetcher";
 
 function useLogout() {
+  const { te, showNotification } = useAppBase();
+  const { fetcher } = useFetcher();
+
   const authBase = useAuthBase();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    authBase.setError();
+    authBase.setSuccess("");
+    authBase.setLoading(true);
+
     try {
-      authBase.setErrors([]);
-      authBase.setSuccess("");
-      authBase.setLoading(true);
-
-      const token = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/api/v1/auth/logout`, {
+      await fetcher({
+        url: "/api/v1/auth/logout",
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
+        credentials: true,
       });
 
-      const dataResponse = await response.json();
+      showNotification("Đã đăng xuất", "success");
 
-      if (dataResponse.statusCode >= 200 && dataResponse.statusCode < 300) {
-        sessionStorage.removeItem("access_token");
-        authBase.setSuccess("Đăng xuất thành công");
-        window.location.reload();
-      } else {
-        console.log(dataResponse.error);
-      }
+      // đang lười nào rảnh tối ưu sau
+      window.location.reload();
     } catch (error) {
-      console.error(error);
+      showNotification(te(error.errorCode), "error");
     } finally {
       authBase.setLoading(false);
     }

@@ -1,23 +1,33 @@
 {
-  "FETCH_FAILED": "Không thể tải dữ liệu từ máy chủ",
+  "ID_NOT_FOUND": "Không tìm thấy dữ liệu với ID",
   "NOT_FOUND": "Không tìm thấy dữ liệu",
-  "ID_NOT_FOUND": "Không tìm thấy dữ liệu với Id này",
   "ALREADY_EXISTS": "Dữ liệu đã tồn tại",
-  
+  "FORBIDDEN": "Truy cập bị từ chối",
+  "BAD_REQUEST": "Dữ liệu yêu cầu không hợp lệ",
+
+  "USER_NOT_FOUND": "Người dùng không tồn tại",
+  "USER_NOT_VERIFIED": "Tài khoản chưa được xác thực",
+
   "AUTH_INVALID": "Email hoặc mật khẩu không đúng",
+  "AUTH_EXPIRED": "Phiên đăng nhập đã hết hạn",
+  "AUTH_SESSION_INVALID": "Phiên đăng nhập không hợp lệ",
+  "AUTH_SESSION_EXPIRED": "Phiên đăng nhập đã hết hạn",
   "AUTH_EMAIL_NOT_EMPTY": "Email không được để trống",
   "AUTH_PASSWORD_NOT_EMPTY": "Mật khẩu không được để trống",
-  
-
-  "COLLECTIONS_FETCH_FAILED": "Không thể tải danh sách bộ sưu tập",
-  "COLLECTION_CREATE_FAILED": "Tạo bộ sưu tập thất bại",
-  "COLLECTION_UPDATE_FAILED": "Cập nhật bộ sưu tập thất bại",
-  "COLLECTIONS_ADD_WORDSET_FAILED": "Thêm bộ từ vựng vào bộ sưu tập thất bại",
-  "COLLECTION_DELETE_FAILED": "Xóa bộ sưu tập thất bại",
-
-  "WORDSETS_FETCH_FAILED": "Không thể tải danh sách bộ từ vựng",
 
 
-  "INPUT_NOT_EMPTY": "Vui lòng không để trống" 
+  "COLLECTION_NAME_NOT_BLANK": "Tên bộ sưu tập không được để trống",
+  "COLLECTION_NAME_TOO_LONG": "Tên bộ sưu tập không được vượt quá 100 ký tự",
+  "COLLECTION_NOT_FOUND": "Không tìm thấy bộ sưu tập",
 
+  "RATING_NOT_FOUND": "Không tìm thấy đánh giá",
+  "RATING_ALREADY_EXISTS": "Người dùng đã đánh giá bộ từ này",
+
+  "EMAIL_EXISTS": "Email đã tồn tại",
+  "EMAIL_INVALID": "Email không hợp lệ",
+  "EMAIL_CODE_INVALID": "Mã xác thực email không hợp lệ",
+  "EMAIL_CODE_EXPIRED": "Mã xác thực email đã hết hạn",
+  "EMAIL_CODE_ATTEMPTS_EXCEEDED": "Quá nhiều lần thử xác thực, vui lòng đợi 30 phút trước khi thử lại",
+  "EMAIL_CODE_USED": "Mã xác thực email đã được sử dụng hoặc không còn",
+  "EMAIL_SEND_FAILED": "Gửi email thất bại"
 }

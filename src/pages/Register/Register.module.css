@@ -27,7 +27,7 @@
    IMAGE SECTION
    ======================================== */
 .imageSection {
-  flex: 1;
+      flex: 10 1;
   display: none;
   min-height: 100%;
   position: relative;
@@ -55,7 +55,7 @@
    FORM SECTION
    ======================================== */
 .formSection {
-  flex: 1;
+      flex: 7 1;
   min-width: 300px;
   padding: 2rem 1.8rem;
   display: flex;
@@ -79,9 +79,7 @@
 .logo {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Title & Subtitle */

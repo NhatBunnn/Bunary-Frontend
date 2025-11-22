@@ -33,22 +33,30 @@ export const fetcher = async ({
 export const useFetcher = () => {
   const { getToken } = useToken();
 
-  const fetcher = async ({ url, method = "get", params, data, signal }) => {
+  const fetcher = async ({
+    url,
+    method = "get",
+    params,
+    data,
+    signal,
+    credentials = false,
+  }) => {
     try {
       const token = await getToken();
+
       const response = await axiosClient({
         url,
         method,
         params,
         data,
         signal,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: credentials,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
+
       return response.data;
     } catch (error) {
-      throw error.response.data;
+      throw error.response?.data || error;
     }
   };
 

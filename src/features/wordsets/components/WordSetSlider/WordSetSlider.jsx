@@ -1,86 +1,90 @@
-import { createContext, useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styles from "./WordSetSlider.module.css";
 import classNames from "classnames/bind";
-import Loading from "@components/Loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import WordSet from "../WordSet/WordSet";
 
 const c = classNames.bind(styles);
 
-export const wordSetValueContext = createContext();
-
 function WordSetSlider({ className, wordSets }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [itemsPerSlide, setItemsPerSlide] = useState(3);
-  const containerRef = useRef(null);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [anim, setAnim] = useState(""); // fade-left / fade-right / fade-in
 
+  // Responsive
   useEffect(() => {
-    const updateItemsPerSlide = () => {
-      const width = window.innerWidth;
-      if (width <= 768) setItemsPerSlide(1);
-      else if (width <= 1200) setItemsPerSlide(2);
-      else setItemsPerSlide(3);
+    const updateItems = () => {
+      const w = window.innerWidth;
+      if (w <= 768) setItemsPerPage(1);
+      else if (w <= 1200) setItemsPerPage(2);
+      else setItemsPerPage(3);
     };
-    updateItemsPerSlide();
-    window.addEventListener("resize", updateItemsPerSlide);
-    return () => window.removeEventListener("resize", updateItemsPerSlide);
+    updateItems();
+    window.addEventListener("resize", updateItems);
+    return () => window.removeEventListener("resize", updateItems);
   }, []);
 
-  if (!wordSets) return <Loading />;
+  const totalPages = Math.ceil(wordSets.length / itemsPerPage);
 
-  const totalSlides = Math.ceil(wordSets.length / itemsPerSlide);
-
-  const handleSlide = (direction) => {
-    if (direction === "prev") {
-      setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
-    } else {
-      setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
-    }
+  const nextPage = () => {
+    setAnim("fade-left");
+    setTimeout(() => {
+      setCurrentPage((p) => (p + 1) % totalPages);
+      setAnim("fade-in");
+    }, 250);
   };
 
-  const getTranslateX = () => {
-    if (!containerRef.current) return 0;
-    const containerWidth = containerRef.current.offsetWidth;
-    const gap = 15; // px gap
-    const itemWidth =
-      (containerWidth - gap * (itemsPerSlide - 1)) / itemsPerSlide;
-    return currentSlide * (itemWidth + gap);
+  const prevPage = () => {
+    setAnim("fade-right");
+    setTimeout(() => {
+      setCurrentPage((p) => (p - 1 + totalPages) % totalPages);
+      setAnim("fade-in");
+    }, 250);
   };
+
+  const start = currentPage * itemsPerPage;
+  const visible = wordSets.slice(start, start + itemsPerPage);
 
   return (
-    <div className={c("wordSetSlider", "d-flex", className)}>
-      <div className={c("slider-container")} ref={containerRef}>
-        <div className={c("btn-leftArrow")} onClick={() => handleSlide("prev")}>
-          <FontAwesomeIcon icon={faAngleLeft} size="lg" />
-        </div>
-        <div
-          className={c("btn-rightArrow")}
-          onClick={() => handleSlide("next")}
-        >
-          <FontAwesomeIcon icon={faAngleRight} size="lg" />
-        </div>
-        <div
-          className={c("slider-track")}
-          style={{
-            transform: `translateX(-${getTranslateX()}px)`,
-            transition: "transform 0.5s ease",
-          }}
-        >
-          {wordSets.map((d, i) => (
-            <div
-              className={c("slider")}
-              key={i}
-              style={{
-                flex: `0 0 calc(${100 / itemsPerSlide}% - ${
-                  (15 * (itemsPerSlide - 1)) / itemsPerSlide
-                }px)`,
-              }}
-            >
-              <WordSet size="large" author={d?.author} wordSet={d} />
-            </div>
-          ))}
-        </div>
+    <div className={c("wordSetSlider", className)}>
+      {/* Buttons */}
+      <div className={c("btn-leftArrow")} onClick={prevPage}>
+        <FontAwesomeIcon icon={faAngleLeft} size="lg" />
+      </div>
+      <div className={c("btn-rightArrow")} onClick={nextPage}>
+        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+      </div>
+
+      {/* Slider Items */}
+      <div className={c("fadeWrapper", anim)}>
+        {visible.map((d, i) => (
+          <div className={c("item")} key={i}>
+            <WordSet size="large" author={d?.author} wordSet={d} />
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination Dots */}
+      <div className={c("dots")}>
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <div
+            key={i}
+            className={c("dot", { active: i === currentPage })}
+            onClick={() => {
+              if (i === currentPage) return; // không click dot hiện tại
+
+              // Xác định hướng animation
+              if (i > currentPage) setAnim("fade-left");
+              else setAnim("fade-right");
+
+              setTimeout(() => {
+                setCurrentPage(i);
+                setAnim("fade-in");
+              }, 250);
+            }}
+          ></div>
+        ))}
       </div>
     </div>
   );

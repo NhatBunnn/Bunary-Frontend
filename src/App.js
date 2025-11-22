@@ -1,5 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { adminRoutes, privateRoutes, publicRoutes } from "./routes/routes";
+import {
+  adminRoutes,
+  guestRoutes,
+  privateRoutes,
+  publicRoutes,
+} from "./routes/routes";
 import { Fragment } from "react/jsx-runtime";
 import GlobalProfiders from "./context/GlobalProviders";
 
@@ -10,8 +15,8 @@ import AddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/AddToCol
 
 import PrivateRoute from "@routes/PrivateRoute.jsx";
 import RoleRoute from "@routes/RoleRoute";
-import { ChatWindow } from "./components";
 import ChatWindowContainer from "@components/ChatWindowContainer/ChatWindowContainer";
+import GuestRoute from "routes/GuestRoute";
 
 function App() {
   return (
@@ -43,6 +48,32 @@ function App() {
                     <Layout>
                       <Page />
                     </Layout>
+                  }
+                />
+              );
+            })}
+
+            {/* Guess routes */}
+            {guestRoutes.map((route, index) => {
+              const Page = route.Page;
+              let Layout = Fragment;
+
+              if (route.Layout) {
+                Layout = route.Layout;
+              } else {
+                Layout = Fragment;
+              }
+
+              return (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={
+                    <GuestRoute>
+                      <Layout>
+                        <Page />
+                      </Layout>
+                    </GuestRoute>
                   }
                 />
               );

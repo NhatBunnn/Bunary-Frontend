@@ -1,24 +1,58 @@
 .wordSetSlider {
   width: 100%;
-}
-
-.slider-container {
-  width: 100%;
   position: relative;
-  overflow: hidden;
-  padding: 10px;
 }
 
-.slider-track {
+.fadeWrapper {
   display: flex;
   gap: 15px;
+  justify-content: space-between;
 }
 
-.slider {
-  flex: 0 0 calc(((100% - 30px) / 3));
-  display: flex;
-  justify-content: center;
+.item {
+  flex: 1;
 }
+
+/* ===========================
+     ANIMATION
+=========================== */
+
+/* xuất hiện */
+.fade-in {
+  animation: fadeIn 0.25s ease forwards;
+}
+
+/* biến mất + trượt trái */
+.fade-left {
+  animation: fadeLeft 0.25s ease forwards;
+}
+
+/* biến mất + trượt phải */
+.fade-right {
+  animation: fadeRight 0.25s ease forwards;
+}
+
+/* xuất hiện item mới */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* biến mất sang trái */
+@keyframes fadeLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-15px); }
+}
+
+/* biến mất sang phải */
+@keyframes fadeRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(15px); }
+}
+
+/* ===========================
+     Buttons
+=========================== */
 
 .btn-leftArrow,
 .btn-rightArrow {
@@ -32,27 +66,54 @@
   border: 1px solid #5c5b5b;
   cursor: pointer;
   position: absolute;
-  z-index: 1;
+  z-index: 10;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.btn-leftArrow {
-  left: 5px;
-}
+.btn-leftArrow { left: 5px; }
+.btn-rightArrow { right: 5px; }
 
-.btn-rightArrow {
-  right: 5px;
-}
+/* ===========================
+     RESPONSIVE
+=========================== */
 
 @media (max-width: 1200px) {
-  .slider {
-    flex: 0 0 calc(((100% - 15px) / 2));
+  .item {
+    flex: 0 0 calc((100% - 15px) / 2);
   }
 }
 
 @media (max-width: 768px) {
-  .slider {
-    flex: 0 0 calc(((100%)));
+  .fadeWrapper {
+    flex-direction: column;
   }
+  .item {
+    flex: 0 0 100%;
+  }
+}
+
+/* ===========================
+     PAGINATION DOTS
+=========================== */
+
+.dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: #d0d0d0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.dot.active {
+  background: #4b4b4b;
+  transform: scale(1.3);
 }

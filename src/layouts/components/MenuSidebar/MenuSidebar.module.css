@@ -115,3 +115,15 @@
 }
 
 
+/* menu item active */
+.menuItem.active .item-content {
+  background-color: var(--background-active, #f0f0f0);
+}
+
+.menuItem.active .icon {
+  color: var(--primary);
+}
+
+.menuItem.active .label {
+  color: var(--primary);
+}

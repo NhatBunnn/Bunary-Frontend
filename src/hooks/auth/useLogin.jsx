@@ -1,16 +1,18 @@
-import { useNavigate } from "react-router-dom";
 import useAuthBase from "./useAuthBase";
-import { API_URL } from "../../config/apiConfig";
-import { useTranslation } from "react-i18next";
+import useAppBase from "@hooks/useAppBase";
+import { useFetcher } from "@api/fetcher";
+import { useState } from "react";
 
 function useLogin() {
-  const { t: ts } = useTranslation("success");
-  const { t: te } = useTranslation("error");
-
   const authBase = useAuthBase();
-  const navigate = useNavigate();
+  const { te, ts, showNotification } = useAppBase();
+  const { fetcher } = useFetcher();
 
-  const handleSubmit = (e) => {
+  const [storeAccount, setStoreAccount] = useState(true);
+
+  console.log("storeAccount", storeAccount);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     authBase.setError("");
@@ -32,34 +34,28 @@ function useLogin() {
     };
 
     authBase.setLoading(true);
-
-    fetch(`${API_URL}/api/v1/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((dataReponse) => {
-        authBase.setLoading(false);
-
-        if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
-          authBase.setSuccess(ts("AUTH_LOGIN_SUCCESS"));
-          navigate(`/`);
-        } else {
-          const response = dataReponse;
-          authBase.setError(te(response.errorCode));
-        }
-      })
-      .catch((error) => {
-        authBase.setErrors([error.message]);
-      })
-      .finally(() => {
-        authBase.setLoading(false);
+    try {
+      const response = await fetcher({
+        url: "/api/v1/auth/login",
+        method: "POST",
+        data,
+        credentials: storeAccount,
       });
+
+      // Nào rảnh fix sau
+      window.location.href = "/";
+      // setToken(response.data.accessToken);
+      // setUser(response.data.user);
+
+      showNotification(ts("AUTH_LOGIN_SUCCESS"), "success");
+    } catch (error) {
+      authBase.setError(error.message);
+    } finally {
+      authBase.setLoading(false);
+    }
   };
 
-  return { ...authBase, handleSubmit };
+  return { ...authBase, storeAccount, setStoreAccount, handleSubmit };
 }
 
 export default useLogin;

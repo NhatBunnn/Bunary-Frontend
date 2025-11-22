@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Home,
   User,
@@ -33,6 +33,8 @@ const menuItems = [
 ];
 
 function MenuSidebar({ collapsed, className, onClose }) {
+  const location = useLocation();
+
   return (
     <div
       className={c("menuSidebar", className, { collapsed })}
@@ -67,10 +69,7 @@ function MenuSidebar({ collapsed, className, onClose }) {
 
           {menuItems.map((item, index) =>
             item.hr ? (
-              <hr
-                key={index}
-                // style={{ border: "1px solid var(--color-gray-500)" }}
-              />
+              <hr key={index} />
             ) : (
               <Link
                 key={index}
@@ -80,7 +79,8 @@ function MenuSidebar({ collapsed, className, onClose }) {
                   "menuItem",
                   "d-flex",
                   "align-items-center",
-                  "link-no-style"
+                  "link-no-style",
+                  { active: item.to === location.pathname }
                 )}
               >
                 <div

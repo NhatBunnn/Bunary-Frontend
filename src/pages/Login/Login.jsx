@@ -13,6 +13,8 @@ const c = classNames.bind(styles);
 
 function LoginForm() {
   const {
+    storeAccount,
+    setStoreAccount,
     email,
     setEmail,
     password,
@@ -32,7 +34,7 @@ function LoginForm() {
         {/* LEFT: IMAGE - Ẩn trên mobile */}
         <div className={c("imageSection")}>
           <img
-            src="https://i.pinimg.com/736x/92/f7/b1/92f7b140e0acdff69131998d6573d89d.jpg"
+            src={Images.imageForm}
             alt="Login background"
             className={c("authImage")}
           />
@@ -87,10 +89,6 @@ function LoginForm() {
                 />
 
                 <div className={c("formOptions")}>
-                  <label className={c("rememberMe")}>
-                    <input type="checkbox" />
-                    <span>Lưu mật khẩu</span>
-                  </label>
                   <Link to="/forgot-password" className={c("forgotLink")}>
                     Quên mật khẩu?
                   </Link>

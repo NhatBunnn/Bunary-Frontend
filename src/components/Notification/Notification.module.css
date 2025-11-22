@@ -1,34 +1,70 @@
+/* Notification.module.css – SÁNG, SẠCH, ĐẸP KIỂU 2025 */
 .notification {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
   align-items: center;
-  background-color: #fff;
-  padding: 5px;
-  border-radius: var(--radius-medium);
-  color: #000;
-  font-size: 20px;
-  z-index: 100;
-  border: 1px solid #2ec862;
-  overflow: hidden;
-  width: 400px;
-  margin: 10px;
-  transform: translateX(417px);
-  transition: transform 1s ease;
+  gap: 14px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1f1f1f;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transform: translateX(420px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 400px;
+  animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .notification.active {
   transform: translateX(0);
 }
 
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
 .icon {
-  border-radius: var(--radius-small);
-  background-color: #e0f7e8;
-  color: #2ec862;
-  width: 22px;
-  height: 22px;
-  padding: 23px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+/* Success: xanh lá nhẹ nhàng */
+.notification.success .icon {
+  background: #ecfdf5;
+  color: #10b981;
+  border: 1px solid #a7f3d0;
+}
+
+/* Error: đỏ nhẹ, không chói */
+.notification.error .icon {
+  background: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fca5a5;
+}
+
+.message {
+  line-height: 1.45;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .notification {
+    left: 16px;
+    right: 16px;
+    max-width: none;
+    border-radius: 14px;
+  }
 }
