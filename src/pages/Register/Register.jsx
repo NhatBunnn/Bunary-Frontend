@@ -7,6 +7,9 @@ import Notification from "@components/Notification";
 import useRegister from "@hooks/auth/useRegister";
 import { Images } from "@assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import Button from "@components/Button/Button";
+import useLogin from "@hooks/auth/useLogin";
 
 const c = classNames.bind(styles);
 
@@ -28,6 +31,8 @@ function Register() {
     loading,
     handleSubmit,
   } = useRegister();
+
+  const { loginGoogle, loadingGoogle } = useLogin();
 
   return (
     <div className={c("loginContainer")}>
@@ -51,6 +56,18 @@ function Register() {
 
               <h1 className={c("title")}>Đăng ký tài khoản</h1>
               <p className={c("subtitle")}>Tạo tài khoản để bắt đầu</p>
+              <Button
+                isLoading={loadingGoogle}
+                label="Đăng nhập với Google"
+                icon={<FontAwesomeIcon icon={faGoogle} />}
+                variant="outline"
+                className={c("btnGoogle")}
+                onClick={loginGoogle}
+              />
+
+              <div className={c("divider")}>
+                <span>hoặc</span>
+              </div>
 
               <form onSubmit={handleSubmit} className={c("loginForm")}>
                 {error && (

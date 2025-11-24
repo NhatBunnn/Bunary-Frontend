@@ -1,7 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Button.module.css";
 import classNames from "classnames/bind";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 
 const c = classNames.bind(styles);
@@ -12,9 +12,9 @@ const c = classNames.bind(styles);
 
 function Button({
   label = "",
-  icon,
-  startIcon,
-  endIcon,
+  icon, // JSX icon
+  startIcon, // JSX icon
+  endIcon, // JSX icon
   type = "button",
   onClick,
   isLoading = false,
@@ -25,48 +25,35 @@ function Button({
   const navigate = useNavigate();
 
   const handleClick = (e) => {
-    if (to) {
-      navigate(to);
-    } else {
-      onClick?.(e);
-    }
+    if (to) navigate(to);
+    else onClick?.(e);
   };
 
-  // switch-case style theo variant
-  let style = {};
-  switch (variant) {
-    case "default":
-      style = {
-        borderRadius: "var(--radius-round)",
-        boxShadow: "var(--box-shadow-primary)",
-      };
-      break;
-    case "menu":
-      style = {
-        borderRadius: "var(--radius-small)",
-        boxShadow: "none",
-        border: "none",
-        background: "transparent",
-      };
-      break;
-    case "outline":
-      style = {
-        borderRadius: "var(--radius-small)",
-        boxShadow: "none",
-        border: "1px solid var(--color-primary)",
-        background: "transparent",
-      };
-      break;
-    case "plain":
-      style = {
-        borderRadius: "var(--radius-round)",
-      };
-      break;
-    default:
-      style = {};
-  }
+  // style theo variant
+  const styleMap = {
+    default: {
+      borderRadius: "var(--radius-round)",
+      background: "var(--color-primary)",
+      color: "#fff",
+    },
+    menu: {
+      borderRadius: "var(--radius-small)",
+      boxShadow: "none",
+      border: "none",
+      background: "transparent",
+    },
+    outline: {
+      borderRadius: "var(--radius-round)",
+      color: "var(--color-primary)",
+      border: "1px solid var(--color-primary)",
+      background: "transparent",
+    },
+    plain: {
+      borderRadius: "var(--radius-round)",
+    },
+  };
 
-  const showIcon = variant !== "plain"; // ẩn icon nếu plain
+  const style = styleMap[variant] || {};
 
   return (
     <div
@@ -81,27 +68,17 @@ function Button({
       onClick={handleClick}
       style={style}
     >
-      {icon && (
-        <div className={c("icon")}>
-          <FontAwesomeIcon icon={icon} />
-        </div>
-      )}
-      {startIcon && (
-        <div className={c("icon")}>
-          <FontAwesomeIcon icon={startIcon} />
-        </div>
-      )}
+      {!isLoading && icon && <div className={c("icon")}>{icon}</div>}
+      {startIcon && <div className={c("icon")}>{startIcon}</div>}
+
       <div className={c("label")}>
         {!isLoading && label}
         {isLoading && (
           <FontAwesomeIcon icon={faSpinner} className="ms-2 fa-spin" />
         )}
       </div>
-      {endIcon && (
-        <div className={c("icon", "ms-1")}>
-          <FontAwesomeIcon icon={endIcon} />
-        </div>
-      )}
+
+      {endIcon && <div className={c("icon", "ms-1")}>{endIcon}</div>}
     </div>
   );
 }

@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import styles from "./WordSetSlider.module.css";
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faA,
+  faAngleLeft,
+  faAngleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import WordSet from "../WordSet/WordSet";
+import Button from "@components/Button/Button";
 
 const c = classNames.bind(styles);
 
@@ -49,12 +54,19 @@ function WordSetSlider({ className, wordSets }) {
   return (
     <div className={c("wordSetSlider", className)}>
       {/* Buttons */}
-      <div className={c("btn-leftArrow")} onClick={prevPage}>
-        <FontAwesomeIcon icon={faAngleLeft} size="lg" />
-      </div>
-      <div className={c("btn-rightArrow")} onClick={nextPage}>
-        <FontAwesomeIcon icon={faAngleRight} size="lg" />
-      </div>
+      <Button
+        className={c("btn-leftArrow")}
+        onClick={prevPage}
+        variant="outline"
+        icon={<FontAwesomeIcon icon={faAngleLeft} size="lg" />}
+      />
+
+      <Button
+        className={c("btn-rightArrow")}
+        onClick={nextPage}
+        variant="outline"
+        icon={<FontAwesomeIcon icon={faAngleRight} size="lg" />}
+      />
 
       {/* Slider Items */}
       <div className={c("fadeWrapper", anim)}>

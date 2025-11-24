@@ -8,6 +8,7 @@ import React, {
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useToken } from "../AuthProvider/TokenContext";
+import { API_URL } from "@config/apiConfig";
 
 const WebSocketContext = createContext(null);
 export const useWebsocket = () => useContext(WebSocketContext);
@@ -29,7 +30,7 @@ export const WebSocketProvider = ({ children }) => {
         return;
       }
 
-      const socket = new SockJS(`http://localhost:8080/ws?token=${token}`);
+      const socket = new SockJS(`${API_URL}/ws?token=${token}`);
 
       client = new Client({
         webSocketFactory: () => socket,

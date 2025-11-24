@@ -66,13 +66,13 @@
   border: 1px solid #5c5b5b;
   cursor: pointer;
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.btn-leftArrow { left: 5px; }
-.btn-rightArrow { right: 5px; }
+.btn-leftArrow { left: -12px; }
+.btn-rightArrow { right: -12px; }
 
 /* ===========================
      RESPONSIVE
@@ -107,13 +107,13 @@
 .dot {
   width: 10px;
   height: 10px;
-  background: #d0d0d0;
+  background: var(--color-primary-light);
   border-radius: 50%;
   cursor: pointer;
   transition: 0.25s ease;
 }
 
 .dot.active {
-  background: #4b4b4b;
+  background: var(--color-primary);
   transform: scale(1.3);
 }

@@ -11,12 +11,17 @@ import useLogout from "../../../hooks/auth/useLogout";
 import Loading from "../../../components/Loading/Loading";
 import Notify from "./Notify/Notify";
 import Search from "./Search/Search";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import useLogin from "@hooks/auth/useLogin";
 
 const c = classNames.bind(styles);
 
 function Header({ onMenuClick, onRankingMenu }) {
   const [openDropDown, setOpenDropDown] = useState(false);
+
   const { user, loading: loadingUser } = useUser();
+  const { loginGoogle, loadingGoogle } = useLogin();
+
   const { handleSubmit } = useLogout();
 
   const dropDownRef = useRef();
@@ -41,17 +46,16 @@ function Header({ onMenuClick, onRankingMenu }) {
     openDropDown ? setOpenDropDown(false) : setOpenDropDown(true);
   };
 
-  console.log("user ", user);
-
   return (
     <header
       className={c(
+        "liquid-glass",
         "container-fluid",
         "header",
         "d-flex",
         "align-items-center",
         "justify-content-between",
-        "px-4"
+        "px-1 px-sm-4"
       )}
     >
       {/* Menu-sidebar */}
@@ -74,14 +78,25 @@ function Header({ onMenuClick, onRankingMenu }) {
       {/* Actions */}
       <div className={c("actions")}>
         {Object.keys(user).length === 0 && (
-          <div className={c("not-logged-in")}>
-            <Button label="Đăng kí" to="/register" />
+          <div className={c("not-logged-in", "d-flex gap-1")}>
+            <div className={c("icon")} onClick={loginGoogle}>
+              <FontAwesomeIcon
+                icon={faGoogle}
+                className={c({ rotate: loadingGoogle })}
+              />
+            </div>
+            <Button
+              label="Đăng kí"
+              to="/register"
+              variant="outline"
+              className="d-none d-sm-block"
+            />
             <Button label="Đăng nhập" to="/login" />
           </div>
         )}
         {Object.keys(user).length !== 0 && (
           <div className={c("logged-in", "d-flex", "align-items-center")}>
-            <div className={c("store")}>
+            <div className={c("icon")}>
               <FontAwesomeIcon icon={faStore} />
             </div>
             <Notify />

@@ -43,8 +43,6 @@ export default function WordSetForm({ type = "CREATE" }) {
 
   const [openDialog, setOpenDialog] = useState({ privacy: false });
 
-  console.log("wordInputs", wordInputs);
-
   useEffect(() => {
     if (type === "UPDATE") {
       handleFindWordSetById();
@@ -212,7 +210,7 @@ export default function WordSetForm({ type = "CREATE" }) {
         </div>
         <div className={c("toolbar-right")} ref={dropdownRef}>
           <Button
-            icon={faGear}
+            icon={<FontAwesomeIcon icon={faGear} />}
             variant="icon"
             onClick={handleToggleOptionsMenu}
           />
@@ -220,7 +218,7 @@ export default function WordSetForm({ type = "CREATE" }) {
             <OptionsMenuWrapper className={c("options-menu")}>
               <Button
                 label="Chỉnh sửa quyền riêng tư"
-                icon={faEarth}
+                icon={<FontAwesomeIcon icon={faEarth} />}
                 variant="menu"
                 onClick={() => {
                   handleToggleDialog("privacy");
@@ -249,7 +247,7 @@ export default function WordSetForm({ type = "CREATE" }) {
       <div className={c("add-card-section")}>
         <Button
           label="Thêm thẻ từ mới"
-          icon={faPlus}
+          icon={<FontAwesomeIcon icon={faPlus} />}
           onClick={addWordCard}
           variant="secondary"
           className={c("add-card-btn")}

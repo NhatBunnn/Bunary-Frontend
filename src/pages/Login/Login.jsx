@@ -8,13 +8,12 @@ import Notification from "@components/Notification";
 import useLogin from "@hooks/auth/useLogin";
 import { Images } from "@assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Button from "@components/Button/Button";
 
 const c = classNames.bind(styles);
 
 function LoginForm() {
   const {
-    storeAccount,
-    setStoreAccount,
     email,
     setEmail,
     password,
@@ -23,7 +22,9 @@ function LoginForm() {
     error,
     success,
     loading,
-    handleSubmit,
+    login,
+    loginGoogle,
+    loadingGoogle,
   } = useLogin();
 
   return (
@@ -49,16 +50,20 @@ function LoginForm() {
               <h1 className={c("title")}>Chào mừng bạn!</h1>
               <p className={c("subtitle")}>Đăng nhập để tiếp tục</p>
 
-              <button className={c("btnGoogle")} type="button">
-                <FontAwesomeIcon icon={faGoogle} />
-                <span>Đăng nhập với Google</span>
-              </button>
+              <Button
+                isLoading={loadingGoogle}
+                label="Đăng nhập với Google"
+                icon={<FontAwesomeIcon icon={faGoogle} />}
+                variant="outline"
+                className={c("btnGoogle")}
+                onClick={loginGoogle}
+              />
 
               <div className={c("divider")}>
                 <span>hoặc</span>
               </div>
 
-              <form onSubmit={handleSubmit} className={c("loginForm")}>
+              <form onSubmit={login} className={c("loginForm")}>
                 {error && (
                   <div className={c("errorAlert")}>
                     <FontAwesomeIcon icon={faClose} />

@@ -72,14 +72,14 @@ const WordSetPage = () => {
       >
         <Button
           label="Lưu"
-          icon={faBookmark}
+          icon={<FontAwesomeIcon icon={faBookmark} />}
           onClick={() => {
             setOpenAddToCollect(true);
           }}
         />
         <div className={c("moreOptions", "d-inline")}>
           <Button
-            icon={faEllipsisVertical}
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} />}
             onClick={() => setMoreOptions((prev) => !prev)}
           />
           {openMoreOptions && (
@@ -112,13 +112,19 @@ const WordSetPage = () => {
           <div className={c("action-bar", "d-flex", "mb-3")}>
             <Button
               label="Thẻ ghi nhớ"
-              icon={faIdCard}
+              icon={<FontAwesomeIcon icon={faIdCard} />}
               onClick={() =>
                 setOpenSetting((prev) => ({ ...prev, flashCard: true }))
               }
             />
-            <Button label="Trắc nghiệm" icon={faIdCard} />
-            <Button label="Kiểm tra" icon={faIdCard} />
+            <Button
+              label="Trắc nghiệm"
+              icon={<FontAwesomeIcon icon={faIdCard} />}
+            />
+            <Button
+              label="Kiểm tra"
+              icon={<FontAwesomeIcon icon={faIdCard} />}
+            />
           </div>
         </div>
       </div>

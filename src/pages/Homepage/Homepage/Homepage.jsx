@@ -13,6 +13,7 @@ import {
   faFire,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const c = bindClass(styles);
 
@@ -30,7 +31,7 @@ function Homepage() {
           label="Xem chi tiết"
           to="/popular_wordsets"
           variant="plain"
-          endIcon={faArrowRight}
+          endIcon={<FontAwesomeIcon icon={faArrowRight} />}
         />
       </TitleSection>
       <MyRecentWordSetList />
@@ -44,7 +45,7 @@ function Homepage() {
           label="Xem chi tiết"
           to="/popular_wordsets"
           variant="plain"
-          endIcon={faArrowRight}
+          endIcon={<FontAwesomeIcon icon={faArrowRight} />}
         />
       </TitleSection>
       <WordSetList />
@@ -58,7 +59,7 @@ function Homepage() {
           label="Xem chi tiết"
           to="/popular_wordsets"
           variant="plain"
-          endIcon={faArrowRight}
+          endIcon={<FontAwesomeIcon icon={faArrowRight} />}
         />
       </TitleSection>
       <WordSetList initialSort="createdAt,desc" />

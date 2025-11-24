@@ -76,7 +76,7 @@ function WordCardCreate({
   };
 
   return (
-    <div className={c("wordCardCreate", "outline-primary", "mb-3")}>
+    <div className={c("wordCardCreate", "mb-3")}>
       {/* head */}
       <div className={c("d-flex", "justify-content-between", "wordCardTitle")}>
         <div className={c("")}>{index + 1}</div>

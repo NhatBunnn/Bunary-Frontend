@@ -259,3 +259,59 @@
     max-width: 720px;
   }
 }
+
+/* Google Button */
+.btnGoogle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: white;
+  border: 1.5px solid #333;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btnGoogle:hover {
+  background: #000;
+  color: white;
+  border-color: #000;
+}
+
+.btnGoogle svg {
+  font-size: 1.1rem;
+}
+
+/* Divider */
+.divider {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin: 0.5rem 0;
+  color: #888;
+  font-size: 0.88rem;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+  z-index: 0;
+}
+
+.divider span {
+  background: #ffffff;
+  padding: 0 1rem;
+  z-index: 1;
+  position: relative;
+}
