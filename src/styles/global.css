@@ -5,7 +5,6 @@
   src: url(../assets/fonts/Lexend-Regular.ttf);
 }
 
-
 @font-face {
   font-family: Roboto-Regular;
   src: url(../assets/fonts/Roboto-Regular.ttf);
@@ -22,24 +21,26 @@
 }
 
 @keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
 
 :root {
   --font-family: Roboto-Regular, Lexend-Medium, sans-serif;
 }
 
-.font-medium{
-  font-family:  Roboto-Medium, Lexend-Medium, sans-serif;
+.font-medium {
+  font-family: Roboto-Medium, Lexend-Medium, sans-serif;
 }
-
 
 .shimmer {
   position: relative;
   overflow: hidden;
-  background: #e0e0e0;           
+  background: #e0e0e0;
   border-radius: 8px;
 }
 
@@ -70,10 +71,7 @@
   }
 }
 
-
-
-
-.button-active{
+.button-active {
   background-color: var(--background-hover) !important;
 }
 
@@ -147,13 +145,30 @@
   transition: color 0.3s ease;
 }
 
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(50px, -50px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Nội dung bên trong */
+.g-dreamy-gradient > * {
+  position: relative;
+  z-index: 1; /* trên pseudo-element */
+}
 
 :root {
   /* PRIMARY COLOR */
-  --color-primary: #4DBAFE;
-  --color-primary-light: #E6F7FF;
-  /* --color-primary: linear-gradient(135deg, #4FACFE, #F093FB); */
-;
+  /* --color-primary: #4DBAFE; */
+  --color-primary-light: #e6f7ff;
+  --color-primary: linear-gradient(135deg, #4facfe, #f093fb);
+  --color-primary-solid: #4dbafe;
 
   /* NEUTRAL COLORS */
   --color-white: #ffffff;

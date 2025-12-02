@@ -44,8 +44,8 @@ function Button({
     },
     outline: {
       borderRadius: "var(--radius-round)",
-      color: "var(--color-primary)",
-      border: "1px solid var(--color-primary)",
+      color: "var(--color-primary-solid)",
+      border: "1px solid var(--color-primary-solid)",
       background: "transparent",
     },
     plain: {

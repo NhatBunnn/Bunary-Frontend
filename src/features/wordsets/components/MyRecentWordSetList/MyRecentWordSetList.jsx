@@ -2,6 +2,7 @@ import useMyRecentWordSetList from "@features/wordsets/hooks/useMyRecentWordSetL
 import styles from "./MyRecentWordSetList.module.css";
 import { bindClass } from "@utils/classnames";
 import { WordSet } from "..";
+import SmallWordSet from "../WordSet/SmallWordSet/SmallWordSet";
 
 const c = bindClass(styles);
 
@@ -14,8 +15,8 @@ function MyRecentWordSetList() {
         {/* LOADING: shimmer */}
         {loading &&
           [...Array(6)].map((_, i) => (
-            <div key={i} className="col-12 col-lg-6 mb-2 px-1 shimmer">
-              <WordSet size="small" />
+            <div key={i} className="col-12 col-lg-6 mb-2 px-1">
+              <SmallWordSet key={i} loading={true} />
             </div>
           ))}
 
@@ -27,7 +28,6 @@ function MyRecentWordSetList() {
           </div>
         )}
 
-        {/* CÓ DỮ LIỆU */}
         {!loading &&
           recentWordSetList?.map((d, i) => (
             <div className="col-12 col-lg-6 mb-2 px-1" key={i}>

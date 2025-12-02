@@ -21,6 +21,7 @@ function Tabs() {
         style={{
           backgroundColor: "#fff",
           paddingRight: "10px",
+          height: "51px",
         }}
       >
         {tabs.map((t) => (
@@ -31,9 +32,7 @@ function Tabs() {
             style={{
               borderRadius: "999px",
               background:
-                activeTab === t.id
-                  ? "linear-gradient(90deg, #63b3ff, #91d7ff)"
-                  : "transparent",
+                activeTab === t.id ? "var(--color-primary)" : "transparent",
               color: activeTab === t.id ? "#000" : "#555",
               border: "none",
               transition: "all 0.2s ease",

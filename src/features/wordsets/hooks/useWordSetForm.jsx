@@ -20,6 +20,7 @@ function useWordSetForm() {
     description: "",
     thumbnailFile: null,
     visibility: "PRIVATE",
+    level: "",
   });
 
   const [wordInputs, setWordInputs] = useState([
@@ -38,8 +39,6 @@ function useWordSetForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { fetcher } = useFetcher();
-
-  useEffect(() => {}, [accessToken, setLoading]);
 
   const handleFindWordSetById = async () => {
     setLoading(true);
@@ -82,6 +81,7 @@ function useWordSetForm() {
         title: wordSetInput.name,
         description: wordSetInput.description,
         visibility: wordSetInput.visibility,
+        level: wordSetInput.level,
         word: wordInputs,
         removedWordIds,
       };

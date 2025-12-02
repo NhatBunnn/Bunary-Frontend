@@ -12,7 +12,7 @@ function SmallWordSet({ wordSet }) {
     <div
       onClick={() =>
         navigate(
-          `/wordset/${wordSet.id}/${wordSet.title
+          `/wordset/${wordSet?.id}/${wordSet?.title
             .split(" ")
             .filter(Boolean)
             .map((d) => d.toLowerCase())
@@ -27,16 +27,16 @@ function SmallWordSet({ wordSet }) {
       )}
     >
       <div className={c("thumbnail")}>
-        <img src={wordSet.thumbnail || Images.Logo} alt="" />
+        <img src={wordSet?.thumbnail || Images.Logo} alt="" />
       </div>
       <div className={c("content")}>
         <div className={c("title", "fw-semibold")}>
-          {wordSet.title || "no title"}
+          {wordSet?.title || "no title"}
         </div>
         <div className={c("detail", "d-xl-flex")}>
           <span>147 từ vựng</span>
           <span className="d-none d-xl-block"> - </span>
-          <span>{wordSet.description || "no desc"}</span>
+          <span>{wordSet?.description || "no desc"}</span>
         </div>
       </div>
     </div>

@@ -74,6 +74,15 @@
 }
 
 /* Collapsed Mode */
+.menuSidebar hr {
+  margin: 12px 0;
+  border: none;
+  height: 1px; 
+  background-color: var(--border-color, #838383aa); 
+  width: 100%;
+}
+
+
 .menuSidebar.collapsed {
   flex: 0 0 60px;
 }

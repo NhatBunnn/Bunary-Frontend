@@ -9,10 +9,9 @@
   transition: 0.3s;
 }
 
-/* .smallWordSet:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--box-shadow-secondary);
-} */
+.smallWordSet:hover .title {
+  color: var(--color-primary-solid);
+}
 
 /* Thumbnail  */
 .detail {

@@ -25,7 +25,6 @@ export default function WordSetForm({ type = "CREATE" }) {
   const { showNotification } = useNotification();
   const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
   const dropdownRef = useRef(null);
-
   const [showBulkImport, setShowBulkImport] = useState(false);
 
   const {
@@ -63,7 +62,6 @@ export default function WordSetForm({ type = "CREATE" }) {
         "error"
       );
     }
-
     if (word.id) {
       setRemovedWordIds((prev) => [...prev, word.id]);
     }
@@ -92,27 +90,25 @@ export default function WordSetForm({ type = "CREATE" }) {
       partOfSpeech: w.partOfSpeech || "",
       thumbnail: w.thumbnail || null,
     }));
-
     setWordInputs((prev) => [...prev, ...newWords]);
     showNotification(`Đã thêm ${newWords.length} thẻ từ!`, "success");
   };
 
-  // Preview ảnh thumbnail
   const thumbnailUrl = wordSetInput.thumbnailFile
     ? URL.createObjectURL(wordSetInput.thumbnailFile)
     : wordSetInput.thumbnail || null;
 
   return (
     <div className={c("wordSetForm")}>
-      {/* === BULK IMPORT MODAL === */}
+      {/* BULK IMPORT MODAL */}
       <BulkImport
         show={showBulkImport}
         onHide={() => setShowBulkImport(false)}
         onImport={handleBulkImport}
       />
 
-      {/* Dialog chỉnh sửa quyền riêng tư */}
-      <DialogWrapper
+      {/* DIALOG QUYỀN RIÊNG TƯ */}
+      {/* <DialogWrapper
         title="Chỉnh sửa quyền riêng tư"
         onClose={() => handleToggleDialog("privacy")}
         isOpen={openDialog.privacy}
@@ -121,9 +117,9 @@ export default function WordSetForm({ type = "CREATE" }) {
           wordSetInput={wordSetInput}
           setWordSetInput={setWordSetInput}
         />
-      </DialogWrapper>
+      </DialogWrapper> */}
 
-      {/* Title */}
+      {/* TITLE */}
       <TitleSection
         title={type === "CREATE" ? "Tạo bộ từ vựng mới" : "Chỉnh sửa bộ từ"}
       >
@@ -137,7 +133,7 @@ export default function WordSetForm({ type = "CREATE" }) {
         />
       </TitleSection>
 
-      {/* Form Input */}
+      {/* FORM INPUT */}
       <div className={c("form-grid")}>
         <div className={c("input-group")}>
           <ValidateInput
@@ -191,10 +187,9 @@ export default function WordSetForm({ type = "CREATE" }) {
         </div>
       </div>
 
-      {/* Toolbar */}
+      {/* TOOLBAR */}
       <div className={c("toolbar")}>
         <div className={c("toolbar-left")}>
-          {/* NÚT MỞ BULK IMPORT */}
           <Button
             label="Thêm nhiều từ"
             variant="outline"
@@ -208,12 +203,68 @@ export default function WordSetForm({ type = "CREATE" }) {
             className={c("ms-2")}
           />
         </div>
+
         <div className={c("toolbar-right")} ref={dropdownRef}>
-          <Button
+          {/* LEVEL SELECT */}
+          <select
+            value={wordSetInput.level || ""}
+            onChange={(e) =>
+              setWordSetInput((prev) => ({ ...prev, level: e.target.value }))
+            }
+            className={c("toolbar-select")}
+            title="Trình độ (A1-C2)"
+          >
+            <option value="">Lv</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+          </select>
+
+          {/* TAG SELECT */}
+          <select
+            value={wordSetInput.tag || ""}
+            onChange={(e) =>
+              setWordSetInput((prev) => ({ ...prev, tag: e.target.value }))
+            }
+            className={c("toolbar-select")}
+            title="Chủ đề / Thẻ"
+          >
+            <option value="">Tag</option>
+            <option value="ielts">IELTS</option>
+            <option value="toeic">TOEIC</option>
+            <option value="toefl">TOEFL</option>
+            <option value="daily">Hằng ngày</option>
+            <option value="business">Kinh doanh</option>
+            <option value="travel">Du lịch</option>
+          </select>
+
+          {/* VISIBILITY SELECT */}
+          <select
+            value={wordSetInput.visibility}
+            onChange={(e) =>
+              setWordSetInput((prev) => ({
+                ...prev,
+                visibility: e.target.value,
+              }))
+            }
+            className={c("toolbar-select")}
+            title="Công khai / Riêng tư"
+          >
+            <option value="PUBLIC">Public</option>
+            <option value="PRIVATE">Private</option>
+          </select>
+
+          {/* NÚT SETTINGS */}
+          {/* <Button
             icon={<FontAwesomeIcon icon={faGear} />}
             variant="icon"
             onClick={handleToggleOptionsMenu}
-          />
+          /> */}
+
+          {/* MENU CŨ */}
           {openOptionsMenu && (
             <OptionsMenuWrapper className={c("options-menu")}>
               <Button
@@ -230,7 +281,7 @@ export default function WordSetForm({ type = "CREATE" }) {
         </div>
       </div>
 
-      {/* Word Cards List */}
+      {/* WORD CARDS */}
       <div className={c("word-cards")}>
         {wordInputs?.map((word, index) => (
           <WordInput
@@ -243,7 +294,7 @@ export default function WordSetForm({ type = "CREATE" }) {
         ))}
       </div>
 
-      {/* Add Card Button */}
+      {/* ADD CARD BUTTON */}
       <div className={c("add-card-section")}>
         <Button
           label="Thêm thẻ từ mới"

@@ -6,8 +6,22 @@ import { Images } from "@assets/images";
 
 const c = classNames.bind(styles);
 
-function SmallWordSet({ wordSet, style }) {
+function SmallWordSet({ loading, wordSet, style }) {
   const navigate = useNavigate();
+
+  if (loading) {
+    return (
+      <div className={c("smallWordSet", "shimmer")} style={style}>
+        <div className={c("thumbnail")}>
+          <img src={wordSet?.thumbnail || Images.Logo} alt="" />
+        </div>
+        <div className={c("content")}>
+          <div className={c("shimmer-line", "title")} />
+          <div className={c("shimmer-line", "desc")} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

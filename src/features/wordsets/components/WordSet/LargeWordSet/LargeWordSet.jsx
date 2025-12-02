@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Image, Images } from "@assets/images";
 import styles from "./LargeWordSet.module.css";
 import classNames from "classnames/bind";
-import { faEarth, faLock, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const c = classNames.bind(styles);
@@ -15,7 +15,6 @@ function LargeWordSet({ author, wordSet }) {
         "d-flex",
         "justify-content-left",
         "link-no-style"
-        // "outline-primary"
       )}
       to={`/wordset/${wordSet.id}/${wordSet.title
         .split(" ")
@@ -28,8 +27,9 @@ function LargeWordSet({ author, wordSet }) {
           <FontAwesomeIcon icon={faStar} className={c("rating__icon")} />
           <span>{wordSet.stat.ratingAvg}</span>
         </div>
-        <img src={wordSet.thumbnail} alt="" />
+        <img src={wordSet.thumbnail} alt={wordSet.title} />
       </div>
+
       <div
         className={c(
           "content",
@@ -40,11 +40,18 @@ function LargeWordSet({ author, wordSet }) {
       >
         <div className={c("head")}>
           <div className={c("title", "font-medium")}>{wordSet.title}</div>
+
+          {/* Giữ nguyên số từ vựng như gốc */}
           <div className={c("vocab")}>
             <span>{`${wordSet.stat?.wordCount} từ vựng`}</span>
           </div>
+
+          {/* Chỉ thêm đúng 1 tag level */}
+          <div className={c("level-tag")}>{wordSet?.level}</div>
         </div>
+
         <div className={c("description", "h-100")}>{wordSet.description}</div>
+
         {author && (
           <div className={c("author", "d-flex", "align-items-center")}>
             <Image

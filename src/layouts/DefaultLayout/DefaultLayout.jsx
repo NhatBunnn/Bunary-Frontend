@@ -26,7 +26,7 @@ function DefaultLayout({ children }) {
   }, []);
 
   return (
-    <div className={c("defaultLayout")}>
+    <div className={c("defaultLayout", "g-dreamy-gradient")}>
       <Header onMenuClick={() => setDisplayMenu(true)} />
       <div className={c("px-0", "content", "d-flex")}>
         <div
