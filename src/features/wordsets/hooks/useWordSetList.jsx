@@ -36,7 +36,6 @@ function useWordSetList(initialSort = "popularityScore,desc") {
         },
       });
 
-      console.log(response);
       setPagination(response.pagination);
       setWordSetList(response.data);
     } catch (error) {

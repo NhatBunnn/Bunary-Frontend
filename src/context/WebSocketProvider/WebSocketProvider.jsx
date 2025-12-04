@@ -34,7 +34,7 @@ export const WebSocketProvider = ({ children }) => {
 
       client = new Client({
         webSocketFactory: () => socket,
-        debug: (str) => console.log("[STOMP]", str),
+        // debug: (str) => console.log("[STOMP]", str),
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
@@ -52,7 +52,7 @@ export const WebSocketProvider = ({ children }) => {
       };
 
       client.onDisconnect = () => {
-        console.log(" WebSocket disconnected");
+        // console.log(" WebSocket disconnected");
         setIsConnected(false);
       };
 
@@ -63,7 +63,7 @@ export const WebSocketProvider = ({ children }) => {
 
     return () => {
       if (client && client.active) {
-        console.log("Disconnecting WebSocket...");
+        // console.log("Disconnecting WebSocket...");
         client.deactivate();
       }
     };

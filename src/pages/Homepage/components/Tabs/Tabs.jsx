@@ -33,7 +33,7 @@ function Tabs() {
               borderRadius: "999px",
               background:
                 activeTab === t.id ? "var(--color-primary)" : "transparent",
-              color: activeTab === t.id ? "#000" : "#555",
+              color: activeTab === t.id ? "#fff" : "#555",
               border: "none",
               transition: "all 0.2s ease",
             }}

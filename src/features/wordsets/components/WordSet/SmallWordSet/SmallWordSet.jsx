@@ -40,11 +40,10 @@ function SmallWordSet({ loading, wordSet, style }) {
         "d-flex",
         "justify-content-left",
         "align-items-center"
-        // "outline-primary"
       )}
     >
       <div className={c("thumbnail")}>
-        <img src={wordSet?.thumbnail || Images.Logo} alt="" />
+        <img src={wordSet?.thumbnail || Images.flashCardNoImageSmall} alt="" />
       </div>
       <div className={c("content")}>
         <div className={c("title", "font-medium")}>

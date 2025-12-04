@@ -2,6 +2,8 @@ import avatar from "../images/avatars/avatar.jpg";
 import imageForm from "../images/auth/forms/images-form.png";
 import Logo from "../images/logos/Logo.png";
 import noImage from "../images/common/no-image.png";
+import flashCardNoImageSmall from "../images/flashcard/no-image-large.png";
+import flashCardNoImageLarge from "../images/flashcard/no-image-large.png";
 import styles from "./index.module.css";
 import classNames from "classnames/bind";
 
@@ -73,4 +75,7 @@ export const Images = {
   imageForm,
   Logo,
   noImage,
+  // flashcard
+  flashCardNoImageSmall,
+  flashCardNoImageLarge,
 };

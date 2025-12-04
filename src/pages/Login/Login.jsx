@@ -81,7 +81,6 @@ function LoginForm() {
                   type="email"
                   placeholder="nhập email của bạn"
                 />
-
                 <ValidateInput
                   field="password"
                   fieldErrors={fieldErrors}

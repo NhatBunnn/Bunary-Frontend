@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@components/Button/Button";
 import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
@@ -11,11 +11,16 @@ import { getThumbnailUrl } from "@utils/getThumbnailUrl";
 const c = classNames.bind(styles);
 
 function FlashCard() {
-  const { words, loading, settings, handleRecordStudy } = useFlashCard();
+  const { words, loading, settings, handleRecordStudy, setProgress } =
+    useFlashCard();
   const [isFlip, setIsFlip] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setProgress({ studyMode: "FLASHCARD" });
+  }, []);
 
   if (loading) return <Loading />;
 
@@ -29,9 +34,6 @@ function FlashCard() {
   const flashCardSides = [{ side: "front" }, { side: "back" }];
 
   const handleSlideNext = () => {
-    console.log("currentCard ", currentCard);
-    console.log("words.length", words.length);
-
     if (currentCard + 1 === words.length) {
       handleRecordStudy();
     }

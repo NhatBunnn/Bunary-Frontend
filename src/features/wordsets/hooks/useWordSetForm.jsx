@@ -22,6 +22,7 @@ function useWordSetForm() {
     visibility: "PRIVATE",
     level: "",
   });
+  console.log("wordSetInput", wordSetInput);
 
   const [wordInputs, setWordInputs] = useState([
     {

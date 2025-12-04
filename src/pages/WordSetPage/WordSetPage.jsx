@@ -4,6 +4,7 @@ import {
   faUsers,
   faEllipsisVertical,
   faIdCard,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Star } from "lucide-react"; // chỉ dùng Star
@@ -18,6 +19,7 @@ import Button from "@components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { AddToCollection } from "@features/collection/components";
 import { getThumbnailUrl } from "@utils/getThumbnailUrl";
+import { useUser } from "@context/UserProvider/UserProvider";
 
 const c = classNames.bind(styles);
 
@@ -38,6 +40,9 @@ const WordSetPage = () => {
     handleRatingWordSet,
   } = useWordSetPage();
 
+  // current user
+  const { user } = useUser();
+
   const [hoverRating, setHoverRating] = useState(0);
 
   const navigation = useNavigate();
@@ -45,6 +50,8 @@ const WordSetPage = () => {
   if (loadingWords || !wordSet) {
     return <Loading />;
   }
+
+  const isAuthor = wordSet?.author?.id === user.id;
 
   return (
     <div className={c("container")}>
@@ -84,14 +91,16 @@ const WordSetPage = () => {
           />
           {openMoreOptions && (
             <div className={c("dropdown", "p-3", "gap-2")}>
-              <Button
-                variant="menu"
-                label="Chỉnh sửa"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigation(`/wordset/${wordSet.id}/edit`);
-                }}
-              />
+              {isAuthor && (
+                <Button
+                  variant="menu"
+                  label="Chỉnh sửa"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigation(`/wordset/${wordSet.id}/edit`);
+                  }}
+                />
+              )}
             </div>
           )}
         </div>
@@ -102,10 +111,20 @@ const WordSetPage = () => {
         <div>
           <div className={c("stats")}>
             <div>
-              <FontAwesomeIcon icon={faUsers} /> {wordSet.stat.studyCount} người
-              đã học
+              <FontAwesomeIcon icon={faUsers} /> {wordSet.stat.studyCount} lượt
+              học
             </div>
-            <div>⭐ {wordSet.stat.ratingAvg} / 5 (10 reviews)</div>
+            <div>
+              {wordSet?.stat?.ratingCount >= 3 ? (
+                <>
+                  <FontAwesomeIcon icon={faStar} color="orange" />
+                  {`${wordSet.stat.ratingAvg} / 5`}
+                </>
+              ) : (
+                "chưa có đánh giá"
+              )}
+              {` (${wordSet?.stat?.ratingCount} lượt đánh giá)`}
+            </div>
           </div>
 
           {/* Action bar */}

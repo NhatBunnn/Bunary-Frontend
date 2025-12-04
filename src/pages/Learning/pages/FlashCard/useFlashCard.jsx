@@ -5,11 +5,11 @@ import useAppBase from "@hooks/useAppBase";
 
 function useFlashCard() {
   const { te, setLoading, loading, showNotification } = useAppBase();
-
   const [words, setWords] = useState([]);
-
   const { id } = useParams();
   const { fetcher } = useFetcher();
+
+  const [progress, setProgress] = useState({});
 
   const [settings, setSettings] = useState({
     front: {
@@ -77,15 +77,25 @@ function useFlashCard() {
   const handleRecordStudy = async () => {
     try {
       const response = await fetcher({
-        url: `/api/v1/wordsets/${id}/history`,
+        // url: `/api/v1/wordsets/${id}/history`,
+        url: `/api/v1/wordsets/${id}/finish`,
         method: "POST",
+        data: {
+          progress,
+        },
       });
     } catch (e) {
       showNotification(te(e.errorCode) || e.message, "error");
     }
   };
 
-  return { words, loading, settings, handleRecordStudy };
+  return {
+    words,
+    loading,
+    settings,
+    handleRecordStudy,
+    setProgress,
+  };
 }
 
 export default useFlashCard;

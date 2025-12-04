@@ -101,8 +101,11 @@ function useLogin() {
       const response = await fetcher({
         url: "/api/v1/auth/login",
         method: "POST",
+        credentials: true,
         data,
       });
+
+      console.log("Login response:", response);
 
       // Nào rảnh fix sau
       window.location.href = "/";

@@ -17,7 +17,7 @@ const c = bindClass(styles);
 function AddToCollection({ isOpen, onCancel, wordSet }) {
   const { t: te } = useTranslation("error");
   const { handleToggleCreateCollect } = useContext(CreateCollectContext);
-  // const { loading, myCollectionList } = useMyCollectionList();
+  const { loading, myCollectionList } = useMyCollectionList();
   const { handleAddToCollection } = useAddToCollection();
   const addToCollectionRef = useRef();
   const { showNotification } = useNotification();
@@ -45,7 +45,7 @@ function AddToCollection({ isOpen, onCancel, wordSet }) {
         <TitleSection title="Lưu vào bộ sưu tập" />
         <Button
           label="Tạo bộ sưu tập mới"
-          icon={faPlus}
+          // icon={faPlus}
           onClick={() => {
             handleToggleCreateCollect(true);
             onCancel();
@@ -53,7 +53,7 @@ function AddToCollection({ isOpen, onCancel, wordSet }) {
         />
         <hr />
         <div className={c("collectionList")}>
-          {/* {myCollectionList.length > 0 &&
+          {myCollectionList.length > 0 &&
             myCollectionList.map((d) => {
               const isExits = wordSet?.myCollectionList?.some(
                 (c) => c.id === d.id
@@ -76,7 +76,7 @@ function AddToCollection({ isOpen, onCancel, wordSet }) {
                   isActive={isExits}
                 />
               );
-            })} */}
+            })}
         </div>
         <hr />
         <div className={c("d-flex", "gap-2")}>

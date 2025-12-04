@@ -12,9 +12,9 @@ const c = classNames.bind(styles);
 
 function Button({
   label = "",
-  icon, // JSX icon
-  startIcon, // JSX icon
-  endIcon, // JSX icon
+  icon,
+  startIcon,
+  endIcon,
   type = "button",
   onClick,
   isLoading = false,
