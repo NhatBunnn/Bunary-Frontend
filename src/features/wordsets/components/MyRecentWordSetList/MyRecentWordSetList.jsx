@@ -29,9 +29,9 @@ function MyRecentWordSetList() {
         )}
 
         {!loading &&
-          recentWordSetList?.map((d, i) => (
-            <div className="col-12 col-lg-6 mb-2 px-1" key={i}>
-              <WordSet size="small" wordSet={d} />
+          recentWordSetList?.map((d) => (
+            <div className="col-12 col-lg-6 mb-2 px-1" key={d.wordSet.id}>
+              <WordSet size="small" wordSet={d.wordSet} />
             </div>
           ))}
       </div>

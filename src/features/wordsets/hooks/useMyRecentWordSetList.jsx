@@ -17,7 +17,7 @@ function useMyRecentWordSetList(initialSort = "popularityScore,desc") {
       );
 
       const response = await fetcher({
-        url: `/api/v1/wordsets/history/recent/me`,
+        url: `/api/v1/user-wordset-recents/self`,
         method: "GET",
         params: {
           page: 0,
@@ -25,8 +25,7 @@ function useMyRecentWordSetList(initialSort = "popularityScore,desc") {
           //   ...filteredParams,
         },
       });
-
-      setRecentWordSetlist(response.data);
+      setRecentWordSetlist(response?.data);
     } catch (error) {
       console.error(error);
     } finally {
