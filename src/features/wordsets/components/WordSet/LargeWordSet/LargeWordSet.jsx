@@ -28,7 +28,7 @@ function LargeWordSet({ author, wordSet }) {
           <span>{wordSet?.stat.ratingAvg}</span>
         </div>
         <img
-          src={wordSet.thumbnail || Images.flashCardNoImageLarge}
+          src={wordSet?.thumbnail || Images.flashCardNoImageLarge}
           alt={wordSet?.title}
         />
       </div>

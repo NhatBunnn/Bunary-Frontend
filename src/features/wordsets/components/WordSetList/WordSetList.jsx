@@ -10,8 +10,12 @@ const c = bindClass(styles);
  * WordSetList component
  * @param {"popularityScore,desc" || "createdAt,desc"} initialSort
  */
-function WordSetList({ initialSort = "popularityScore,desc" }) {
-  const { wordSetList } = useWordSetList(initialSort);
+function WordSetList(initialSort = "popularityScore,desc") {
+  const { wordSetList, fetchWordSets } = useWordSetList();
+
+  useEffect(() => {
+    fetchWordSets(initialSort);
+  }, [initialSort]);
 
   return (
     <div className={c("wordSetList")}>

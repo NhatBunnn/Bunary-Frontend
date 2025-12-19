@@ -40,7 +40,7 @@ export default function WordSetForm({ type = "CREATE" }) {
     loading,
   } = useWordSetForm();
 
-  const [openDialog, setOpenDialog] = useState({ privacy: false });
+  const [openDialog, setOpenDialog] = useState({});
 
   useEffect(() => {
     if (type === "UPDATE") {

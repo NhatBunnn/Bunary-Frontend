@@ -12,7 +12,6 @@ function useWordSetForm() {
     fieldErrors,
     setFieldErrors,
     showNotification,
-    accessToken,
   } = useAppBase();
 
   const [wordSetInput, setWordSetInput] = useState({
@@ -22,7 +21,6 @@ function useWordSetForm() {
     visibility: "PRIVATE",
     level: "",
   });
-  console.log("wordSetInput", wordSetInput);
 
   const [wordInputs, setWordInputs] = useState([
     {
@@ -34,6 +32,8 @@ function useWordSetForm() {
       thumbnail: "",
     },
   ]);
+
+  console.log("wordSetInput ", wordSetInput);
 
   const [removedWordIds, setRemovedWordIds] = useState([]);
 
@@ -132,6 +132,8 @@ function useWordSetForm() {
       const wordSet = {
         title: wordSetInput.name,
         description: wordSetInput.description,
+        visibility: wordSetInput.visibility,
+        level: wordSetInput.level || null,
         word: wordInputs,
       };
 

@@ -1,11 +1,58 @@
-.userList {
+.container {
+  position: relative;
   width: 100%;
+}
+
+.userList {
   display: flex;
   gap: 10px;
   overflow-x: auto;
   scroll-behavior: smooth;
+  padding: 10px 0;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .userList > * {
   flex: 0 0 auto;
+}
+
+.sliderButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease, box-shadow 0.2s ease-in-out;
+  opacity: 0; /* Hide by default */
+}
+
+.container:hover .sliderButton {
+  opacity: 1; /* Show on container hover */
+}
+
+.sliderButton:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sliderButton.prev {
+  left: 10px;
+}
+
+.sliderButton.next {
+  right: 10px;
 }

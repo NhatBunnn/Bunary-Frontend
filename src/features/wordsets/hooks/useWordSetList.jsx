@@ -1,70 +1,59 @@
 import { useFetcher } from "@api/fetcher";
 import useAppBase from "@hooks/useAppBase";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
-function useWordSetList(initialSort = "popularityScore,desc") {
+function useWordSetList() {
   const { setLoading } = useAppBase();
   const { fetcher } = useFetcher();
 
   const [wordSetList, setWordSetList] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const fetchWordSets = async (param) => {
+    let params = {};
 
-  const queryParams = Object.fromEntries([...searchParams]);
-
-  const handleFetchWordSetList = async () => {
-    const params = {
-      sort: queryParams.sort || initialSort,
-      keyword: queryParams.keyword || undefined,
-      minRating: queryParams.minRating || undefined,
-      level: queryParams.level || undefined,
-      page: queryParams.page - 1 || 0,
-    };
+    if (param instanceof URLSearchParams) {
+      params = {
+        sort: param.get("sort"),
+        keyword: param.get("keyword") || undefined,
+        minRating: param.get("minRating") || undefined,
+        level: param.get("level") || undefined,
+        page: param.get("page") ? param.get("page") - 1 : 0,
+      };
+    } else {
+      params = {
+        sort: param.sort,
+        keyword: param.keyword || undefined,
+        minRating: param.minRating || undefined,
+        level: param.level || undefined,
+        page: param.page ? param.page - 1 : 0,
+      };
+    }
 
     setLoading(true);
     try {
-      const response = await fetcher({
-        url: `/api/v1/wordsets`,
+      const res = await fetcher({
+        url: "/api/v1/wordsets",
         method: "GET",
         params: {
           visibility: "PUBLIC",
-          page: 0,
           size: 9,
+          page: 0,
           ...params,
         },
       });
 
-      setPagination(response.pagination);
-      setWordSetList(response.data);
-    } catch (error) {
-      console.error(error);
+      setWordSetList(res.data);
+      setPagination(res.pagination);
     } finally {
       setLoading(false);
     }
   };
 
-  const updateSearchParams = (newParams) => {
-    const current = Object.fromEntries([...searchParams]);
-    const merged = { ...current, ...newParams };
-
-    const cleaned = Object.entries(merged).filter(
-      ([_, v]) => v != null && v !== ""
-    );
-    setSearchParams(Object.fromEntries(cleaned));
-  };
-
-  useEffect(() => {
-    handleFetchWordSetList(searchParams);
-  }, [searchParams]);
-
   return {
     wordSetList,
-    queryParams,
     pagination,
-    handleFetchWordSetList,
-    updateSearchParams,
+    fetchWordSets,
   };
 }
 

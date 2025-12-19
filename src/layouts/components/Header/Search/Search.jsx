@@ -21,6 +21,8 @@ export default function Search() {
 
   const { keyword, setKeyword, wordsets, users, totalResult } = useSearch();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -34,6 +36,13 @@ export default function Search() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const onSearch = (e) => {
+    if (e.key == "Enter") {
+      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+      setIsFocused(false);
+    }
+  };
 
   const hasAnyResult = (wordsets?.length || 0) + (users?.length || 0) > 0;
 
@@ -51,6 +60,7 @@ export default function Search() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onFocus={() => setIsFocused(true)}
+          onKeyDown={onSearch}
         />
       </div>
 

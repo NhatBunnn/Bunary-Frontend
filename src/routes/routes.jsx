@@ -3,14 +3,17 @@ import CreateWordSet from "../pages/CreateWordSet";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
-import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
 import HeaderOnly from "../layouts/HeaderOnly";
 import {
   Collection,
   CollectionDetail,
   EditWordset,
+  FollowerPage,
   Learning,
+  ProfilePage,
+  SearchPage,
+  stats,
 } from "@pages/index";
 import WordSetPage from "@pages/WordSetPage/WordSetPage";
 import AdminHome from "@pages/AdminDashboard/AdminHome/AdminHome";
@@ -23,6 +26,7 @@ import Homepage from "@pages/Homepage/Homepage/Homepage";
 import MyWordSets from "@pages/Homepage/MyWordSets/MyWordSets";
 import WordSetList from "@pages/Homepage/WordSetList/WordSetList";
 import TermPage from "@pages/Term/Term";
+import ProfileLayout from "@layouts/ProfileLayout/ProfileLayout";
 
 const publicRoutes = [
   // Homepage
@@ -32,6 +36,7 @@ const publicRoutes = [
 
   { path: "/terms", Page: TermPage },
   { path: "/wordset/:id/:slug", Page: WordSetPage, Layout: DefaultLayout },
+  { path: "/search", Page: SearchPage, Layout: DefaultLayout },
 
   {
     path: "/collection/:id/wordsets",
@@ -47,11 +52,15 @@ const publicRoutes = [
 
 const privateRoutes = [
   { path: "/createwordset", Page: CreateWordSet, Layout: DefaultLayout },
-  { path: "/profile", Page: Profile, Layout: DefaultLayout },
+  { path: "/stats", Page: stats, Layout: DefaultLayout },
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
   { path: "/wordset/:id/edit", Page: EditWordset, Layout: DefaultLayout },
   { path: "/learning/:id/:mode", Page: Learning, Layout: HeaderOnly },
+
+  // Profile
+  { path: "/profile", Page: ProfilePage, Layout: ProfileLayout },
+  { path: "/profile/follower", Page: FollowerPage, Layout: ProfileLayout },
 ];
 
 const guestRoutes = [

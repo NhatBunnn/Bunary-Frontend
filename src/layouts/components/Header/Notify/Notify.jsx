@@ -10,13 +10,12 @@ import { useNotification } from "@context/WebSocketProvider/NotificationProvider
 const c = bindClass(styles);
 
 function Notify() {
-  const { notifications } = useNotification();
+  const { notifications, unReadCount, markAllNotificationsAsRead } =
+    useNotification();
 
   const [openDropDown, setOpenDropDown] = useState(false);
-
   const navigate = useNavigate();
-
-  const dropDownRef = useRef();
+  const dropDownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -24,15 +23,23 @@ function Notify() {
         setOpenDropDown(false);
       }
     };
+
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   const handleToggleDropDown = () => {
-    setOpenDropDown((prev) => !prev);
+    setOpenDropDown((prev) => {
+      if (!prev) {
+        markAllNotificationsAsRead();
+      }
+      return !prev;
+    });
   };
 
   const handleClickNotification = (notification) => {
+    setOpenDropDown(false);
+
     switch (notification.targetType) {
       case "wordset":
         navigate(`/wordset/${notification.targetId}/a`);
@@ -42,46 +49,60 @@ function Notify() {
     }
   };
 
+  const handleViewMore = () => {
+    setOpenDropDown(false);
+    navigate("/notifications");
+  };
+
   return (
-    <BadgeIconWrapper count={notifications.length}>
+    <BadgeIconWrapper count={unReadCount}>
       <div
         className={c("notify")}
         onClick={handleToggleDropDown}
         ref={dropDownRef}
       >
         <FontAwesomeIcon icon={faBell} />
+
         {openDropDown && (
           <div className={c("drop-down")}>
-            {notifications?.map((notification, index) => (
-              <div
-                className={c("notify-item")}
-                onClick={() => handleClickNotification(notification)}
-              >
-                <div className={c("avatar")}>
-                  <img
-                    src={notification?.fromUser?.avatar}
-                    alt="Bún Bò Huế"
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </div>
-                <div className={c("info")}>
-                  <div className={c("title")}>
-                    <strong>{notification?.fromUser?.fullName} :</strong>{" "}
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: notification?.message || "",
-                      }}
-                    ></span>
-                  </div>
+            {/* header */}
+            <div className={c("drop-down-header")}>Thông báo</div>
 
-                  <div className={c("time")}>2025-11-17</div>
-                </div>
-              </div>
-            ))}
+            {/* body */}
+            <div className={c("drop-down-body")}>
+              {notifications?.length > 0 ? (
+                notifications.map((notification, index) => (
+                  <div
+                    key={index}
+                    className={c("notify-item")}
+                    onClick={() => handleClickNotification(notification)}
+                  >
+                    <div className={c("avatar")}>
+                      <img src={notification?.actor?.avatar} alt="avatar" />
+                    </div>
+
+                    <div className={c("info")}>
+                      <div className={c("title")}>
+                        <strong>{notification?.actor?.fullName}:</strong>{" "}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: notification?.message || "",
+                          }}
+                        />
+                      </div>
+                      <div className={c("time")}>{notification?.createdAt}</div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className={c("empty")}>Không có thông báo</div>
+              )}
+            </div>
+
+            {/* footer */}
+            <div className={c("drop-down-footer")} onClick={handleViewMore}>
+              Xem thêm
+            </div>
           </div>
         )}
       </div>

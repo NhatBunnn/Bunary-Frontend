@@ -15,8 +15,6 @@ function useWordSetPage() {
   const { id } = useParams();
   const { fetcher } = useFetcher();
 
-  console.log("ratingList", ratingList);
-
   useEffect(() => {
     const fetchWords = async () => {
       setLoading(true);

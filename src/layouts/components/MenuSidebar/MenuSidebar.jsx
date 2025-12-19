@@ -28,7 +28,7 @@ const menuItems = [
   { icon: Home, label: "Trang chủ", to: "/" },
   { icon: User, label: "Người dùng", to: "/profile" },
   { icon: Users, label: "Cộng đồng", to: "/community" },
-  { icon: BarChart, label: "Thống kê" },
+  { icon: BarChart, label: "Thống kê", to: "/stats" },
   // { hr: true },
   // { icon: FileText, label: "Hộp chứa từ" },
   // { icon: Trophy, label: "Xếp hạng" },

@@ -6,7 +6,6 @@ import { UserList } from "@features/user/components";
 import Button from "@components/Button/Button";
 import { MyRecentWordSetList } from "@features/wordsets/components";
 import Tabs from "../components/Tabs/Tabs";
-import { fa42Group } from "@fortawesome/free-brands-svg-icons";
 import {
   faArrowRight,
   faClock,
@@ -43,7 +42,7 @@ function Homepage() {
       >
         <Button
           label="Xem chi tiết"
-          to="/popular_wordsets"
+          to="/wordsets"
           variant="plain"
           endIcon={<FontAwesomeIcon icon={faArrowRight} />}
         />
@@ -57,7 +56,7 @@ function Homepage() {
       >
         <Button
           label="Xem chi tiết"
-          to="/popular_wordsets"
+          to="/wordsets"
           variant="plain"
           endIcon={<FontAwesomeIcon icon={faArrowRight} />}
         />
