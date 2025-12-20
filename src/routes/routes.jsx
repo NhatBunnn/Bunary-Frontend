@@ -10,10 +10,10 @@ import {
   CollectionDetail,
   EditWordset,
   FollowerPage,
-  Learning,
   ProfilePage,
   SearchPage,
   stats,
+  TestPage,
 } from "@pages/index";
 import WordSetPage from "@pages/WordSetPage/WordSetPage";
 import AdminHome from "@pages/AdminDashboard/AdminHome/AdminHome";
@@ -27,6 +27,9 @@ import MyWordSets from "@pages/Homepage/MyWordSets/MyWordSets";
 import WordSetList from "@pages/Homepage/WordSetList/WordSetList";
 import TermPage from "@pages/Term/Term";
 import ProfileLayout from "@layouts/ProfileLayout/ProfileLayout";
+import FlashCard from "@pages/Learning/FlashCard/FlashCard";
+import MultipleChoice from "@pages/Learning/MultipleChoice/MultipleChoice";
+import LearningLayout from "@layouts/LeaningLayout/LearningLayout";
 
 const publicRoutes = [
   // Homepage
@@ -56,7 +59,20 @@ const privateRoutes = [
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
   { path: "/wordset/:id/edit", Page: EditWordset, Layout: DefaultLayout },
-  { path: "/learning/:id/:mode", Page: Learning, Layout: HeaderOnly },
+
+  // Learning
+  { path: "/learning/:id/flashcard", Page: FlashCard, Layout: LearningLayout },
+  {
+    path: "/learning/:id/multiple-choice",
+    Page: MultipleChoice,
+    Layout: LearningLayout,
+  },
+
+  {
+    path: "/learning/:id/test",
+    Page: TestPage,
+    Layout: LearningLayout,
+  },
 
   // Profile
   { path: "/profile", Page: ProfilePage, Layout: ProfileLayout },

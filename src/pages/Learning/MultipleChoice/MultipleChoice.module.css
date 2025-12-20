@@ -1,0 +1,118 @@
+/* MultipleChoice.module.css - Đã tinh chỉnh để giao diện nhỏ gọn, đẹp và responsive hơn */
+
+.question-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.question-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background-color: rgba(0, 123, 255, 0.12);
+  color: #007bff;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.word-highlight {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  margin-top: 12px;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  text-align: left;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  background-color: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.option:hover {
+  border-color: #007bff;
+  background-color: #f8fbff;
+}
+
+.option.selected {
+  border-color: #007bff;
+  background-color: #ebf3ff;
+  font-weight: 500;
+}
+
+.option.correct {
+  border-color: #28a745;
+  background-color: #d1edda;
+  color: #155724;
+}
+
+.option.incorrect {
+  border-color: #dc3545;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.option.faded {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #495057;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.correct-feedback {
+  background-color: #d1edda;
+  border: 1px solid #badbcc;
+}
+
+.incorrect-feedback {
+  background-color: #f8d7da;
+  border: 1px solid #f1aeb5;
+}
+
+.result-card {
+  background: white;
+  padding: 40px 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.trophy-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(0, 123, 255, 0.15);
+}

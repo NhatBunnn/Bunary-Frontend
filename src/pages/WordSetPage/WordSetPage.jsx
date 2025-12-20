@@ -139,10 +139,12 @@ const WordSetPage = () => {
             <Button
               label="Trắc nghiệm"
               icon={<FontAwesomeIcon icon={faIdCard} />}
+              to={`/learning/${wordSet.id}/multiple-choice`}
             />
             <Button
               label="Kiểm tra"
               icon={<FontAwesomeIcon icon={faIdCard} />}
+              to={`/learning/${wordSet.id}/test`}
             />
           </div>
         </div>

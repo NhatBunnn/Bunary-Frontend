@@ -4,7 +4,7 @@ import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
 import useFlashCard from "./useFlashCard";
 import Loading from "@components/Loading/Loading";
-import FinishScreen from "../FinishScreen/FinishScreen";
+import FinishScreen from "../components/FinishScreen/FinishScreen";
 import { useNavigate } from "react-router-dom";
 import { getThumbnailUrl } from "@utils/getThumbnailUrl";
 

@@ -77,7 +77,6 @@ function useFlashCard() {
   const handleRecordStudy = async () => {
     try {
       const response = await fetcher({
-        // url: `/api/v1/wordsets/${id}/history`,
         url: `/api/v1/wordsets/${id}/finish`,
         method: "POST",
         data: {

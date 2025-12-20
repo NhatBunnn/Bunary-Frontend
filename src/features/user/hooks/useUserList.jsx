@@ -19,12 +19,10 @@ function useUserList() {
       setLoading(true);
       try {
         const response = await fetcher({
-          url: "/api/v1/users",
+          url: "/api/v1/users/suggestions",
           method: "GET",
           params: {
-            page: 0,
-            size: 20,
-            sort: "id,asc",
+            pageSize: 10,
           },
         });
         setUserList(response.data);
