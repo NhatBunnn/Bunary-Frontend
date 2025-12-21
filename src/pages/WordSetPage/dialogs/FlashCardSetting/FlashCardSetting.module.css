@@ -1,69 +1,174 @@
-/* common */
+/* FlashCard Setting Dialog */
 .flashCardSetting {
-  background-color: var(--color-white);
-  box-shadow: var(--box-shadow-primary);
-  max-width: 856px;
-  border-radius: var(--radius-large);
+  background-color: #f8fafc;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* preview */
+.row {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
 
-.preview{
-  
+/* Preview Section */
+.preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.previewLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardWrapper {
+  position: relative;
 }
 
 .card {
+  /* Inherits styling from FlashCard component, 
+     additional specific tweaks can go here */
 }
 
-.card.active{
-  box-shadow: var(--box-shadow-secondary);
-  outline: 3px solid red;
+.card.active {
+  border: 2px solid #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
 }
 
-/* setting */
+/* Settings Sidebar */
+.settingColumn {
+  width: 350px;
+  flex-shrink: 0;
+}
+
 .setting {
-  background-color: var(--color-white);
-  box-shadow: var(--box-shadow-primary);
-  border-radius: var(--radius-medium);
-}
-
-.setting .tab-header {
-  display: flex;
-}
-
-.tab-header .tab {
-  height: 40px;
-  padding: 0 8px;
-  align-content: center;
-  cursor: pointer;
-}
-
-.tab.focus {
-  border-radius: var(--radius-medium) var(--radius-medium) 0 0;
-  background-color: var(--color-gray-300);
-}
-
-/* content */
-.content {
-  border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border: 1px solid #e2e8f0;
   overflow: hidden;
 }
 
-.content .setting-item {
+.tab-header {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f1f5f9;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 1rem 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.tab.focus {
+  background-color: #ffffff;
+  color: #4f46e5;
+  border-bottom: 2px solid #4f46e5;
+  margin-bottom: -1px;
+  /* Overlap border */
+}
+
+/* Settings Content */
+.content {
+  padding: 0.5rem 0;
+}
+
+.setting-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 48px;
-  padding: 0 8px;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.setting-item .icon{
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item:hover {
+  background-color: #f8fafc;
+}
+
+.text {
+  font-weight: 500;
+  color: #334155;
+}
+
+/* Toggle Switch */
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: #cbd5e1;
+  border-radius: 999px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.content .setting-item:nth-child(odd) {
-  background-color: var(--color-gray-300);
+.toggle.on {
+  background-color: #4f46e5;
 }
-.content .setting-item:nth-child(even) {
-  background-color: var(--color-gray-100);
+
+.toggleHandle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+}
+
+.toggle.on .toggleHandle {
+  transform: translateX(20px);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.footer {
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .settingColumn {
+    width: 100%;
+  }
 }

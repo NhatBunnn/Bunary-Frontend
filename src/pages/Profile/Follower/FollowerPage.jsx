@@ -18,7 +18,7 @@ const FollowerPage = () => {
 
   return (
     <div className={styles.followerPage}>
-      <h1>Người theo dõi</h1>
+      <h1 className={styles.title}>Người theo dõi</h1>
       <div className={styles.followerList}>
         {followers.map((follower) => (
           <div key={follower?.id} className={styles.userCard}>

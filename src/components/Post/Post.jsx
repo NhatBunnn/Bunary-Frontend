@@ -38,8 +38,8 @@ function Post({ post }) {
       <div className={c("header")}>
         <Image src={currentPost.author.avatar} className={c("avatar")} />
         <div className={c("info")}>
-          <div className={c("authorName")}>{currentPost.author.name}</div>
-          <div className={c("date")}>{currentPost.date}</div>
+          <span className={c("authorName")}>{currentPost.author.name}</span>
+          <span className={c("date")}>{currentPost.date}</span>
         </div>
         <button className={c("options-btn")}>
           <FontAwesomeIcon icon={faEllipsis} />
@@ -58,12 +58,13 @@ function Post({ post }) {
 
       {/* Stats */}
       <div className={c("stats")}>
-        <span className={c("likes-stat")}>
-          <FontAwesomeIcon icon={faThumbsUp} className={c("like-icon")} />
-          {currentPost.stats.likes}
-        </span>
-        <div className={c("comments-shares-stat")}>
+        <div className={c("stat-item")}>
+          <FontAwesomeIcon icon={faThumbsUp} className="me-1 text-primary" />
+          <strong>{currentPost.stats.likes}</strong>
+        </div>
+        <div className={c("stat-item")}>
           <span>{currentPost.stats.comments} comments</span>
+          <span className="mx-2">•</span>
           <span>{currentPost.stats.shares} shares</span>
         </div>
       </div>
@@ -72,15 +73,15 @@ function Post({ post }) {
       <div className={c("actions")}>
         <button className={c("action-btn")}>
           <FontAwesomeIcon icon={faThumbsUp} />
-          <span>Thích</span>
+          <span>Like</span>
         </button>
         <button className={c("action-btn")}>
           <FontAwesomeIcon icon={faComment} />
-          <span>Bình luận</span>
+          <span>Comment</span>
         </button>
         <button className={c("action-btn")}>
           <FontAwesomeIcon icon={faShare} />
-          <span>Chia sẻ</span>
+          <span>Share</span>
         </button>
       </div>
     </div>

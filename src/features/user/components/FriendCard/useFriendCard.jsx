@@ -1,18 +1,22 @@
 import { useFetcher } from "@api/fetcher";
 import useAppBase from "@hooks/useAppBase";
+import { useState } from "react";
 
 function useFriendCard() {
   const { te, setLoading, loading, showNotification } = useAppBase();
   const { fetcher } = useFetcher();
 
-  const toggleFollow = async (followeeId) => {
+  // State
+  const [isRequestFriend, setRequestFriend] = useState(false);
+
+  const sendFriendRequest = async (addresseeId) => {
     setLoading(true);
     try {
       await fetcher({
-        url: `/api/v1/users/${followeeId}/follow`,
+        url: `/api/v1/friends/request/${addresseeId}`,
         method: "POST",
       });
-      showNotification("Bạn đã theo dõi người dùng này", "success");
+      setRequestFriend(true);
     } catch (e) {
       showNotification(te(e.errorCode) || e.message, "error");
     } finally {
@@ -20,7 +24,7 @@ function useFriendCard() {
     }
   };
 
-  return { toggleFollow, loading };
+  return { sendFriendRequest,isRequestFriend, loading };
 }
 
 export default useFriendCard;

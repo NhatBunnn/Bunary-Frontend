@@ -44,6 +44,8 @@ function Notify() {
       case "wordset":
         navigate(`/wordset/${notification.targetId}/a`);
         break;
+      case "friendship":
+        break;
       default:
         navigate("/");
     }

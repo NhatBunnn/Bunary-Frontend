@@ -1,43 +1,126 @@
-/* slider */
+/* Local variables for Profile Context */
+.profileLayout {
+  --profile-banner-height: 280px;
+  --profile-primary: #4f46e5;
+  --profile-bg: #f8fafc;
+  --profile-card-bg: #ffffff;
+  --profile-text-main: #1e293b;
+  --profile-text-sub: #64748b;
+  --profile-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  background-color: var(--profile-bg);
+  min-height: 100vh;
+}
+
+/* Banner Section */
 .slider {
+  position: relative;
+  width: 100%;
 }
 
 .banner {
-  position: relative;
   width: 100%;
-  aspect-ratio: 3 / 1;
+  height: var(--profile-banner-height);
+  object-fit: cover;
+  position: relative;
+}
+
+.banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
 }
 
 .preface {
-  font-size: var(--font-size-heading);
-  text-transform: uppercase;
   position: absolute;
-  top: 0;
-  bottom: 0;
+  bottom: 2rem;
   left: 0;
   right: 0;
-  margin: auto;
   text-align: center;
-  align-self: center;
   color: #fff;
+  font-size: 2.5rem;
+  font-family: 'SVN-Segoe', var(--font-family);
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  letter-spacing: 0.5px;
 }
 
-/* tabs */
-.tabs {
-    margin-bottom: 20px;
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+/* Content Container */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  padding-bottom: 4rem;
 }
 
-/* content */
-
-.post-lists {
-  height: 1000px;
-}
-
+/* Sidebar / Profile Card */
 .profileCard-sticky {
-  margin-top: -50px;
   position: sticky;
-  top: 85px;
+  top: 90px;
+  margin-top: -80px;
+  /* Overlap banner */
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+/* Tabs Navigation */
+.tabs {
+  margin: 1.5rem 0 2rem;
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--profile-text-sub);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.tabBtn:hover {
+  background-color: #f1f5f9;
+  color: var(--profile-primary);
+}
+
+.tabBtn.active {
+  color: var(--profile-primary);
+  background-color: #eef2ff;
+}
+
+.tabBtn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -0.6rem;
+  /* Align with border-bottom of .tabs */
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--profile-primary);
+  border-radius: 3px 3px 0 0;
+}
+
+.mainContent {
+  /* Animation for content switching */
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

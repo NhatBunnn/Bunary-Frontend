@@ -1,127 +1,124 @@
+/* Local variables for Follower Page */
 .followerPage {
-  padding: 20px;
-  background-color: #f0f2f5;
-  min-height: calc(100vh - var(--header-height, 60px)); /* Adjust based on your header height */
+  /* Use local padding/variables instead of global dependencies if avoiding global edits */
+  padding-bottom: 2rem;
 }
 
-.followerPage h1 {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  padding-left: 0.5rem;
 }
 
 .followerList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
 }
 
 .userCard {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
   display: flex;
-  flex-direction: row; /* Changed to row */
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between; /* Added for spacing */
-  padding: 15px 20px; /* Adjusted padding */
-  transition: transform 0.2s ease-in-out;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
 .userCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  border-color: #cbd5e1;
 }
 
-.userInfo { /* New class to group avatar and name */
+.userInfo {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .avatar {
-  width: 50px; /* Smaller avatar for horizontal layout */
-  height: 50px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 15px; /* Added right margin */
-  border: 3px solid var(--primary-color, #007bff); /* Assuming a primary color variable */
-  flex-shrink: 0; /* Prevent avatar from shrinking */
+  margin-bottom: 1rem;
+  border: 3px solid #f8fafc;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 .userName {
-  font-size: 16px; /* Adjusted font size */
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
-  margin: 0; /* Reset margin */
-  white-space: nowrap; /* Prevent name from wrapping */
+  color: #1e293b;
+  margin-bottom: 1rem;
+  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis for long names */
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .messageButton {
-  background-color: var(--primary-color, #007bff);
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 12px; /* Adjusted padding */
+  width: 100%;
+  background-color: #eef2ff;
+  color: #4f46e5;
+  border: 1px solid transparent;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.2s ease-in-out;
-  flex-shrink: 0; /* Prevent button from shrinking */
-  margin-left: 15px; /* Added left margin for spacing */
+  transition: all 0.2s;
+  margin-top: auto;
 }
 
 .messageButton:hover {
-  background-color: var(--primary-dark-color, #0056b3);
+  background-color: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 4px 6px -1px rgb(79 70 229 / 0.2);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Response adjustments */
+@media (max-width: 576px) {
   .followerList {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusted for smaller cards */
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .userCard {
-    padding: 10px 15px;
+    flex-direction: row;
+    padding: 1rem;
+    text-align: left;
+    align-items: center;
+  }
+
+  .userInfo {
+    flex-direction: row;
+    width: auto;
+    flex: 1;
+    margin-right: 1rem;
   }
 
   .avatar {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0;
+    margin-right: 1rem;
   }
 
   .userName {
-    font-size: 14px;
+    margin-bottom: 0;
   }
 
   .messageButton {
-    padding: 6px 10px;
-    font-size: 12px;
-    margin-left: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .followerList {
-    grid-template-columns: 1fr;
-  }
-  .followerPage h1 {
-    font-size: 20px;
-  }
-  .userCard {
-    flex-wrap: wrap; /* Allow wrapping on very small screens */
-    justify-content: center;
-    text-align: center;
-  }
-  .userInfo {
-    margin-bottom: 10px; /* Add margin when wrapping */
-  }
-  .messageButton {
-    margin-top: 10px; /* Add margin when wrapping */
-    width: 100%; /* Full width button when wrapped */
+    width: auto;
+    padding: 0.5rem 1rem;
   }
 }

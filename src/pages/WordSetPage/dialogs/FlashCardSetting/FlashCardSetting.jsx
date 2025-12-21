@@ -1,8 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import Button from "@components/Button/Button";
 import styles from "./FlashCardSetting.module.css";
 import classNames from "classnames/bind";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import FlashCard from "./FlashCard/FlashCard";
 import useFlashCardSetting from "./useFlashCardSetting";
 
@@ -19,39 +18,54 @@ function FlashCardSetting({ wordSetId }) {
   } = useFlashCardSetting();
 
   const settingFields = [
-    { field: "Thuật ngữ", key: "term" },
-    { field: "Ipa", key: "ipa" },
-    { field: "Nghĩa", key: "meaning" },
-    { field: "Loại từ", key: "partOfSpeech" },
-    { field: "Hình ảnh", key: "image" },
+    { field: "Term", key: "term" },
+    { field: "IPA", key: "ipa" },
+    { field: "Meaning", key: "meaning" },
+    { field: "Part Of Speech", key: "partOfSpeech" },
+    { field: "Image", key: "image" },
   ];
 
   const tabs = [
-    { tab: "Mặt trước", side: "front" },
-    { tab: "Mặt sau", side: "back" },
+    { tab: "Front Side", side: "front" },
+    { tab: "Back Side", side: "back" },
   ];
 
+  const toggleSetting = (key) => {
+    setSettings((prev) => ({
+      ...prev,
+      [activeSide]: {
+        ...prev[activeSide],
+        [key]: !prev[activeSide][key],
+      },
+    }));
+  };
+
   return (
-    <div className={c("flashCardSetting", "p-3")}>
+    <div className={c("flashCardSetting")}>
       <div className={c("row")}>
-        <div className={c("col-7", "p-0", "p-sm-3", "col-sm-6")}>
-          <div className={c("preview")}>
-            <div className="mb-2">Trước:</div>
+        {/* Preview Section */}
+        <div className={c("preview")}>
+          <div className={c("cardWrapper")}>
+            <div className={c("previewLabel")}>Front Preview</div>
             <FlashCard
-              className={c("mb-3", "card", { active: activeSide === "front" })}
+              className={c("card", "mb-4", { active: activeSide === "front" })}
               setting={settings.front}
             />
-            <div className="mb-2">Sau:</div>
+          </div>
+          <div className={c("cardWrapper")}>
+            <div className={c("previewLabel")}>Back Preview</div>
             <FlashCard
               className={c("card", { active: activeSide === "back" })}
               setting={settings.back}
             />
           </div>
         </div>
-        <div className={c("col-5", "p-0", "p-sm-3", "col-sm-6")}>
-          <div className={c("setting", "p-2")}>
+
+        {/* Settings Sidebar */}
+        <div className={c("settingColumn")}>
+          <div className={c("setting")}>
             <div className={c("tab-header")}>
-              {tabs?.map((d, i) => (
+              {tabs.map((d, i) => (
                 <div
                   key={i}
                   className={c("tab", { focus: activeSide === d.side })}
@@ -61,53 +75,47 @@ function FlashCardSetting({ wordSetId }) {
                 </div>
               ))}
             </div>
-            <hr className="my-0" />
+            
             <div className={c("content")}>
-              {settingFields?.map((d, i) => (
+              {settingFields.map((d, i) => (
                 <div className={c("setting-item")} key={i}>
                   <div className={c("text")}>{d.field}</div>
                   <div
-                    className={c("icon")}
-                    onClick={() => {
-                      setSettings((prev) => ({
-                        ...prev,
-                        [activeSide]: {
-                          ...prev[activeSide],
-                          [d.key]: !prev[activeSide][d.key],
-                        },
-                      }));
-                    }}
+                    className={c("toggle", { on: settings[activeSide][d.key] })}
+                    onClick={() => toggleSetting(d.key)}
                   >
-                    {settings[activeSide][d.key] ? (
-                      <FontAwesomeIcon icon={faEye} />
-                    ) : (
-                      <FontAwesomeIcon icon={faEyeSlash} />
-                    )}
+                    <div className={c("toggleHandle")} />
                   </div>
                 </div>
               ))}
             </div>
-            <div
-              className={c(
-                "button",
-                "mt-2",
-                "d-flex",
-                "justify-content-evenly",
-                "flex-wrap"
-              )}
-            >
-              <Button
-                label="Lưu cài đặt"
-                onClick={() => updateFlashCardSetting()}
-                isLoading={loading}
-              />
-              <Button label="Để mặc định" />
+
+            <div className="p-3 border-top bg-light">
+               <Button 
+                label="Reset to Default" 
+                variant="outline" 
+                className="w-100"
+                size="sm"
+               />
             </div>
           </div>
         </div>
       </div>
-      <div className={c("d-flex", "justify-content-center", "mt-3")}>
-        <Button label="Học" to={`/learning/${wordSetId}/flashcard`} />
+
+      {/* Footer Actions */}
+      <div className={c("footer")}>
+        <div className="d-flex gap-2">
+            <Button
+                label="Study Now"
+                to={`/learning/${wordSetId}/flashcard`}
+                variant="outline"
+             />
+            <Button
+                label="Save Settings"
+                onClick={() => updateFlashCardSetting()}
+                isLoading={loading}
+            />
+        </div>
       </div>
     </div>
   );

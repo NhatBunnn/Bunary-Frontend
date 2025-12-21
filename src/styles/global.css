@@ -16,7 +16,8 @@
 }
 
 .rotate {
-  display: inline-block; /* cần để transform hoạt động */
+  display: inline-block;
+  /* cần để transform hoạt động */
   animation: rotate 1s linear infinite;
 }
 
@@ -24,6 +25,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -48,14 +50,12 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    #e0e0e0 0%,
-    #ededed 20%,
-    #fafafa 50%,
-    #ededed 80%,
-    #e0e0e0 100%
-  );
+  background: linear-gradient(90deg,
+      #e0e0e0 0%,
+      #ededed 20%,
+      #fafafa 50%,
+      #ededed 80%,
+      #e0e0e0 100%);
   background-size: 200% 100%;
   animation: shimmerMove 1.6s infinite linear;
   pointer-events: none;
@@ -66,14 +66,12 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
-.button-active {
-  background-color: var(--background-hover) !important;
-}
 
 .cursor-pointer {
   cursor: pointer;
@@ -81,7 +79,6 @@
 
 .cursor-pointer:hover {
   color: var(--color-primary);
-  background: var(--color-primary-light);
 }
 
 .link-no-style {
@@ -104,21 +101,15 @@
 }
 
 .liquid-glass {
-  background: linear-gradient(
-      135deg,
+  background: linear-gradient(135deg,
       rgba(255, 255, 255, 0.25),
-      rgba(255, 255, 255, 0.05)
-    ),
-    radial-gradient(
-      circle at top left,
+      rgba(255, 255, 255, 0.05)),
+    radial-gradient(circle at top left,
       rgba(255, 255, 255, 0.2),
-      transparent 70%
-    ),
-    radial-gradient(
-      circle at bottom right,
+      transparent 70%),
+    radial-gradient(circle at bottom right,
       rgba(255, 255, 255, 0.15),
-      transparent 70%
-    );
+      transparent 70%);
   backdrop-filter: blur(30px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2),
@@ -149,25 +140,30 @@
   0% {
     transform: translate(0, 0);
   }
+
   50% {
     transform: translate(50px, -50px);
   }
+
   100% {
     transform: translate(0, 0);
   }
 }
 
 /* Nội dung bên trong */
-.g-dreamy-gradient > * {
+.g-dreamy-gradient>* {
   position: relative;
-  z-index: 1; /* trên pseudo-element */
+  z-index: 1;
+  /* trên pseudo-element */
 }
 
 :root {
   /* PRIMARY COLOR */
   /* --color-primary: #4DBAFE; */
   --color-primary-light: #e6f7ff;
-  --color-primary: linear-gradient(135deg, #4facfe, #f093fb);
+  /* --color-primary: linear-gradient(135deg, #4facfe, #f093fb);
+  - */
+  --color-primary: #4facfe;
   --color-primary-solid: #4dbafe;
 
   /* NEUTRAL COLORS */
@@ -201,12 +197,18 @@
   --radius-round: 100px;
 
   /* FONT SIZE ---------------- */
-  --font-size-caption: 13px; /* chú thích, text nhỏ */
-  --font-size-small: 14px; /* mô tả ngắn, text phụ */
-  --font-size-body: 16px; /* văn bản thường */
-  --font-size-subtitle: 18px; /* tiêu đề phụ */
-  --font-size-title: 24px; /* tiêu đề chính */
-  --font-size-heading: 36px; /* heading lớn */
+  --font-size-caption: 13px;
+  /* chú thích, text nhỏ */
+  --font-size-small: 14px;
+  /* mô tả ngắn, text phụ */
+  --font-size-body: 16px;
+  /* văn bản thường */
+  --font-size-subtitle: 18px;
+  /* tiêu đề phụ */
+  --font-size-title: 24px;
+  /* tiêu đề chính */
+  --font-size-heading: 36px;
+  /* heading lớn */
 
   /* REPONSIVE */
 
@@ -235,7 +237,8 @@ body {
 
 html {
   font-size: 16px;
-  scrollbar-gutter: stable; /* giữ không gian thanh cuộn luôn tồn tại */
+  scrollbar-gutter: stable;
+  /* giữ không gian thanh cuộn luôn tồn tại */
 }
 
 body ul {

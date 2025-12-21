@@ -78,7 +78,7 @@
 
 .thumbnail {
   width: 100%;
-  aspect-ratio: 3 / 4; 
+  aspect-ratio: 3 / 4;
   background-color: #eee;
   border-radius: 8px;
   display: flex;
@@ -177,12 +177,13 @@
   color: #fff;
   cursor: pointer;
 }
+
 /* bo xung */
-.moreOptions{
+.moreOptions {
   position: relative;
 }
 
-.moreOptions .dropdown{
+.moreOptions .dropdown {
   position: absolute;
   right: 0;
   width: 200px;

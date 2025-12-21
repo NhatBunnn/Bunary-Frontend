@@ -10,11 +10,14 @@ const c = classNames.bind(styles);
  * @typedef {"default" | "menu" | "outline" | "plain"} ButtonVariant
  */
 
+/**
+ * startIcon, endIcon, icon có thể là FontAwesomeIcon, Lucide icon, hoặc bất cứ ReactNode nào
+ */
 function Button({
   label = "",
-  icon,
-  startIcon,
-  endIcon,
+  icon,       // ReactNode
+  startIcon,  // ReactNode
+  endIcon,    // ReactNode
   type = "button",
   onClick,
   isLoading = false,
@@ -29,57 +32,23 @@ function Button({
     else onClick?.(e);
   };
 
-  // style theo variant
-  const styleMap = {
-    default: {
-      borderRadius: "var(--radius-round)",
-      background: "var(--color-primary)",
-      color: "#fff",
-    },
-    menu: {
-      borderRadius: "var(--radius-small)",
-      boxShadow: "none",
-      border: "none",
-      background: "transparent",
-    },
-    outline: {
-      borderRadius: "var(--radius-round)",
-      color: "var(--color-primary-solid)",
-      border: "1px solid var(--color-primary-solid)",
-      background: "transparent",
-    },
-    plain: {
-      borderRadius: "var(--radius-round)",
-    },
-  };
-
-  const style = styleMap[variant] || {};
-
   return (
-    <div
-      className={c(
-        "button",
-        "d-inline-flex",
-        "align-center",
-        "cursor-pointer",
-        className
-      )}
+    <button
+      className={c("button", variant, className)}
       type={type}
       onClick={handleClick}
-      style={style}
+      disabled={isLoading}
     >
-      {!isLoading && icon && <div className={c("icon")}>{icon}</div>}
       {startIcon && <div className={c("icon")}>{startIcon}</div>}
+      {!isLoading && icon && <div className={c("icon")}>{icon}</div>}
 
-      <div className={c("label")}>
+      <span className={c("label")}>
         {!isLoading && label}
-        {isLoading && (
-          <FontAwesomeIcon icon={faSpinner} className="ms-2 fa-spin" />
-        )}
-      </div>
+        {isLoading && <FontAwesomeIcon icon={faSpinner} className="fa-spin" />}
+      </span>
 
-      {endIcon && <div className={c("icon", "ms-1")}>{endIcon}</div>}
-    </div>
+      {endIcon && <div className={c("icon")}>{endIcon}</div>}
+    </button>
   );
 }
 

@@ -1,14 +1,73 @@
-/* Common */
-
+/* Common card style */
 .friendCard {
   width: 180px;
-  background-color: var(--ui-white);
-  border-radius: var(--radius-medium);
-  box-shadow: var(--box-shadow-primary);
+  background-color: var(--color-white);
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   overflow: hidden;
   cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s, border-color 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .friendCard:hover {
-  background-color: var(--background-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  border-color: #e2e8f0;
+}
+
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  background-color: #f8fafc;
+  position: relative;
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.friendCard:hover .imageContainer img {
+  transform: scale(1.08);
+}
+
+.info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  background-color: #ffffff;
+  flex: 1;
+}
+
+.name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+/* Hover buttons inside the card */
+.actions .button.default:hover,
+.actions .button.outline:hover {
+  transform: translateY(-1px);
+  /* nhẹ nhàng */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }

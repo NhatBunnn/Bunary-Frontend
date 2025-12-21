@@ -11,50 +11,56 @@ function ProfileLayout({ children }) {
   const navigate = useNavigate();
 
   return (
+
     <DefaultLayout>
       <div className={c("profileLayout")}>
-        {/* slider */}
+        {/* Banner Section */}
         <div className={c("slider")}>
           <Background
-            // src={Images.avatar}
             className={c("banner")}
             src="https://wallpapers.com/images/featured/universe-qs811igzbabl1m0o.jpg"
           >
             <div className={c("preface")}>Xin chào các con vợ</div>
           </Background>
         </div>
-        {/* content */}
-        <div className={c("content", "px-5")}>
-          <div className="row">
-            {/* profile-card */}
+
+        {/* Main Interface */}
+        <div className={c("content")}>
+          <div className="row g-4">
+            {/* Left Column: Sticky Profile Card */}
             <div className="col-12 col-lg-4">
               <div className={c("profileCard-sticky")}>
                 <ProfileCard />
               </div>
             </div>
-            <div className="col col-lg-8">
-              {/* Tabs */}
-              <div className={c("tabs", "btn-group")} role="group">
+
+            {/* Right Column: Content & Tabs */}
+            <div className="col-12 col-lg-8">
+              {/* Navigation Tabs */}
+              <div className={c("tabs")}>
                 <button
                   type="button"
-                  className="btn btn-outline-primary"
+                  className={c("tabBtn", { active: window.location.pathname === "/profile" })}
                   onClick={() => navigate("/profile")}
                 >
                   Posts
                 </button>
                 <button
                   type="button"
-                  className="btn btn-outline-primary"
+                  className={c("tabBtn", { active: window.location.pathname.includes("follower") })}
                   onClick={() => navigate("/profile/follower")}
                 >
-                  Follower
+                  Followers
                 </button>
-                <button type="button" className="btn btn-outline-primary">
+                <button 
+                  type="button" 
+                  className={c("tabBtn")}
+                >
                   Following
                 </button>
               </div>
 
-              {/* Main content */}
+              {/* Dynamic Content */}
               <div className={c("mainContent")}>{children}</div>
             </div>
           </div>
