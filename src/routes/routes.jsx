@@ -30,6 +30,7 @@ import ProfileLayout from "@layouts/ProfileLayout/ProfileLayout";
 import FlashCard from "@pages/Learning/FlashCard/FlashCard";
 import MultipleChoice from "@pages/Learning/MultipleChoice/MultipleChoice";
 import LearningLayout from "@layouts/LeaningLayout/LearningLayout";
+import PostPage from "@pages/Profile/Profile/ProfilePage";
 
 const publicRoutes = [
   // Homepage
@@ -75,8 +76,8 @@ const privateRoutes = [
   },
 
   // Profile
-  { path: "/profile", Page: ProfilePage, Layout: ProfileLayout },
-  { path: "/profile/follower", Page: FollowerPage, Layout: ProfileLayout },
+  { path: "/u/:username", Page: PostPage, Layout: ProfileLayout },
+  { path: "/u/follower", Page: FollowerPage, Layout: ProfileLayout },
 ];
 
 const guestRoutes = [

@@ -4,37 +4,45 @@ import Button from "@components/Button/Button";
 import { Image, Images } from "@assets/images";
 import useFriendCard from "./useFriendCard";
 import { MessageCircle, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const c = classNames.bind(styles);
 
 function FriendCard({ user, openChatWindow, className }) {
   const { sendFriendRequest, isRequestFriend, loading } = useFriendCard();
 
+  const navigate = useNavigate();
+
   return (
     <div className={c("friendCard", className)}>
-      <div className={c("imageContainer")}>
+      <div
+        className={c("imageContainer")}
+        onClick={() => navigate(`/u/${user?.username}`)}
+      >
         <Image src={user?.avatar || Images.avatar} />
       </div>
-      
+
       <div className={c("info")}>
-        <div className={c("name")} title={user?.fullName}>{user?.fullName || "User"}</div>
-        
+        <div className={c("name")} title={user?.fullName}>
+          {user?.fullName || "User"}
+        </div>
+
         <div className={c("actions")}>
           <Button
             onClick={(e) => {
-              e.stopPropagation(); 
+              e.stopPropagation();
               sendFriendRequest(user.id);
             }}
             loading={loading}
             label={isRequestFriend ? "Đã gửi lời mời" : "Kết bạn"}
             size="sm"
-            className="w-100" 
+            className="w-100"
             startIcon={<Users fill="currentColor" size={16} />}
           />
           <Button
             label="Nhắn tin"
             size="sm"
-            variant="outline" 
+            variant="outline"
             className="w-100 border-0 bg-gray-50 hover-bg-gray-100"
             startIcon={<MessageCircle fill="currentColor" size={16} />}
             onClick={(e) => {

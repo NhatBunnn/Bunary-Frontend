@@ -1,0 +1,77 @@
+/* Create Post Widget Styles */
+.createPost {
+  background-color: var(--profile-card-bg, #ffffff);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.1));
+  padding: 1rem 1rem 0.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #f0f2f5; 
+}
+
+.top {
+  display: flex;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f2f5;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+}
+
+.inputTrigger {
+  flex: 1;
+  background-color: #f0f2f5;
+  border-radius: 20px;
+  padding: 0.6rem 1rem;
+  color: var(--profile-text-sub, #65676b);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+.inputTrigger:hover {
+  background-color: #e4e6eb;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: var(--profile-text-sub, #65676b);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.actionBtn:hover {
+  background-color: #f0f2f5;
+}
+
+.icon {
+  font-size: 1.25rem;
+}
+
+/* Specific icon colors */
+.liveVideo { color: #f02849; }
+.photoVideo { color: #45bd62; }
+.feeling { color: #f7b928; }
