@@ -4,12 +4,11 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
 import Setting from "../pages/Setting";
-import HeaderOnly from "../layouts/HeaderOnly";
 import {
   Collection,
   CollectionDetail,
   EditWordset,
-  FollowerPage,
+  FriendPage,
   ProfilePage,
   SearchPage,
   stats,
@@ -30,7 +29,7 @@ import ProfileLayout from "@layouts/ProfileLayout/ProfileLayout";
 import FlashCard from "@pages/Learning/FlashCard/FlashCard";
 import MultipleChoice from "@pages/Learning/MultipleChoice/MultipleChoice";
 import LearningLayout from "@layouts/LeaningLayout/LearningLayout";
-import PostPage from "@pages/Profile/Profile/ProfilePage";
+import PostPage from "@pages/Profile/Profile/PostPage";
 
 const publicRoutes = [
   // Homepage
@@ -77,7 +76,7 @@ const privateRoutes = [
 
   // Profile
   { path: "/u/:username", Page: PostPage, Layout: ProfileLayout },
-  { path: "/u/follower", Page: FollowerPage, Layout: ProfileLayout },
+  { path: "/u/:username/friends", Page: FriendPage, Layout: ProfileLayout },
 ];
 
 const guestRoutes = [

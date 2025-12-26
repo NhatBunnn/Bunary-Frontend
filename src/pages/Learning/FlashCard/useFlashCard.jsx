@@ -83,6 +83,7 @@ function useFlashCard() {
           progress,
         },
       });
+      return response.data;
     } catch (e) {
       showNotification(te(e.errorCode) || e.message, "error");
     }

@@ -8,6 +8,7 @@ import {
   Hash,
   Library,
   BarChart,
+  Trophy,
 } from "lucide-react";
 import styles from "./MenuSidebar.module.css";
 import classNames from "classnames/bind";
@@ -28,7 +29,7 @@ function MenuSidebar({ collapsed, className, onClose }) {
     { icon: BarChart, label: "Thống kê", to: "/stats" },
     // { hr: true },
     // { icon: FileText, label: "Hộp chứa từ" },
-    // { icon: Trophy, label: "Xếp hạng" },
+    { icon: Trophy, label: "Xếp hạng" },
     { hr: true },
     // { icon: Clipboard, label: "Ghi chú" },
     { icon: Hash, label: "Thẻ ghi nhớ", to: "/createwordset" },

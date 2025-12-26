@@ -1,16 +1,130 @@
+/* DialogWrapper Styles - Modern Design */
+
 .dialogWrapper {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 50;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 .content {
-    background-color: var(--color-white);
-    box-shadow: var(--box-shadow-primary);
-    border-radius: var(--radius-medium);
+  background-color: var(--color-white, #ffffff);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-medium, 8px);
+  max-width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e3e5e8;
+  background-color: #ffffff;
+  border-radius: var(--radius-medium, 8px) var(--radius-medium, 8px) 0 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #313338;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #5c5e66;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.closeBtn:hover {
+  background-color: #f2f3f5;
+  color: #313338;
+}
+
+.closeBtn:active {
+  transform: scale(0.95);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* Custom Scrollbar for body */
+.body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: #f2f3f5;
+  border-radius: 4px;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: #d1d3d9;
+  border-radius: 4px;
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background: #b5bac1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dialogWrapper {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 16px 20px;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+  }
 }

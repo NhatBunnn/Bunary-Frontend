@@ -56,19 +56,6 @@ function Post({ post }) {
         </div>
       )}
 
-      {/* Stats */}
-      <div className={c("stats")}>
-        <div className={c("stat-item")}>
-          <FontAwesomeIcon icon={faThumbsUp} className="me-1 text-primary" />
-          <strong>{currentPost.stats.likes}</strong>
-        </div>
-        <div className={c("stat-item")}>
-          <span>{currentPost.stats.comments} comments</span>
-          <span className="mx-2">•</span>
-          <span>{currentPost.stats.shares} shares</span>
-        </div>
-      </div>
-
       {/* Actions */}
       <div className={c("actions")}>
         <button className={c("action-btn")}>

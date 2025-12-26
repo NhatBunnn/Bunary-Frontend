@@ -64,21 +64,24 @@ function ProfileLayout({ children }) {
                   className={c("tabBtn", {
                     active: window.location.pathname === "/profile",
                   })}
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate(`/u/${user.username}`)}
                 >
-                  Posts
+                  Bài viết
                 </button>
                 <button
                   type="button"
                   className={c("tabBtn", {
                     active: window.location.pathname.includes("follower"),
                   })}
-                  onClick={() => navigate("/profile/follower")}
+                  onClick={() => navigate(`/u/${user.username}/friends`)}
                 >
-                  Followers
+                  Bạn bè
                 </button>
                 <button type="button" className={c("tabBtn")}>
-                  Following
+                  Ảnh
+                </button>
+                <button type="button" className={c("tabBtn")}>
+                  Video
                 </button>
               </div>
 

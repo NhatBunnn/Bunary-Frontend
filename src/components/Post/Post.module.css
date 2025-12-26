@@ -94,22 +94,7 @@
   display: block;
 }
 
-/* Stats */
-.stats {
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
-  color: var(--post-text-meta);
-}
 
-.stat-item strong {
-  color: var(--post-text);
-  font-weight: 600;
-  margin-left: 4px;
-}
 
 /* Actions */
 .actions {

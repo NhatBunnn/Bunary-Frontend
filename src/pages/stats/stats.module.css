@@ -1,46 +1,208 @@
-.darkMode {
-  background: #f8fafc;
+:root {
+  --stats-bg: #f8fafc;
+  --stats-card-bg: #ffffff;
+  --stats-accent: #3b82f6;
+  --stats-text-primary: #1a1a1a;
+  --stats-text-secondary: #64748b;
+  --stats-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --stats-radius: 24px;
 }
 
-.bgGradientPrimary {
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+.statsPage {
+  background-color: var(--stats-bg);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
-.textGradientPrimary {
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  color: white;
-  font-weight: bold;
+.header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.iconBox {
-  width: 56px;
-  height: 56px;
+.tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 0.4rem;
   border-radius: 16px;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  gap: 0.25rem;
+}
+
+.tabBtn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--stats-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activeTab {
+  background: white;
+  color: var(--stats-accent);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--stats-text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  background: var(--stats-card-bg);
+  border-radius: var(--stats-radius);
+  padding: 2rem;
+  box-shadow: var(--stats-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--stats-accent);
 }
 
-.card {
+.statInfo h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--stats-text-primary);
+}
+
+.statInfo p {
+  color: var(--stats-text-secondary);
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.activityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.activityCard {
   background: white;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.card:hover {
-  transform: translateY(-4px);
+.activityCard h5 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.activityCard p {
+  font-size: 0.75rem;
+  color: var(--stats-text-secondary);
+  margin-bottom: 0;
+}
+
+.chartContainer {
+  background: white;
+  border-radius: var(--stats-radius);
+  padding: 2rem;
+  box-shadow: var(--stats-shadow);
+  margin-bottom: 3rem;
+}
+
+.achievementsContainer {
+  background: white;
+  border-radius: var(--stats-radius);
+  padding: 2.5rem;
+  box-shadow: var(--stats-shadow);
+}
+
+.achievementGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.5rem;
+}
+
+.badge {
+  aspect-ratio: 1;
+  background: #f8fafc;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.badge.unlocked {
+  background: #fff;
+  border-color: #f1f5f9;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.badge.locked {
+  opacity: 0.6;
+}
+
+.badge p {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  color: var(--stats-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .statCard {
+    padding: 1.5rem;
+  }
 }

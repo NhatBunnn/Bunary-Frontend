@@ -3,10 +3,13 @@ import { CheckCircle2, XCircle, Trophy, RotateCw } from "lucide-react";
 import classNames from "classnames/bind";
 import styles from "./MultipleChoice.module.css";
 import useMultipleChoice from "./useMultipleChoice";
+import FinishScreen from "../components/FinishScreen/FinishScreen";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 const MultipleChoice = () => {
+  const navigate = useNavigate();
   const { words } = useMultipleChoice();
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -126,40 +129,15 @@ const MultipleChoice = () => {
   if (isTestComplete) {
     const percentage = Math.round((score / questions.length) * 100);
     return (
-      <div className="d-flex min-vh-100 bg-light align-items-center">
-        <div className="container py-5">
-          <div className="row justify-content-center">
-            <div className="col-12 col-sm-8 col-md-6 col-lg-5">
-              <div className={cx("result-card", "text-center")}>
-                <div className={cx("trophy-circle")}>
-                  <Trophy size={40} className="text-primary" />
-                </div>
-                <h2 className="h3 mt-4 mb-3">Test Complete!</h2>
-                <div className="my-4">
-                  <h3 className="display-4 text-primary mb-1">
-                    {score}/{questions.length}
-                  </h3>
-                  <p className="h4 text-muted mb-3">{percentage}%</p>
-                  <p className="lead mb-4">
-                    {percentage >= 80
-                      ? "🎉 Excellent!"
-                      : percentage >= 60
-                      ? "👏 Good job!"
-                      : "💪 Keep practicing!"}
-                  </p>
-                </div>
-                <button
-                  onClick={handleRestartTest}
-                  className="btn btn-primary btn-lg px-5"
-                >
-                  <RotateCw size={20} className="me-2" />
-                  Try Again
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <FinishScreen
+        onRestart={handleRestartTest}
+        onGoHome={() => navigate("/")}
+        stats={{
+          pointsEarned: score * 10, // Giả định mỗi câu đúng 10 điểm
+          sparksEarned: Math.floor(score / 2), // Giả định mỗi 2 câu đúng được 1 spark
+        }}
+        percentage={percentage}
+      />
     );
   }
 

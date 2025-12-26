@@ -1,38 +1,59 @@
-// FinishScreen.tsx
-import React, { useEffect } from "react";
+import React from "react";
 import classNames from "classnames/bind";
 import styles from "./FinishScreen.module.css";
-
-// Font Awesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { Trophy, RotateCcw, Home, Target, Zap } from "lucide-react";
 
 const c = classNames.bind(styles);
 
-const FinishScreen = ({ onRestart, onGoHome }) => {
+const FinishScreen = ({ onRestart, onGoHome, stats = {} }) => {
+  // Extract values with sensible defaults
+  const points = stats?.pointsEarned ?? stats?.points ?? 0;
+  const sparks = stats?.sparksEarned ?? stats?.sparks ?? 0;
+
   return (
     <div className={c("container")}>
-      <div className={c("card")}>
-        <div className="text-center">
-          {/* Icon Font Awesome */}
-          <FontAwesomeIcon icon={faCircleCheck} className={c("icon")} />
-
+      <div className={c("finishCard")}>
+        <div className={c("headerSection")}>
+          <div className={c("iconWrapper")}>
+            <Trophy className={c("celebrationIcon")} size={42} />
+          </div>
           <h1 className={c("title")}>Hoàn thành!</h1>
           <p className={c("subtitle")}>
-            Chúc mừng bạn đã học xong bộ flashcard tiếng Anh!
+            Chúc mừng bạn đã hoàn thành phiên học tập tuyệt vời này. Hãy tiếp
+            tục phát huy nhé!
           </p>
+        </div>
 
-          <div className={c("button-group")}>
-            <button
-              onClick={onRestart}
-              className={c("btn", "btn-primary", "me-3")}
-            >
-              Học lại
-            </button>
-            <button onClick={onGoHome} className={c("btn", "btn-outline")}>
-              Về trang chủ
-            </button>
+        <div className={c("statsRow")}>
+          <div className={c("statCard")}>
+            <Target
+              size={20}
+              className={c("pointsText")}
+              style={{ marginBottom: "8px" }}
+            />
+            <span className={c("statValue", "pointsText")}>+{points}</span>
+            <span className={c("statLabel")}>Điểm số</span>
           </div>
+          <div className={c("statCard")}>
+            <Zap
+              size={20}
+              className={c("sparksText")}
+              style={{ marginBottom: "8px" }}
+            />
+            <span className={c("statValue", "sparksText")}>+{sparks}</span>
+            <span className={c("statLabel")}>Sparks</span>
+          </div>
+        </div>
+
+        <div className={c("actionGroup")}>
+          <button onClick={onRestart} className={c("btn", "btnPrimary")}>
+            <RotateCcw className={c("btnIcon")} />
+            <span>Học lại</span>
+          </button>
+          <button onClick={onGoHome} className={c("btn", "btnOutline")}>
+            <Home className={c("btnIcon")} />
+            <span>Về trang chủ</span>
+          </button>
         </div>
       </div>
     </div>

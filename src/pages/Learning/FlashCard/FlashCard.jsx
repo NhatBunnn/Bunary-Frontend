@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Button from "@components/Button/Button";
 import styles from "./FlashCard.module.css";
 import classNames from "classnames/bind";
 import useFlashCard from "./useFlashCard";
@@ -7,6 +6,7 @@ import Loading from "@components/Loading/Loading";
 import FinishScreen from "../components/FinishScreen/FinishScreen";
 import { useNavigate } from "react-router-dom";
 import { getThumbnailUrl } from "@utils/getThumbnailUrl";
+import { ChevronLeft, ChevronRight, RotateCw, Info } from "lucide-react";
 
 const c = classNames.bind(styles);
 
@@ -15,6 +15,7 @@ function FlashCard() {
     useFlashCard();
   const [isFlip, setIsFlip] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [studyResult, setStudyResult] = useState(null);
 
   const navigate = useNavigate();
 
@@ -24,18 +25,10 @@ function FlashCard() {
 
   if (loading) return <Loading />;
 
-  const flashCardFields = [
-    { key: "term" },
-    { key: "ipa" },
-    { key: "meaning" },
-    { key: "partOfSpeech" },
-  ];
-
-  const flashCardSides = [{ side: "front" }, { side: "back" }];
-
-  const handleSlideNext = () => {
+  const handleSlideNext = async () => {
     if (currentCard + 1 === words.length) {
-      handleRecordStudy();
+      const result = await handleRecordStudy();
+      setStudyResult(result);
     }
 
     setCurrentCard((prev) => prev + 1);
@@ -51,63 +44,118 @@ function FlashCard() {
     setIsFlip((prev) => !prev);
   };
 
+  const progressPercentage = ((currentCard + 1) / words.length) * 100;
+
   return (
     <div className={c("flashCard")}>
       {currentCard === words.length ? (
         <FinishScreen
-          onRestart={() => setCurrentCard(0)}
+          onRestart={() => {
+            setCurrentCard(0);
+            setStudyResult(null);
+          }}
           onGoHome={() => navigate("/")}
+          stats={studyResult}
         />
       ) : (
         <>
-          <div className={c("card-counter")}>
-            {currentCard + 1}/{words.length}
+          <div className={c("header")}>
+            <div className={c("cardCounter")}>
+              {currentCard + 1} / {words.length}
+            </div>
+            <div className={c("progressContainer")}>
+              <div
+                className={c("progressBar")}
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
           </div>
 
           <div className={c("content")}>
             <div
-              className={c(
-                "card",
-                "d-flex",
-                "justify-content-center",
-                "align-items-center",
-                isFlip ? "flipped" : ""
-              )}
+              className={c("card", isFlip ? "flipped" : "")}
               onClick={handleFlip}
             >
-              {flashCardSides.map((flashCardSide, i) => (
-                <div key={i} className={c(flashCardSide.side)}>
-                  {settings[flashCardSide.side].image === true && (
-                    <div className={c("image")}>
-                      <img
-                        src={getThumbnailUrl(words[currentCard]?.thumbnail)}
-                        alt=""
-                      />
-                    </div>
+              {/* Front Side */}
+              <div className={c("side", "front")}>
+                {settings.front.image && words[currentCard]?.thumbnail && (
+                  <div className={c("imageWrapper")}>
+                    <img
+                      src={getThumbnailUrl(words[currentCard]?.thumbnail)}
+                      alt=""
+                    />
+                  </div>
+                )}
+                {settings.front.partOfSpeech &&
+                  words[currentCard]?.partOfSpeech && (
+                    <span className={c("partOfSpeech")}>
+                      {words[currentCard].partOfSpeech}
+                    </span>
                   )}
-                  {flashCardFields.map((field, j) =>
-                    settings?.[flashCardSide.side]?.[field.key] ? (
-                      <div key={j}>{words?.[currentCard]?.[field.key]}</div>
-                    ) : null
-                  )}
+                {settings.front.term && (
+                  <h2 className={c("term")}>{words[currentCard]?.term}</h2>
+                )}
+                {settings.front.ipa && words[currentCard]?.ipa && (
+                  <span className={c("ipa")}>/{words[currentCard].ipa}/</span>
+                )}
+                {settings.front.meaning && (
+                  <p className={c("meaning")}>{words[currentCard]?.meaning}</p>
+                )}
+                <div className={c("flipHint")}>
+                  <RotateCw size={14} />
+                  <span>Click to flip</span>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <div className={c("action")}>
-              <div className={c("control-btn")}>
-                <Button
-                  label="Trước"
-                  className={c("ms-2")}
-                  onClick={handleSlidePrev}
-                />
-                <Button
-                  label="Sau"
-                  className={c("me-2")}
-                  onClick={handleSlideNext}
-                />
+              {/* Back Side */}
+              <div className={c("side", "back")}>
+                {settings.back.image && words[currentCard]?.thumbnail && (
+                  <div className={c("imageWrapper")}>
+                    <img
+                      src={getThumbnailUrl(words[currentCard]?.thumbnail)}
+                      alt=""
+                    />
+                  </div>
+                )}
+                {settings.back.partOfSpeech &&
+                  words[currentCard]?.partOfSpeech && (
+                    <span className={c("partOfSpeech")}>
+                      {words[currentCard].partOfSpeech}
+                    </span>
+                  )}
+                {settings.back.term && (
+                  <h2 className={c("term")}>{words[currentCard]?.term}</h2>
+                )}
+                {settings.back.ipa && words[currentCard]?.ipa && (
+                  <span className={c("ipa")}>/{words[currentCard].ipa}/</span>
+                )}
+                {settings.back.meaning && (
+                  <p className={c("meaning")}>{words[currentCard]?.meaning}</p>
+                )}
+                <div className={c("flipHint")}>
+                  <RotateCw size={14} />
+                  <span>Click to flip</span>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div className={c("actions")}>
+            <button
+              className={c("navBtn")}
+              onClick={handleSlidePrev}
+              disabled={currentCard === 0}
+              title="Previous"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            <button
+              className={c("navBtn")}
+              onClick={handleSlideNext}
+              title="Next"
+            >
+              <ChevronRight size={28} />
+            </button>
           </div>
         </>
       )}

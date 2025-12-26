@@ -7,7 +7,7 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Star } from "lucide-react"; // chỉ dùng Star
+import { Star } from "lucide-react";
 import styles from "./WordSetPage.module.css";
 import classNames from "classnames/bind";
 import useWordSetPage from "./useWordSetPage";
@@ -55,8 +55,7 @@ const WordSetPage = () => {
 
   return (
     <div className={c("container")}>
-      {/* Dialog */}
-
+      {/* Dialogs */}
       <AddToCollection
         isOpen={openAddToCollect}
         onCancel={() => setOpenAddToCollect(false)}
@@ -71,66 +70,67 @@ const WordSetPage = () => {
       >
         <FlashCardSetting wordSetId={wordSet.id} />
       </DialogWrapper>
-      {/* Title */}
-      <TitleSection
-        title={wordSet.title}
-        onTop={true}
-        style={{ marginBottom: "8px" }}
-      >
-        <Button
-          label="Lưu"
-          icon={<FontAwesomeIcon icon={faBookmark} />}
-          onClick={() => {
-            setOpenAddToCollect(true);
-          }}
-        />
-        <div className={c("moreOptions", "d-inline")}>
-          <Button
-            icon={<FontAwesomeIcon icon={faEllipsisVertical} />}
-            onClick={() => setMoreOptions((prev) => !prev)}
-          />
-          {openMoreOptions && (
-            <div className={c("dropdown", "p-3", "gap-2")}>
-              {isAuthor && (
-                <Button
-                  variant="menu"
-                  label="Chỉnh sửa"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigation(`/wordset/${wordSet.id}/edit`);
-                  }}
-                />
-              )}
-            </div>
-          )}
-        </div>
-      </TitleSection>
 
-      {/* info */}
-      <div className={c("header")}>
-        <div>
+      {/* Header section with Title and Action Bar */}
+      <div className={c("headerSection")}>
+        <TitleSection
+          title={wordSet.title}
+          onTop={true}
+          className={c("titleSection")}
+        >
+          <Button
+            label="Lưu vào bộ"
+            icon={<FontAwesomeIcon icon={faBookmark} />}
+            onClick={() => setOpenAddToCollect(true)}
+          />
+          <div className={c("moreOptions", "d-inline-block")}>
+            <Button
+              icon={<FontAwesomeIcon icon={faEllipsisVertical} />}
+              onClick={() => setMoreOptions((prev) => !prev)}
+            />
+            {openMoreOptions && (
+              <div className={c("dropdownWrapper")}>
+                {isAuthor && (
+                  <Button
+                    variant="menu"
+                    label="Chỉnh sửa"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigation(`/wordset/${wordSet.id}/edit`);
+                    }}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        </TitleSection>
+
+        <div className={c("header")}>
           <div className={c("stats")}>
-            <div>
-              <FontAwesomeIcon icon={faUsers} /> {wordSet.stat.studyCount} lượt
-              học
+            <div className={c("statItem")}>
+              <FontAwesomeIcon icon={faUsers} size="sm" />
+              <span>{wordSet.stat.studyCount} lượt học</span>
             </div>
-            <div>
+            <div className={c("statItem")}>
               {wordSet?.stat?.ratingCount >= 3 ? (
                 <>
-                  <FontAwesomeIcon icon={faStar} color="orange" />
-                  {`${wordSet.stat.ratingAvg} / 5`}
+                  <FontAwesomeIcon icon={faStar} color="#ffc107" size="sm" />
+                  <span className={c("ratingNum")}>
+                    {wordSet.stat.ratingAvg} / 5
+                  </span>
                 </>
               ) : (
-                "chưa có đánh giá"
+                <span>Chưa có đánh giá</span>
               )}
-              {` (${wordSet?.stat?.ratingCount} lượt đánh giá)`}
+              <span className={c("ratingTotal")}>
+                ({wordSet?.stat?.ratingCount || 0} đánh giá)
+              </span>
             </div>
           </div>
 
-          {/* Action bar */}
-          <div className={c("action-bar", "d-flex", "mb-3")}>
+          <div className={c("actionBar")}>
             <Button
-              label="Thẻ ghi nhớ"
+              label="Flashcards"
               icon={<FontAwesomeIcon icon={faIdCard} />}
               onClick={() =>
                 setOpenSetting((prev) => ({ ...prev, flashCard: true }))
@@ -142,7 +142,7 @@ const WordSetPage = () => {
               to={`/learning/${wordSet.id}/multiple-choice`}
             />
             <Button
-              label="Kiểm tra"
+              label="Test"
               icon={<FontAwesomeIcon icon={faIdCard} />}
               to={`/learning/${wordSet.id}/test`}
             />
@@ -150,210 +150,120 @@ const WordSetPage = () => {
         </div>
       </div>
 
-      {/* Main Grid */}
+      {/* Main Grid Content */}
       <div className={c("mainGrid")}>
-        <div className={c("thumbnail")}>
-          <img
-            src={wordSet?.thumbnail}
-            alt={wordSet?.title}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "8px",
-            }}
-          />
+        <div className={c("thumbnailWrapper")}>
+          <img src={wordSet?.thumbnail} alt={wordSet?.title} />
         </div>
 
         <div className={c("wordGrid")}>
           {words.map((word, idx) => (
             <div key={idx} className={c("wordCard")}>
-              <div className={c("wordCardLeft")}>
-                <img
-                  src={getThumbnailUrl(word?.thumbnail)}
-                  alt={word?.term}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                  }}
-                />
+              <div className={c("wordImage")}>
+                <img src={getThumbnailUrl(word?.thumbnail)} alt={word?.term} />
               </div>
-
-              <div className={c("wordCardRight")}>
-                <div>
-                  <strong>{word?.term}</strong> ({word?.partOfSpeech})
+              <div className={c("wordContent")}>
+                <div className={c("wordTopLine")}>
+                  <span className={c("term")}>{word?.term}</span>
+                  <span className={c("pos")}>({word?.partOfSpeech})</span>
                 </div>
-                <div>/{word.ipa}/</div>
-                <div>{word.meaning}</div>
+                <div className={c("ipa")}>/{word.ipa}/</div>
+                <div className={c("meaning")}>{word.meaning}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className={c("separator")} />
+      <div className={c("divider")} />
 
-      {/* Author Section */}
-      <div className={c("authorSection")}>
-        <div className={c("avatar")}>
-          <img
-            src={wordSet.author?.avatar}
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-        <div>
-          <div
-            style={{ fontSize: "0.875rem", color: "#555", marginBottom: "4px" }}
-          >
-            Created by{" "}
-            <strong> {wordSet.author?.fullName || "Unknown Author"}</strong>
-          </div>
-          <div style={{ fontSize: "0.75rem", color: "#888" }}>
-            Updated 2 weeks ago
-          </div>
+      {/* Author Details */}
+      <div className={c("authorCard")}>
+        <img
+          src={wordSet.author?.avatar}
+          alt={wordSet.author?.fullName}
+          className={c("authorAvatar")}
+        />
+        <div className={c("authorBio")}>
+          <span className={c("authorLabel")}>Tác giả</span>
+          <span className={c("authorName")}>
+            {wordSet.author?.fullName || "Bunary User"}
+          </span>
         </div>
       </div>
 
-      <div className={c("separator")} />
+      <div className={c("divider")} />
 
-      {/* Rating & Review */}
-      <div style={{ padding: "24px 0" }}>
-        <h2
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: "600",
-            marginBottom: "16px",
-          }}
-        >
-          Rate this word set
-        </h2>
+      {/* Rating System */}
+      <div className={c("ratingContainer")}>
+        <h2 className={c("sectionTitle")}>Đánh giá bộ từ vựng</h2>
 
-        {/* Lucide Stars */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginBottom: "16px",
-          }}
-        >
-          <div style={{ display: "flex", gap: "4px" }}>
-            {[1, 2, 3, 4, 5].map((star) => {
-              const filled = star <= (hoverRating || rating.value);
-              return (
-                <div
-                  key={star}
-                  onClick={(e) =>
-                    setRating((prev) => ({ ...prev, value: star }))
-                  }
-                  onMouseEnter={() => setHoverRating(star)}
-                  onMouseLeave={() => setHoverRating(0)}
-                  style={{
-                    cursor: "pointer",
-                    transition: "transform 0.2s",
-                    transform: filled ? "scale(1.3)" : "scale(1)",
-                  }}
-                >
-                  <Star
-                    size={28}
-                    strokeWidth={2.5}
-                    color={filled ? "#ffc107" : "#ccc"}
-                    fill={filled ? "#ffc107" : "none"}
-                  />
-                </div>
-              );
-            })}
-          </div>
-          <span style={{ color: "#666", fontSize: "0.875rem" }}>
-            {rating.value > 0
-              ? `You rated ${rating.value} star${rating.value > 1 ? "s" : ""}`
-              : "Click to rate"}
-          </span>
-        </div>
-
-        {/* Textarea + Submit */}
-        <textarea
-          value={rating.comment}
-          onChange={(e) =>
-            setRating((prev) => ({ ...prev, comment: e.target.value }))
-          }
-          placeholder="Write your review here..."
-          style={{
-            width: "100%",
-            minHeight: "100px",
-            padding: "12px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            resize: "none",
-            fontSize: "0.9375rem",
-            marginBottom: "12px",
-            fontFamily: "inherit",
-          }}
-        />
-
-        <button
-          className={c("submitButton")}
-          style={{ padding: "10px 20px" }}
-          onClick={() => handleRatingWordSet()}
-        >
-          Submit Review
-        </button>
-
-        {/* Sample Review */}
-        {ratingList?.map((rating, i) => (
-          <div
-            style={{ marginTop: "32px", display: "flex", gap: "12px" }}
-            key={i}
-          >
-            <img
-              src={rating.user.avatar}
-              alt={rating.user.fullName}
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
-            <div>
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "0.9375rem",
-                  marginBottom: "4px",
-                }}
-              >
-                {rating.user.fullName}{" "}
-                <span style={{ color: "#ffc107", marginLeft: "6px" }}>
-                  {[...Array(rating.value)].map((_, i) => (
-                    <span key={i}>⭐</span>
-                  ))}
-                </span>
-              </div>
-              <div
-                style={{
-                  fontSize: "0.875rem",
-                  color: "#333",
-                  lineHeight: "1.5",
-                }}
-              >
-                {rating.comment}
-              </div>
-              <div
-                style={{ fontSize: "0.75rem", color: "#888", marginTop: "4px" }}
-              >
-                {rating.createdAt}
-              </div>
+        <div className={c("ratingInput")}>
+          <div className={c("starsRow")}>
+            <div className={c("starGroup")}>
+              {[1, 2, 3, 4, 5].map((star) => {
+                const filled = star <= (hoverRating || rating.value);
+                return (
+                  <button
+                    key={star}
+                    className={c("starBtn")}
+                    onClick={() =>
+                      setRating((prev) => ({ ...prev, value: star }))
+                    }
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                  >
+                    <Star
+                      size={24}
+                      strokeWidth={filled ? 0 : 2}
+                      color={filled ? "#ffc107" : "#cbd5e1"}
+                      fill={filled ? "#ffc107" : "none"}
+                    />
+                  </button>
+                );
+              })}
             </div>
           </div>
-        ))}
+
+          <textarea
+            value={rating.comment}
+            onChange={(e) =>
+              setRating((prev) => ({ ...prev, comment: e.target.value }))
+            }
+            placeholder="Chia sẻ cảm nghĩ của bạn về bộ từ này..."
+            className={c("reviewTextarea")}
+          />
+
+          <button className={c("submitBtn")} onClick={handleRatingWordSet}>
+            Gửi nhận xét
+          </button>
+        </div>
+
+        {/* User Reviews */}
+        <div className={c("reviewList")}>
+          {ratingList?.map((item, i) => (
+            <div className={c("reviewItem")} key={i}>
+              <img
+                src={item.user.avatar}
+                alt={item.user.fullName}
+                className={c("reviewerImg")}
+              />
+              <div className={c("reviewBody")}>
+                <div className={c("reviewHead")}>
+                  <span className={c("reviewerName")}>
+                    {item.user.fullName}
+                  </span>
+                  <div className={c("starsDisplay")}>
+                    {"★".repeat(item.value)}
+                    {"☆".repeat(5 - item.value)}
+                  </div>
+                </div>
+                <p className={c("reviewText")}>{item.comment}</p>
+                <div className={c("reviewDate")}>{item.createdAt}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
