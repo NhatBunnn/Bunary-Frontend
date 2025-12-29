@@ -7,8 +7,8 @@ const c = classNames.bind(styles);
 
 const FinishScreen = ({ onRestart, onGoHome, stats = {} }) => {
   // Extract values with sensible defaults
-  const points = stats?.pointsEarned ?? stats?.points ?? 0;
-  const sparks = stats?.sparksEarned ?? stats?.sparks ?? 0;
+  const points = stats?.point || 0;
+  const sparks = stats?.spark || 0;
 
   return (
     <div className={c("container")}>
@@ -41,7 +41,7 @@ const FinishScreen = ({ onRestart, onGoHome, stats = {} }) => {
               style={{ marginBottom: "8px" }}
             />
             <span className={c("statValue", "sparksText")}>+{sparks}</span>
-            <span className={c("statLabel")}>Sparks</span>
+            <span className={c("statLabel")}>Tia lửa</span>
           </div>
         </div>
 

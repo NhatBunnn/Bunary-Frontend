@@ -14,7 +14,6 @@ import {
   BarChart3,
   Award,
 } from "lucide-react";
-
 import classNames from "classnames/bind";
 import styles from "./stats.module.css";
 import useStats from "./useStats";
@@ -22,12 +21,13 @@ import useStats from "./useStats";
 const c = classNames.bind(styles);
 
 export default function Stats() {
-  const { totals, charts } = useStats();
-  const [activeTab, setActiveTab] = useState("today");
+  const { total, chart, fetchLastDaysStats, fetchTotalStats, period } =
+    useStats();
 
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
+  // Chuẩn bị dữ liệu chart theo tab
   useEffect(() => {
     if (!chartRef.current) return;
     if (chartInstance.current) chartInstance.current.destroy();
@@ -35,15 +35,21 @@ export default function Stats() {
     let labels = [];
     let data = [];
 
-    switch (activeTab) {
-      case "today":
-      case "thisWeek":
-        labels = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
-        data = charts?.thisWeek?.map((i) => i.learned_count) ?? [];
+    switch (period) {
+      case "TODAY":
+        labels = chart.map((c) => new Date(c.date).getDate());
+        const todayData = chart.find(
+          (c) => c.date === new Date().toISOString().split("T")[0]
+        );
+        data = [todayData?.learnedWordSetsCount || 0];
         break;
-      case "thisMonth":
-        labels = Array.from({ length: 30 }, (_, i) => i + 1);
-        data = charts?.thisMonth?.map((i) => i.learned_count) ?? [];
+      case "LAST_7_DAYS":
+        labels = chart.map((c) => new Date(c.date).toLocaleDateString());
+        data = chart.map((c) => c.learnedWordSetsCount);
+        break;
+      case "LAST_28_DAYS":
+        labels = chart.map((c) => new Date(c.date).getDate());
+        data = chart.map((c) => c.learnedWordSetsCount);
         break;
       default:
         break;
@@ -82,36 +88,33 @@ export default function Stats() {
             grid: { color: "#f1f5f9" },
             ticks: { stepSize: 1, color: "#64748b" },
           },
-          x: {
-            grid: { display: false },
-            ticks: { color: "#64748b" },
-          },
+          x: { grid: { display: false }, ticks: { color: "#64748b" } },
         },
       },
     });
 
     return () => chartInstance.current?.destroy();
-  }, [charts, activeTab]);
+  }, [chart, period]);
 
   const mainStats = [
     {
       icon: Sparkles,
       label: "Điểm tích lũy",
-      value: totals[activeTab]?.point_earned || 0,
+      value: total.point || 0,
       color: "#f59e0b",
       bg: "rgba(245, 158, 11, 0.1)",
     },
     {
       icon: Gem,
       label: "Tinh thể",
-      value: "2,340",
+      value: total.spark || 0,
       color: "#8b5cf6",
       bg: "rgba(139, 92, 246, 0.1)",
     },
     {
       icon: Zap,
       label: "Tia sét",
-      value: totals[activeTab]?.spark_earned || 0,
+      value: total.spark || 0,
       color: "#3b82f6",
       bg: "rgba(59, 130, 246, 0.1)",
     },
@@ -121,9 +124,13 @@ export default function Stats() {
     {
       icon: BookOpen,
       label: "Từ vựng đã học",
-      value: totals[activeTab]?.learned_count || 0,
+      value: total.learnedWordSetsCount || 0,
     },
-    { icon: Layout, label: "Bộ từ vựng đã tạo", value: "12" },
+    {
+      icon: Layout,
+      label: "Bộ từ vựng đã tạo",
+      value: total.wordsetCreatedCount || 0,
+    },
     { icon: Flame, label: "Chuỗi ngày học", value: "12 ngày" },
     { icon: Clock, label: "Thời gian học", value: "48.5h" },
   ];
@@ -131,7 +138,7 @@ export default function Stats() {
   return (
     <div className={c("statsPage")}>
       <div className={c("container")}>
-        {/* Header Section */}
+        {/* Header */}
         <header className={c("header")}>
           <div>
             <h1 style={{ fontSize: "2rem", fontWeight: 800, margin: 0 }}>
@@ -142,23 +149,29 @@ export default function Stats() {
             </p>
           </div>
           <div className={c("tabs")}>
-            {[
-              { id: "today", label: "Hôm nay" },
-              { id: "thisWeek", label: "Tuần này" },
-              { id: "thisMonth", label: "Tháng này" },
-            ].map((tab) => (
+            {["TOTAL", "TODAY", "LAST_7_DAYS", "LAST_28_DAYS"].map((tab) => (
               <button
-                key={tab.id}
-                className={c("tabBtn", activeTab === tab.id && "activeTab")}
-                onClick={() => setActiveTab(tab.id)}
+                key={tab}
+                className={c("tabBtn", period === tab && "activeTab")}
+                onClick={() =>
+                  tab === "TOTAL" ? fetchTotalStats() : fetchLastDaysStats(tab)
+                }
               >
-                {tab.label}
+                {tab === "TOTAL"
+                  ? "Tất cả"
+                  : tab === "TODAY"
+                  ? "Hôm nay"
+                  : tab === "LAST_7_DAYS"
+                  ? "Tuần này"
+                  : tab === "LAST_28_DAYS"
+                  ? "Tháng này"
+                  : ""}
               </button>
             ))}
           </div>
         </header>
 
-        {/* Overview Stats Grid */}
+        {/* Stats */}
         <div className={c("overviewGrid")}>
           {mainStats.map((stat, idx) => (
             <div className={c("statCard")} key={idx}>
@@ -176,7 +189,7 @@ export default function Stats() {
           ))}
         </div>
 
-        {/* Activity Section */}
+        {/* Activity */}
         <h2 className={c("sectionTitle")}>
           <BarChart3 size={20} /> Hoạt động học tập
         </h2>
@@ -190,38 +203,40 @@ export default function Stats() {
           ))}
         </div>
 
-        {/* Chart Section */}
-        <div className={c("chartContainer")}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1.5rem",
-            }}
-          >
-            <h3
+        {/* Chart */}
+        {period !== "TOTAL" && (
+          <div className={c("chartContainer")}>
+            <div
               style={{
-                fontSize: "1.125rem",
-                fontWeight: 700,
-                margin: 0,
                 display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
-                gap: "0.5rem",
+                marginBottom: "1.5rem",
               }}
             >
-              <TrendingUp size={18} /> Biểu đồ học tập
-            </h3>
-            <span style={{ fontSize: "0.875rem", color: "#64748b" }}>
-              Đơn vị: Từ vựng
-            </span>
+              <h3
+                style={{
+                  fontSize: "1.125rem",
+                  fontWeight: 700,
+                  margin: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                <TrendingUp size={18} /> Biểu đồ học tập
+              </h3>
+              <span style={{ fontSize: "0.875rem", color: "#64748b" }}>
+                Đơn vị: Từ vựng
+              </span>
+            </div>
+            <div style={{ height: 350 }}>
+              <canvas ref={chartRef}></canvas>
+            </div>
           </div>
-          <div style={{ height: 350 }}>
-            <canvas ref={chartRef}></canvas>
-          </div>
-        </div>
+        )}
 
-        {/* Achievements Section */}
+        {/* Achievements */}
         <h2 className={c("sectionTitle")}>
           <Award size={20} /> Thành tích đạt được
         </h2>

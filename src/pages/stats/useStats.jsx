@@ -1,44 +1,58 @@
 import { useFetcher } from "@api/fetcher";
 import useAppBase from "@hooks/useAppBase";
-import { use, useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 function useStats() {
   const { fetcher } = useFetcher();
-  const { te, setLoading, loading, showNotification } = useAppBase();
+  const { setLoading } = useAppBase();
 
-  const [charts, setCharts] = useState({
-    today: null,
-    thisWeek: [],
-    thisMonth: [],
-  });
+  const [chart, setChart] = useState([]);
+  const [period, setPeriod] = useState("TODAY");
+  const [total, setTotal] = useState({});
 
-  const [totals, setTotals] = useState({
-    today: null,
-    thisWeek: null,
-    thisMonth: null,
-  });
+  const fetchTotalStats = async () => {
+    setLoading(true);
+    try {
+      const response = await fetcher({
+        url: `/api/v1/users/me/stats`,
+        method: "GET",
+      });
+
+      const data = response.data || {};
+      setTotal(data || {});
+      setPeriod("TOTAL");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchLastDaysStats = async (period = "TODAY") => {
+    setLoading(true);
+    try {
+      const response = await fetcher({
+        url: `/api/v1/users/me/stats-daily`,
+        method: "GET",
+        params: { period },
+      });
+
+      const data = response.data || {};
+      setTotal(data.total || {});
+      setChart(data.chart || []);
+      setPeriod(data.period || period);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      try {
-        const response = await fetcher({
-          url: `/api/v1/user-wordset-daily/self`,
-          method: "GET",
-        });
-
-        setTotals(response.data?.totals || {});
-        setCharts(response.data?.charts || {});
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
+    fetchLastDaysStats("TODAY");
   }, []);
 
-  return { totals, charts };
+  return { total, chart, period, fetchLastDaysStats, fetchTotalStats };
 }
 
 export default useStats;
