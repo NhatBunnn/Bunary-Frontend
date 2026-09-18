@@ -31,7 +31,7 @@ function VerifyEmail() {
 
     try {
       const response = await fetcher({
-        url: "/api/v1/auth/send-code",
+        url: "/api/v1/auth/send-otp",
         method: "POST",
         data: { email },
       });
@@ -61,7 +61,7 @@ function VerifyEmail() {
 
       const data = {
         email,
-        code,
+        otp: code,
       };
 
       const response = await fetcher({
@@ -109,7 +109,7 @@ function VerifyEmail() {
                 "otp",
                 "d-flex",
                 "align-items-center",
-                "justify-content-center"
+                "justify-content-center",
               )}
             >
               <ValidateInput value={code} onChange={setCode} error={error} />
