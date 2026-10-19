@@ -90,7 +90,7 @@ function UserDashboard() {
           </thead>
           <tbody>
             {userList?.map((user, i) => (
-              <tr>
+              <tr key={user?.id || i}>
                 <td>#{i + 1}</td>
                 <td className={cx("userCell")}>
                   <Image src={user?.avatar} size="40px" />

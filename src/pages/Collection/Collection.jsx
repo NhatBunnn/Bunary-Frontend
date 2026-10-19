@@ -12,8 +12,8 @@ function Colection() {
   const { handleToggleCreateCollect } = useContext(CreateCollectContext);
 
   return (
-    <div className={c("collection", "mt-5")}>
-      <TitleSection title="Bộ sưu tập">
+    <div className={c("collection")}>
+      <TitleSection title="Bộ sưu tập của tôi" onTop={true}>
         <Button
           label="Thêm bộ sưu tập"
           onClick={() => handleToggleCreateCollect(true)}

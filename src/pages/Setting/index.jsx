@@ -16,33 +16,33 @@ function Setting() {
   }
 
   return (
-    <div className={c("setting", "px-5")}>
-      <TitleSection title="Cài đặt" onTop={true} />
+    <div className={c("setting")}>
+      <TitleSection title="Cài đặt tài khoản" onTop={true} />
       <SettingPanel title="Thông tin cá nhân">
         <SettingItem isAvatar={true} label="Ảnh đại diện" type="avatar" />
         <SettingItem
           label="Họ và tên"
-          value={`${user.lastName} ${user.firstName}`}
+          value={`${user?.lastName || ""} ${user?.firstName || ""}`.trim() || "Chưa cập nhật"}
         />
-        <SettingItem label="Biệt danh" value={user.dateOfBirth || "N/A"} />
-        <SettingItem label="Ngày sinh" value={user.dateOfBirth || "N/A"} />
+        <SettingItem label="Biệt danh" value={user?.username || user?.nickname || "N/A"} />
+        <SettingItem label="Ngày sinh" value={user?.dateOfBirth || "N/A"} field="dateOfBirth" />
         <SettingItem
           label="Giới tính"
-          value={user.gender || "N/A"}
+          value={user?.gender || "N/A"}
           field="gender"
         />
         <SettingItem
           label="Địa chỉ"
-          value={user.address || "N/A"}
+          value={user?.address || "N/A"}
           field="address"
         />
       </SettingPanel>
       <SettingPanel title="Bảo mật">
-        <SettingItem label="Email" value="Imnhat2k5@gmail.com" />
+        <SettingItem label="Email" value={user?.email || "N/A"} />
         <SettingItem label="Mật khẩu" value="***************" />
       </SettingPanel>
       <SettingPanel title="Tài khoản">
-        <SettingItem label="Xóa tài khoản" value="Imnhat2k5@gmail.com" />
+        <SettingItem label="Xóa tài khoản" value={user?.email || "Yêu cầu xóa tài khoản"} />
       </SettingPanel>
     </div>
   );

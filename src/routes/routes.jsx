@@ -9,7 +9,6 @@ import {
   CollectionDetail,
   EditWordset,
   FriendPage,
-  ProfilePage,
   SearchPage,
   stats,
   TestPage,
@@ -37,7 +36,7 @@ const publicRoutes = [
   { path: "/my-wordsets", Page: MyWordSets, Layout: DefaultLayout },
   { path: "/wordsets", Page: WordSetList, Layout: DefaultLayout },
 
-  { path: "/terms", Page: TermPage },
+  { path: "/terms", Page: TermPage, Layout: DefaultLayout },
   { path: "/wordset/:id/:slug", Page: WordSetPage, Layout: DefaultLayout },
   { path: "/search", Page: SearchPage, Layout: DefaultLayout },
 

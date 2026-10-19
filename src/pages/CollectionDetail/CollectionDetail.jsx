@@ -13,13 +13,19 @@ function CollectionDetail() {
   if (loading) return <Loading />;
 
   return (
-    <div className={c("collectionDetail", "mt-5")}>
-      <TitleSection title={"Bộ sưu tập: " + collection?.name} />
+    <div className={c("collectionDetail")}>
+      <TitleSection
+        title={"Bộ sưu tập: " + (collection?.name || "...")}
+        onTop={true}
+      />
       <div className={c("content", "d-flex", "flex-column", "gap-3")}>
-        {wordSets &&
-          wordSets.map((d) => {
-            return <WordSet key={d.id} wordSet={d} />;
-          })}
+        {wordSets && wordSets.length > 0 ? (
+          wordSets.map((d) => <WordSet key={d.id} wordSet={d} />)
+        ) : (
+          <div className="text-center py-5 text-muted bg-white rounded-3 border">
+            Chưa có bộ từ vựng nào trong bộ sưu tập này.
+          </div>
+        )}
       </div>
     </div>
   );

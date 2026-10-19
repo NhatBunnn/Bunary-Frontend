@@ -1,17 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import "bootstrap/dist/css/bootstrap.min.css";
+import TitleSection from "@components/TitleSection";
 
 export default function TermPage() {
   return (
-    <div className="container py-5 d-flex justify-content-center">
-      <div
-        className="p-5 shadow-lg rounded-4 bg-white"
-        style={{ maxWidth: "850px", width: "100%" }}
-      >
-        <h1 className="mb-4 text-center fw-bold text-primary">
-          Điều khoản sử dụng
-        </h1>
+    <div className="py-4 d-flex flex-column align-items-center w-100">
+      <div style={{ maxWidth: "880px", width: "100%" }}>
+        <TitleSection title="Điều khoản sử dụng" onTop={true} />
+        <div className="p-4 p-md-5 rounded-4 bg-white shadow-sm border mt-3">
 
         <p className="text-secondary mb-4 text-center">
           Cảm ơn bạn đã sử dụng nền tảng học tiếng Anh của chúng tôi. Vui lòng
@@ -90,5 +86,6 @@ export default function TermPage() {
         </div>
       </div>
     </div>
+  </div>
   );
 }

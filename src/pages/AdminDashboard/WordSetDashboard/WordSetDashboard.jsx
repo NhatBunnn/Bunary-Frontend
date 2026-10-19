@@ -87,7 +87,7 @@ function WordSetDashboard() {
           </thead>
           <tbody>
             {wordSetList?.map((wordset, i) => (
-              <tr>
+              <tr key={wordset?.id || i}>
                 <td>#{i + 1}</td>
                 <td>
                   <Image src={wordset?.thumbnail} size="40px" />

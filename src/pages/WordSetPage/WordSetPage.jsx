@@ -5,6 +5,8 @@ import {
   faEllipsisVertical,
   faIdCard,
   faStar,
+  faListCheck,
+  faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Star } from "lucide-react";
@@ -130,7 +132,7 @@ const WordSetPage = () => {
 
           <div className={c("actionBar")}>
             <Button
-              label="Flashcards"
+              label="Thẻ ghi nhớ"
               icon={<FontAwesomeIcon icon={faIdCard} />}
               onClick={() =>
                 setOpenSetting((prev) => ({ ...prev, flashCard: true }))
@@ -138,12 +140,12 @@ const WordSetPage = () => {
             />
             <Button
               label="Trắc nghiệm"
-              icon={<FontAwesomeIcon icon={faIdCard} />}
+              icon={<FontAwesomeIcon icon={faListCheck} />}
               to={`/learning/${wordSet.id}/multiple-choice`}
             />
             <Button
-              label="Test"
-              icon={<FontAwesomeIcon icon={faIdCard} />}
+              label="Kiểm tra"
+              icon={<FontAwesomeIcon icon={faGraduationCap} />}
               to={`/learning/${wordSet.id}/test`}
             />
           </div>

@@ -1,25 +1,34 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./LearningLayout.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Home, CreditCard, CheckSquare, BookOpen } from "lucide-react";
 
 const cx = classNames.bind(styles);
 
 const tabs = [
   { id: "flashcard", label: "Thẻ ghi nhớ", icon: CreditCard },
-  { id: "multiplechoice", label: "trắc nghiệm", icon: CheckSquare },
+  { id: "multiple-choice", label: "Trắc nghiệm", icon: CheckSquare },
   { id: "test", label: "Kiểm tra", icon: BookOpen },
 ];
 
 function LearningLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
 
-  const currentTab = location.pathname.split("/").pop() || "flashcard";
+  const currentTab = location.pathname.endsWith("/multiple-choice")
+    ? "multiple-choice"
+    : location.pathname.endsWith("/test")
+    ? "test"
+    : "flashcard";
 
   const handleTabChange = (tabId) => {
-    navigate(`/learning/${tabId}`);
+    if (id) {
+      navigate(`/learning/${id}/${tabId}`);
+    } else {
+      navigate(`/learning/${tabId}`);
+    }
   };
 
   const handleGoHome = () => {
@@ -36,10 +45,10 @@ function LearningLayout({ children }) {
             <button
               onClick={handleGoHome}
               className={cx("home-btn")}
-              title="Back to Home"
+              title="Quay lại trang chủ"
             >
-              <Home size={24} />
-              <span className={cx("home-label")}>Nhà</span>
+              <Home size={22} />
+              <span className={cx("home-label")}>Trang chủ</span>
             </button>
 
             {/* Tabs */}

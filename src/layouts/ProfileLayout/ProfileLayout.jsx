@@ -3,7 +3,7 @@ import styles from "./ProfileLayout.module.css";
 import ProfileCard from "@components/ProfileCard/ProfileCard";
 import { Background } from "@assets/images";
 import DefaultLayout from "@layouts/DefaultLayout/DefaultLayout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useProfileLayout from "./useProfileLayout";
 import { useEffect } from "react";
 import Loading from "@components/Loading/Loading";
@@ -21,6 +21,7 @@ function ProfileLayout({ children }) {
   } = useProfileLayout();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     fetchUserByUserName();
@@ -62,18 +63,18 @@ function ProfileLayout({ children }) {
                 <button
                   type="button"
                   className={c("tabBtn", {
-                    active: window.location.pathname === "/profile",
+                    active: !location.pathname.endsWith("/friends"),
                   })}
-                  onClick={() => navigate(`/u/${user.username}`)}
+                  onClick={() => navigate(`/u/${user?.username}`)}
                 >
                   Bài viết
                 </button>
                 <button
                   type="button"
                   className={c("tabBtn", {
-                    active: window.location.pathname.includes("follower"),
+                    active: location.pathname.endsWith("/friends"),
                   })}
-                  onClick={() => navigate(`/u/${user.username}/friends`)}
+                  onClick={() => navigate(`/u/${user?.username}/friends`)}
                 >
                   Bạn bè
                 </button>

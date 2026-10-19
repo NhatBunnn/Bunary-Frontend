@@ -45,7 +45,7 @@ const TestPage = () => {
       return {
         id: word.id || index,
         term: word.term,
-        question: `What does '${word.term}' mean?`,
+        question: `Từ '${word.term}' có nghĩa là gì?`,
         options,
         correctText: word.meaning,
       };
@@ -100,7 +100,7 @@ const TestPage = () => {
   };
 
   if (questions.length === 0) {
-    return <div className="text-center py-5">Loading questions...</div>;
+    return <div className="text-center py-5">Đang tải câu hỏi kiểm tra...</div>;
   }
 
   const total = questions.length;
@@ -109,18 +109,18 @@ const TestPage = () => {
   return (
     <div className={cx("container")}>
       <div className={cx("header")}>
-        <h1 className={cx("title")}>Vocabulary Test</h1>
+        <h1 className={cx("title")}>Kiểm tra từ vựng</h1>
         <p className={cx("subtitle")}>
-          {questions.length} questions • Choose the correct meaning
+          {questions.length} câu hỏi • Chọn nghĩa chính xác của từ
         </p>
         {submitted && (
           <div className={cx("result-summary")}>
             <span className={cx("score")}>
-              {score}/{total} ({percentage}%)
+              Kết quả: {score}/{total} ({percentage}%)
             </span>
             <button onClick={handleRestart} className={cx("restart-btn")}>
               <RotateCw size={18} />
-              Try Again
+              Làm lại bài thi
             </button>
           </div>
         )}
@@ -135,12 +135,12 @@ const TestPage = () => {
           return (
             <div key={q.id} className={cx("question-item")}>
               <div className={cx("question-header")}>
-                <span className={cx("question-number")}>{index + 1}.</span>
+                <span className={cx("question-number")}>Câu {index + 1}.</span>
                 <span className={cx("term")}>{q.term}</span>
 
                 {/* Hiển thị trạng thái ngay bên cạnh nếu đã chọn */}
                 {selectedId && !submitted && (
-                  <span className={cx("selected-indicator")}>Selected</span>
+                  <span className={cx("selected-indicator")}>Đã chọn</span>
                 )}
                 {submitted &&
                   isCorrect !== undefined &&
@@ -170,7 +170,7 @@ const TestPage = () => {
               {/* Hiển thị đáp án đúng nếu sai và đã submit */}
               {submitted && !isCorrect && (
                 <div className={cx("correct-answer")}>
-                  <strong>Correct answer:</strong> {q.correctText}
+                  <strong>Đáp án chính xác:</strong> {q.correctText}
                 </div>
               )}
             </div>
@@ -185,7 +185,7 @@ const TestPage = () => {
             disabled={Object.keys(answers).length < questions.length}
             className={cx("submit-btn")}
           >
-            Submit Test ({Object.keys(answers).length}/{total} answered)
+            Nộp bài kiểm tra ({Object.keys(answers).length}/{total} đã làm)
           </button>
         </div>
       )}
