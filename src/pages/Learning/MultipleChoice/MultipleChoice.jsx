@@ -49,7 +49,7 @@ const MultipleChoice = () => {
 
       return {
         id: word.id || index,
-        question: `What does '${word.term}' mean?`,
+        question: `Từ '${word.term}' có nghĩa là gì?`,
         word: word.term,
         options,
       };
@@ -83,7 +83,7 @@ const MultipleChoice = () => {
     if (!selectedAnswer) return;
     setShowFeedback(true);
     const selectedOption = currentQuestion.options.find(
-      (opt) => opt.id === selectedAnswer
+      (opt) => opt.id === selectedAnswer,
     );
     if (selectedOption?.isCorrect) {
       setScore(score + 1);
@@ -124,7 +124,7 @@ const MultipleChoice = () => {
   };
 
   if (questions.length === 0)
-    return <div className="text-center py-5">Loading questions...</div>;
+    return <div className="text-center py-5">Đang tải câu hỏi...</div>;
 
   if (isTestComplete) {
     const percentage = Math.round((score / questions.length) * 100);
@@ -133,8 +133,8 @@ const MultipleChoice = () => {
         onRestart={handleRestartTest}
         onGoHome={() => navigate("/")}
         stats={{
-          pointsEarned: score * 10, // Giả định mỗi câu đúng 10 điểm
-          sparksEarned: Math.floor(score / 2), // Giả định mỗi 2 câu đúng được 1 spark
+          pointsEarned: score * 10,
+          sparksEarned: Math.floor(score / 2),
         }}
         percentage={percentage}
       />
@@ -146,13 +146,13 @@ const MultipleChoice = () => {
       <div className="container py-4 py-md-5">
         <div className="row justify-content-center">
           <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-            {/* Progress */}
+            {/* Tiến độ */}
             <div className="mb-4">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <small className="text-muted">
                   {currentIndex + 1} / {questions.length}
                 </small>
-                <small className="text-muted">Score: {score}</small>
+                <small className="text-muted">Điểm: {score}</small>
               </div>
               <div className="progress" style={{ height: "6px" }}>
                 <div
@@ -162,18 +162,18 @@ const MultipleChoice = () => {
               </div>
             </div>
 
-            {/* Question Card */}
+            {/* Thẻ câu hỏi */}
             <div className={cx("question-card")}>
               <div className="p-4">
                 <span className={cx("question-badge")}>
-                  Question {currentIndex + 1}
+                  Câu hỏi {currentIndex + 1}
                 </span>
                 <h2 className="h4 mt-3 mb-4">{currentQuestion.question}</h2>
                 <div className={cx("word-highlight")}>
                   <span className="h3">{currentQuestion.word}</span>
                 </div>
 
-                {/* Options */}
+                {/* Các đáp án */}
                 <div className="mt-4">
                   {currentQuestion.options.map((option) => (
                     <button
@@ -202,20 +202,20 @@ const MultipleChoice = () => {
                   ))}
                 </div>
 
-                {/* Feedback */}
+                {/* Phản hồi */}
                 {showFeedback && (
                   <div
                     className={cx(
                       "feedback",
                       currentQuestion.options.find(
-                        (opt) => opt.id === selectedAnswer
+                        (opt) => opt.id === selectedAnswer,
                       )?.isCorrect
                         ? "correct-feedback"
-                        : "incorrect-feedback"
+                        : "incorrect-feedback",
                     )}
                   >
                     {currentQuestion.options.find(
-                      (opt) => opt.id === selectedAnswer
+                      (opt) => opt.id === selectedAnswer,
                     )?.isCorrect ? (
                       <>
                         <CheckCircle2
@@ -223,8 +223,10 @@ const MultipleChoice = () => {
                           className="text-success flex-shrink-0"
                         />
                         <div>
-                          <strong className="text-success">Correct! 🎉</strong>
-                          <p className="mb-0 mt-1">Great job!</p>
+                          <strong className="text-success">
+                            Chính xác! 🎉
+                          </strong>
+                          <p className="mb-0 mt-1">Làm tốt lắm!</p>
                         </div>
                       </>
                     ) : (
@@ -234,13 +236,15 @@ const MultipleChoice = () => {
                           className="text-danger flex-shrink-0"
                         />
                         <div>
-                          <strong className="text-danger">Incorrect</strong>
+                          <strong className="text-danger">
+                            Chưa chính xác
+                          </strong>
                           <p className="mb-0 mt-1">
-                            Correct:{" "}
+                            Đáp án đúng:{" "}
                             <strong>
                               {
                                 currentQuestion.options.find(
-                                  (opt) => opt.isCorrect
+                                  (opt) => opt.isCorrect,
                                 )?.text
                               }
                             </strong>
@@ -253,7 +257,7 @@ const MultipleChoice = () => {
               </div>
             </div>
 
-            {/* Action Button */}
+            {/* Nút thao tác */}
             <div className="text-center mt-4">
               {!showFeedback ? (
                 <button
@@ -261,14 +265,16 @@ const MultipleChoice = () => {
                   disabled={!selectedAnswer}
                   className="btn btn-primary px-5 py-2"
                 >
-                  Submit
+                  Trả lời
                 </button>
               ) : (
                 <button
                   onClick={handleNextQuestion}
                   className="btn btn-primary px-5 py-2"
                 >
-                  {currentIndex < questions.length - 1 ? "Next" : "Results"}
+                  {currentIndex < questions.length - 1
+                    ? "Câu tiếp theo"
+                    : "Xem kết quả"}
                 </button>
               )}
             </div>

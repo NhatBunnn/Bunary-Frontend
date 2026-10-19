@@ -1,4 +1,3 @@
-
 import Button from "@components/Button/Button";
 import styles from "./FlashCardSetting.module.css";
 import classNames from "classnames/bind";
@@ -18,16 +17,16 @@ function FlashCardSetting({ wordSetId }) {
   } = useFlashCardSetting();
 
   const settingFields = [
-    { field: "Term", key: "term" },
-    { field: "IPA", key: "ipa" },
-    { field: "Meaning", key: "meaning" },
-    { field: "Part Of Speech", key: "partOfSpeech" },
-    { field: "Image", key: "image" },
+    { field: "Thuật ngữ", key: "term" },
+    { field: "Phiên âm", key: "ipa" },
+    { field: "Nghĩa", key: "meaning" },
+    { field: "Từ loại", key: "partOfSpeech" },
+    { field: "Hình ảnh", key: "image" },
   ];
 
   const tabs = [
-    { tab: "Front Side", side: "front" },
-    { tab: "Back Side", side: "back" },
+    { tab: "Mặt trước", side: "front" },
+    { tab: "Mặt sau", side: "back" },
   ];
 
   const toggleSetting = (key) => {
@@ -46,14 +45,14 @@ function FlashCardSetting({ wordSetId }) {
         {/* Preview Section */}
         <div className={c("preview")}>
           <div className={c("cardWrapper")}>
-            <div className={c("previewLabel")}>Front Preview</div>
+            <div className={c("previewLabel")}>Xem trước mặt trước</div>
             <FlashCard
               className={c("card", "mb-4", { active: activeSide === "front" })}
               setting={settings.front}
             />
           </div>
           <div className={c("cardWrapper")}>
-            <div className={c("previewLabel")}>Back Preview</div>
+            <div className={c("previewLabel")}>Xem trước mặt sau</div>
             <FlashCard
               className={c("card", { active: activeSide === "back" })}
               setting={settings.back}
@@ -75,7 +74,7 @@ function FlashCardSetting({ wordSetId }) {
                 </div>
               ))}
             </div>
-            
+
             <div className={c("content")}>
               {settingFields.map((d, i) => (
                 <div className={c("setting-item")} key={i}>
@@ -91,12 +90,12 @@ function FlashCardSetting({ wordSetId }) {
             </div>
 
             <div className="p-3 border-top bg-light">
-               <Button 
-                label="Reset to Default" 
-                variant="outline" 
+              <Button
+                label="Khôi phục mặc định"
+                variant="outline"
                 className="w-100"
                 size="sm"
-               />
+              />
             </div>
           </div>
         </div>
@@ -105,16 +104,16 @@ function FlashCardSetting({ wordSetId }) {
       {/* Footer Actions */}
       <div className={c("footer")}>
         <div className="d-flex gap-2">
-            <Button
-                label="Study Now"
-                to={`/learning/${wordSetId}/flashcard`}
-                variant="outline"
-             />
-            <Button
-                label="Save Settings"
-                onClick={() => updateFlashCardSetting()}
-                isLoading={loading}
-            />
+          <Button
+            label="Học ngay"
+            to={`/learning/${wordSetId}/flashcard`}
+            variant="outline"
+          />
+          <Button
+            label="Lưu cài đặt"
+            onClick={() => updateFlashCardSetting()}
+            isLoading={loading}
+          />
         </div>
       </div>
     </div>

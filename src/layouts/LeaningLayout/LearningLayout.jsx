@@ -7,9 +7,9 @@ import { Home, CreditCard, CheckSquare, BookOpen } from "lucide-react";
 const cx = classNames.bind(styles);
 
 const tabs = [
-  { id: "flashcard", label: "Flashcard", icon: CreditCard },
-  { id: "multiplechoice", label: "Multiple Choice", icon: CheckSquare },
-  { id: "test", label: "Test All", icon: BookOpen },
+  { id: "flashcard", label: "Thẻ ghi nhớ", icon: CreditCard },
+  { id: "multiplechoice", label: "trắc nghiệm", icon: CheckSquare },
+  { id: "test", label: "Kiểm tra", icon: BookOpen },
 ];
 
 function LearningLayout({ children }) {
@@ -39,7 +39,7 @@ function LearningLayout({ children }) {
               title="Back to Home"
             >
               <Home size={24} />
-              <span className={cx("home-label")}>Home</span>
+              <span className={cx("home-label")}>Nhà</span>
             </button>
 
             {/* Tabs */}
