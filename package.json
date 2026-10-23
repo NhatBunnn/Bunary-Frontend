@@ -2,6 +2,7 @@
   "name": "bunary",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
@@ -23,21 +24,14 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^11.18.6",
     "react-router-dom": "^7.6.3",
-    "react-scripts": "^5.0.1",
     "sockjs-client": "^1.6.1",
-    "stompjs": "^2.3.3",
-    "web-vitals": "^2.1.4"
+    "stompjs": "^2.3.3"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -52,10 +46,9 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "sass": "^1.90.0",
-    "sass-loader": "^16.0.5",
     "typescript": "^4.9.5",
-    "webpack-cli": "^6.0.1"
+    "vite": "^6.2.0"
   }
 }

@@ -16,7 +16,7 @@ import AddToCollection from "@pages/WordSetPage/dialogs/AddToCollection/AddToCol
 import PrivateRoute from "@routes/PrivateRoute.jsx";
 import RoleRoute from "@routes/RoleRoute";
 import ChatWindowContainer from "@components/ChatWindowContainer/ChatWindowContainer";
-import GuestRoute from "routes/GuestRoute";
+import GuestRoute from "@routes/GuestRoute";
 
 function App() {
   return (

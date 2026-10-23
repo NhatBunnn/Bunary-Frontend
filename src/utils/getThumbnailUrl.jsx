@@ -1,4 +1,4 @@
-const { API_URL } = require("@config/apiConfig");
+import { API_URL } from "@config/apiConfig";
 
 export function getThumbnailUrl(thumbnail) {
   if (!thumbnail) return;

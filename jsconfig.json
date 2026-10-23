@@ -2,18 +2,22 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@utils/*": ["utils/*"],
-      "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"],
-      "@config/*": ["config/*"],
+      "@/*": ["*"],
       "@api/*": ["api/*"],
+      "@assets/*": ["assets/*"],
+      "@builders/*": ["builders/*"],
+      "@components/*": ["components/*"],
+      "@config/*": ["config/*"],
       "@context/*": ["context/*"],
       "@features/*": ["features/*"],
       "@hooks/*": ["hooks/*"],
+      "@i18n/*": ["i18n/*"],
       "@layouts/*": ["layouts/*"],
       "@pages/*": ["pages/*"],
+      "@routes/*": ["routes/*"],
       "@service/*": ["service/*"],
-      "@styles/*": ["styles/*"]
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"]
     }
   }
 }
