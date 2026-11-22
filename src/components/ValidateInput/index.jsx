@@ -12,6 +12,9 @@ function ValidateInput({
   value,
   label,
   className,
+  type = "text",
+  placeholder,
+  ...props
 }) {
   const id = useId();
 
@@ -23,6 +26,8 @@ function ValidateInput({
         </label>
       )}
       <input
+        type={type}
+        placeholder={placeholder}
         className={c("form-control", {
           "is-invalid": (!!field && !!fieldErrors?.[field]) || error,
         })}
@@ -30,6 +35,7 @@ function ValidateInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         style={{ backgroundColor: "var(--color-gray-100)" }}
+        {...props}
       />
       <div className="invalid-feedback">
         {fieldErrors && fieldErrors[field]}

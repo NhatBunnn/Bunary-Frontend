@@ -3,6 +3,7 @@ import CreateWordSet from "../pages/CreateWordSet";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
+import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Setting from "../pages/Setting";
 import {
   Collection,
@@ -82,6 +83,7 @@ const guestRoutes = [
   { path: "/login", Page: Login },
   { path: "/register", Page: Register },
   { path: "/verify-email", Page: VerifyEmail },
+  { path: "/forgot-password", Page: ForgotPassword },
 ];
 
 const adminRoutes = [

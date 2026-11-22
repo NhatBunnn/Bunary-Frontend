@@ -1,5 +1,7 @@
 {
   "AUTH_LOGIN_SUCCESS": "Login successful",
   "AUTH_REGISTER_SUCCESS": "Registration successful",
-  "AUTH_SEND_CODE_SUCCESS": "Verification code sent"
+  "AUTH_SEND_CODE_SUCCESS": "Verification code sent",
+  "PASSWORD_RESET_SUCCESS": "Password reset successfully! Please log in again",
+  "FORGOT_PASSWORD_SENT": "Verification code has been sent to your email"
 }

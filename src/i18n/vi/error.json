@@ -14,7 +14,8 @@
   "AUTH_SESSION_EXPIRED": "Phiên đăng nhập đã hết hạn",
   "AUTH_EMAIL_NOT_EMPTY": "Email không được để trống",
   "AUTH_PASSWORD_NOT_EMPTY": "Mật khẩu không được để trống",
-
+  "AUTH_CONFIRM_PASSWORD_NOT_EMPTY": "Vui lòng xác nhận mật khẩu",
+  "AUTH_OTP_NOT_EMPTY": "Mã xác thực không được để trống",
 
   "COLLECTION_NAME_NOT_BLANK": "Tên bộ sưu tập không được để trống",
   "COLLECTION_NAME_TOO_LONG": "Tên bộ sưu tập không được vượt quá 100 ký tự",
@@ -29,5 +30,15 @@
   "EMAIL_CODE_EXPIRED": "Mã xác thực email đã hết hạn",
   "EMAIL_CODE_ATTEMPTS_EXCEEDED": "Quá nhiều lần thử xác thực, vui lòng đợi 30 phút trước khi thử lại",
   "EMAIL_CODE_USED": "Mã xác thực email đã được sử dụng hoặc không còn",
-  "EMAIL_SEND_FAILED": "Gửi email thất bại"
+  "EMAIL_SEND_FAILED": "Gửi email thất bại",
+
+  "OTP_LOCKED": "Bạn đã nhập sai mã quá nhiều lần. Vui lòng thử lại sau 30 phút",
+  "OTP_INVALID": "Mã xác nhận không chính xác",
+  "OTP_EXPIRED": "Mã xác nhận đã hết hạn",
+  "OTP_NOT_FOUND": "Không tìm thấy mã xác nhận",
+  "OTP_RESEND_TOO_SOON": "Vui lòng đợi 30 giây trước khi gửi lại mã mới",
+
+  "PASSWORD_NOT_MATCH": "Mật khẩu xác nhận không khớp",
+  "PASSWORD_TOO_SHORT": "Mật khẩu phải có ít nhất 6 ký tự",
+  "ACCOUNT_OAUTH_CANNOT_RESET": "Tài khoản đăng nhập bằng Google không thể đặt lại mật khẩu theo cách này"
 }

@@ -1,6 +1,32 @@
-
 {
-  "AUTH_LOGIN_SUCCESS": "Login successful",
-  "AUTH_REGISTER_SUCCESS": "Registration successful",
-  "AUTH_SEND_CODE_SUCCESS": "Verification code sent"
+  "ID_NOT_FOUND": "Data not found with ID",
+  "NOT_FOUND": "Data not found",
+  "ALREADY_EXISTS": "Data already exists",
+  "FORBIDDEN": "Access denied",
+  "BAD_REQUEST": "Invalid request",
+
+  "USER_NOT_FOUND": "User not found",
+  "USER_NOT_VERIFIED": "Account is not verified",
+
+  "AUTH_INVALID": "Invalid email or password",
+  "AUTH_EXPIRED": "Session expired",
+  "AUTH_SESSION_INVALID": "Invalid session",
+  "AUTH_SESSION_EXPIRED": "Session expired",
+  "AUTH_EMAIL_NOT_EMPTY": "Email is required",
+  "AUTH_PASSWORD_NOT_EMPTY": "Password is required",
+  "AUTH_CONFIRM_PASSWORD_NOT_EMPTY": "Please confirm password",
+  "AUTH_OTP_NOT_EMPTY": "OTP code is required",
+
+  "EMAIL_EXISTS": "Email already exists",
+  "EMAIL_INVALID": "Invalid email format",
+
+  "OTP_LOCKED": "Too many failed attempts. Please try again after 30 minutes",
+  "OTP_INVALID": "Invalid verification code",
+  "OTP_EXPIRED": "Verification code has expired",
+  "OTP_NOT_FOUND": "Verification code not found",
+  "OTP_RESEND_TOO_SOON": "Please wait 30 seconds before resending code",
+
+  "PASSWORD_NOT_MATCH": "Passwords do not match",
+  "PASSWORD_TOO_SHORT": "Password must be at least 6 characters",
+  "ACCOUNT_OAUTH_CANNOT_RESET": "Google linked accounts cannot reset password this way"
 }
