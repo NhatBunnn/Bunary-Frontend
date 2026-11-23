@@ -96,9 +96,20 @@ function Header({ onMenuClick, onRankingMenu }) {
         )}
         {Object.keys(user).length !== 0 && (
           <div className={c("logged-in", "d-flex", "align-items-center")}>
-            <div className={c("icon")}>
+            <Link
+              to="/store"
+              className={c("crystalBadge")}
+              title="Số dư Crystal - Bấm để nạp thêm"
+            >
+              <span className={c("crystalIcon")}>💎</span>
+              <span className={c("crystalAmount")}>
+                {(user.crystalBalance != null ? Number(user.crystalBalance) : 0).toLocaleString("vi-VN")}
+              </span>
+            </Link>
+
+            <Link to="/store" className={c("icon", "link-no-style")} title="Cửa hàng Crystal">
               <FontAwesomeIcon icon={faStore} />
-            </div>
+            </Link>
             <Notify />
             <div className={c("avatar")} ref={dropDownRef}>
               <Image
@@ -138,6 +149,13 @@ function Header({ onMenuClick, onRankingMenu }) {
                       className={c("personal-page", "link-no-style")}
                     >
                       Trang cá nhân
+                    </Link>
+                    <Link
+                      to="/store"
+                      className={c("personal-page", "link-no-style", "d-flex", "justify-content-between", "align-items-center")}
+                    >
+                      <span>Cửa hàng Crystal</span>
+                      <span style={{ color: "#0077cc", fontWeight: 600 }}>💎 {(user.crystalBalance != null ? Number(user.crystalBalance) : 0).toLocaleString("vi-VN")}</span>
                     </Link>
                     <hr />
                     <div className={c("theme")}>Sáng</div>

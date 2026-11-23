@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import avatar from "../images/avatars/avatar.jpg";
 import imageForm from "../images/auth/forms/images-form.png";
 import Logo from "../images/logos/Logo.png";
@@ -6,6 +7,7 @@ import flashCardNoImageSmall from "../images/flashcard/no-image-large.png";
 import flashCardNoImageLarge from "../images/flashcard/no-image-large.png";
 import styles from "./index.module.css";
 import classNames from "classnames/bind";
+import { getThumbnailUrl } from "@utils/getThumbnailUrl";
 
 const c = classNames.bind(styles);
 
@@ -19,8 +21,27 @@ export const Image = ({
   height,
   style,
   className,
+  fallback = noImage,
+  loading = "lazy",
   ...props
 }) => {
+  const resolveSrc = (source) => {
+    if (!source) return fallback;
+    return getThumbnailUrl(source) || fallback;
+  };
+
+  const [currentSrc, setCurrentSrc] = useState(() => resolveSrc(src));
+
+  useEffect(() => {
+    setCurrentSrc(resolveSrc(src));
+  }, [src, fallback]);
+
+  const handleError = () => {
+    if (currentSrc !== fallback) {
+      setCurrentSrc(fallback);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
@@ -29,21 +50,27 @@ export const Image = ({
         width: width || size,
         height: height || size,
         ...style,
-        borderRadius: isCircled ? "100px" : "",
+        borderRadius: isCircled ? "50%" : "",
       }}
       {...props}
     >
       <img
-        src={src}
+        src={currentSrc}
         alt={alt}
+        loading={loading}
+        onError={handleError}
         style={{
           width: "100%",
           height: "100%",
+          objectFit: "cover",
+          display: "block",
         }}
       />
     </div>
   );
 };
+
+export const AppImage = Image;
 
 export const Background = ({
   src,
@@ -53,15 +80,16 @@ export const Background = ({
   className,
   children,
 }) => {
+  const finalSrc = getThumbnailUrl(src) || src || noImage;
   return (
     <div
       className={className}
       style={{
-        backgroundImage: `url(${src})`,
+        backgroundImage: `url(${finalSrc})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        width: { width },
-        height: { height },
+        width: typeof width === "number" ? `${width}px` : width,
+        height: typeof height === "number" ? `${height}px` : height,
         ...style,
       }}
     >
@@ -79,3 +107,5 @@ export const Images = {
   flashCardNoImageSmall,
   flashCardNoImageLarge,
 };
+
+export default Image;

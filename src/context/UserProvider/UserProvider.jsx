@@ -8,12 +8,27 @@ export const useUser = () => useContext(UserContext);
 
 function UserProvider({ children }) {
   const { setLoading, loading } = useAppBase();
-
   const { fetcher } = useFetcher();
-
   const [user, setUser] = useState({});
 
+  const refetchUser = async () => {
+    try {
+      const response = await fetcher({
+        url: `/api/v1/users/me`,
+        method: "GET",
+      });
+      if (response && response.data) {
+        setUser(response.data);
+        return response.data;
+      }
+    } catch (e) {
+      console.error("Lỗi khi tải thông tin người dùng:", e);
+    }
+  };
+
   useEffect(() => {
+    let isMounted = true;
+
     const fetch = async () => {
       setLoading(true);
       try {
@@ -21,20 +36,28 @@ function UserProvider({ children }) {
           url: `/api/v1/users/me`,
           method: "GET",
         });
-
-        setUser(response.data);
+        if (isMounted && response?.data) {
+          setUser(response.data);
+        }
       } catch (e) {
         console.error(e);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetch();
+
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, loading, setUser, refetchUser }}>
       {children}
     </UserContext.Provider>
   );

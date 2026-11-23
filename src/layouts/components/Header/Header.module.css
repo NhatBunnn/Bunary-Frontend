@@ -61,3 +61,40 @@
   align-items: center;
   color: var(--color-gray-500);
 }
+
+.crystalBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.12), rgba(0, 242, 254, 0.18));
+  border: 1px solid rgba(79, 172, 254, 0.45);
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
+  text-decoration: none;
+  color: #0077cc;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.crystalBadge:hover {
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.22), rgba(0, 242, 254, 0.3));
+  border-color: #0077cc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+  color: #005fa3;
+}
+
+.crystalIcon {
+  font-size: 15px;
+  line-height: 1;
+  filter: drop-shadow(0 0 4px rgba(0, 198, 255, 0.6));
+}
+
+.crystalAmount {
+  letter-spacing: 0.3px;
+  font-family: Roboto-Medium, sans-serif;
+}
+

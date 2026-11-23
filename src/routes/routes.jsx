@@ -30,6 +30,8 @@ import FlashCard from "@pages/Learning/FlashCard/FlashCard";
 import MultipleChoice from "@pages/Learning/MultipleChoice/MultipleChoice";
 import LearningLayout from "@layouts/LeaningLayout/LearningLayout";
 import PostPage from "@pages/Profile/Profile/PostPage";
+import CrystalStore from "@pages/CrystalStore/CrystalStore";
+import PaymentResult from "@pages/PaymentResult/PaymentResult";
 
 const publicRoutes = [
   // Homepage
@@ -46,6 +48,10 @@ const publicRoutes = [
     Page: CollectionDetail,
     Layout: DefaultLayout,
   },
+
+  // Store & Payment
+  { path: "/store", Page: CrystalStore, Layout: DefaultLayout },
+  { path: "/payment-result", Page: PaymentResult, Layout: DefaultLayout },
 
   // FallBack
   { path: "/*", Page: NotFound },

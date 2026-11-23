@@ -18,6 +18,11 @@ import WordInput from "./components/WordInput/WordInput";
 import { DialogWrapper, OptionsMenuWrapper } from "@components/index";
 import { EditVisibilityDialog } from "./components/Dialogs";
 import BulkImport from "./components/Dialogs/BulkImport/BulkImport";
+import AiUsageModal from "./components/AiUsageModal/AiUsageModal";
+import SuggestWordsModal from "./components/SuggestWordsModal/SuggestWordsModal";
+import { useFetcher } from "@api/fetcher";
+import { getAiUsage, buyAiCredits, autoFillWords, suggestWords } from "@api/aiApi";
+import { Sparkles, Wand2 } from "lucide-react";
 
 const c = classNames.bind(styles);
 
@@ -26,6 +31,14 @@ export default function WordSetForm({ type = "CREATE" }) {
   const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
   const dropdownRef = useRef(null);
   const [showBulkImport, setShowBulkImport] = useState(false);
+  const { fetcher } = useFetcher();
+
+  const [aiUsage, setAiUsage] = useState(null);
+  const [showAiModal, setShowAiModal] = useState(false);
+  const [showSuggestModal, setShowSuggestModal] = useState(false);
+  const [isAutoFilling, setIsAutoFilling] = useState(false);
+  const [isSuggesting, setIsSuggesting] = useState(false);
+  const [isBuyingCredits, setIsBuyingCredits] = useState(false);
 
   const {
     handleCreateWordSet,
@@ -46,7 +59,163 @@ export default function WordSetForm({ type = "CREATE" }) {
     if (type === "UPDATE") {
       handleFindWordSetById();
     }
+
+    const fetchUsage = async () => {
+      try {
+        const res = await getAiUsage(fetcher);
+        if (res?.data) {
+          setAiUsage(res.data);
+        }
+      } catch (err) {
+        console.error("Failed to load AI usage", err);
+      }
+    };
+    fetchUsage();
   }, []);
+
+  const handleAutoFill = async () => {
+    const hasAnyTerm = wordInputs.some((w) => w.term && w.term.trim() !== "");
+    if (!hasAnyTerm) {
+      return showNotification(
+        "Vui lòng điền thuật ngữ trước khi bấm Tự động điền!",
+        "warning"
+      );
+    }
+
+    setIsAutoFilling(true);
+    try {
+      const terms = wordInputs.map((w) => w.term?.trim() || "");
+      const res = await autoFillWords(fetcher, terms);
+
+      if (res?.data?.results) {
+        const results = res.data.results;
+        let filledCount = 0;
+
+        const updatedWords = wordInputs.map((w, idx) => {
+          const match = results[idx];
+          if (match && match.found) {
+            filledCount++;
+            return {
+              ...w,
+              ipa: w.ipa?.trim() ? w.ipa : match.ipa || "",
+              partOfSpeech: w.partOfSpeech?.trim()
+                ? w.partOfSpeech
+                : match.partOfSpeech || "",
+              meaning: w.meaning?.trim() ? w.meaning : match.meaning || "",
+              thumbnail: w.thumbnail ? w.thumbnail : match.thumbnail || "",
+            };
+          }
+          return w;
+        });
+
+        setWordInputs(updatedWords);
+        if (res.data.usage) {
+          setAiUsage(res.data.usage);
+        }
+
+        if (filledCount > 0) {
+          showNotification(
+            `Đã tự động điền thành công ${filledCount} từ!`,
+            "success"
+          );
+        } else {
+          showNotification(
+            "Không tìm thấy dữ liệu từ điển cho các từ này.",
+            "warning"
+          );
+        }
+      }
+    } catch (e) {
+      if (e?.errorCode === "AI_USAGE_EXHAUSTED" || e?.status === 429) {
+        showNotification(
+          "Bạn đã hết lượt sử dụng AI hôm nay. Hãy nâng cấp thêm AI Credits!",
+          "warning"
+        );
+        setShowAiModal(true);
+      } else {
+        showNotification(
+          e?.message || "Có lỗi xảy ra khi tự động điền",
+          "error"
+        );
+      }
+    } finally {
+      setIsAutoFilling(false);
+    }
+  };
+
+  const handleSuggestWords = async (payload) => {
+    setIsSuggesting(true);
+    try {
+      const res = await suggestWords(fetcher, payload);
+      if (res?.data?.words && res.data.words.length > 0) {
+        const newWords = res.data.words.map((w) => ({
+          term: w.term || "",
+          meaning: w.meaning || "",
+          ipa: w.ipa || "",
+          partOfSpeech: w.partOfSpeech || "",
+          thumbnail: w.thumbnail || null,
+        }));
+
+        setWordInputs((prev) => {
+          // Nếu form hiện chỉ có đúng 1 thẻ trống, thay thế thẻ đó
+          const isInitialEmpty =
+            prev.length === 1 &&
+            (!prev[0].term || prev[0].term.trim() === "") &&
+            (!prev[0].meaning || prev[0].meaning.trim() === "");
+
+          return isInitialEmpty ? newWords : [...prev, ...newWords];
+        });
+
+        if (res.data.usage) {
+          setAiUsage(res.data.usage);
+        }
+
+        setShowSuggestModal(false);
+        showNotification(
+          `AI đã gợi ý thành công ${newWords.length} từ vựng!`,
+          "success"
+        );
+      }
+    } catch (e) {
+      if (e?.errorCode === "AI_USAGE_EXHAUSTED" || e?.status === 429) {
+        showNotification(
+          "Bạn đã hết lượt sử dụng AI hôm nay. Hãy nâng cấp thêm AI Credits!",
+          "warning"
+        );
+        setShowSuggestModal(false);
+        setShowAiModal(true);
+      } else {
+        showNotification(
+          e?.message || "Có lỗi xảy ra khi gợi ý từ vựng bằng AI",
+          "error"
+        );
+      }
+    } finally {
+      setIsSuggesting(false);
+    }
+  };
+
+  const handleBuyCredits = async (credits) => {
+    setIsBuyingCredits(true);
+    try {
+      const res = await buyAiCredits(fetcher, credits);
+      if (res?.data) {
+        setAiUsage(res.data);
+        showNotification(`Mua thành công ${credits} AI Credits!`, "success");
+      }
+    } catch (e) {
+      if (e?.errorCode === "INSUFFICIENT_CRYSTAL") {
+        showNotification(
+          "Bạn không đủ Tinh thể để mua gói Credit này!",
+          "error"
+        );
+      } else {
+        showNotification(e?.message || "Mua AI Credits thất bại", "error");
+      }
+    } finally {
+      setIsBuyingCredits(false);
+    }
+  };
 
   const addWordCard = () => {
     setWordInputs((prev) => [
@@ -105,6 +274,19 @@ export default function WordSetForm({ type = "CREATE" }) {
         show={showBulkImport}
         onHide={() => setShowBulkImport(false)}
         onImport={handleBulkImport}
+      />
+
+      {/* AI SUGGEST WORDS MODAL */}
+      <SuggestWordsModal
+        isOpen={showSuggestModal}
+        onClose={() => setShowSuggestModal(false)}
+        onSubmit={handleSuggestWords}
+        currentTitle={wordSetInput.name}
+        currentDescription={wordSetInput.description}
+        initialLevel={wordSetInput.level}
+        aiUsage={aiUsage}
+        isGenerating={isSuggesting}
+        onOpenAiModal={() => setShowAiModal(true)}
       />
 
       {/* DIALOG QUYỀN RIÊNG TƯ */}
@@ -202,6 +384,33 @@ export default function WordSetForm({ type = "CREATE" }) {
             size="sm"
             className={c("ms-2")}
           />
+          <Button
+            label="Tự động điền"
+            variant="outline"
+            size="sm"
+            className={c("ms-2", "btn-autofill")}
+            onClick={handleAutoFill}
+            isLoading={isAutoFilling}
+          />
+          <Button
+            label="Gợi ý từ"
+            variant="outline"
+            size="sm"
+            className={c("ms-2", "btn-suggest-ai")}
+            onClick={() => setShowSuggestModal(true)}
+          />
+          <div
+            className={c("ai-usage-pill", "ms-2")}
+            onClick={() => setShowAiModal(true)}
+            title="Nhấn để xem hạn mức & mua thêm AI Credits"
+          >
+            <Sparkles size={14} className={c("ai-pill-icon")} />
+            <span className={c("ai-pill-label")}>AI Usage:</span>
+            <span className={c("ai-pill-value")}>
+              {aiUsage ? `${aiUsage.freeRemaining + aiUsage.bonusCredits}/${aiUsage.dailyLimit + aiUsage.bonusCredits}` : "10/10"}
+            </span>
+            <span className={c("ai-pill-plus")}>+</span>
+          </div>
         </div>
 
         <div className={c("toolbar-right")} ref={dropdownRef}>
@@ -304,6 +513,15 @@ export default function WordSetForm({ type = "CREATE" }) {
           className={c("add-card-btn")}
         />
       </div>
+
+      {/* AI USAGE MODAL */}
+      <AiUsageModal
+        isOpen={showAiModal}
+        onClose={() => setShowAiModal(false)}
+        usage={aiUsage || {}}
+        onBuyCredits={handleBuyCredits}
+        isBuying={isBuyingCredits}
+      />
     </div>
   );
 }

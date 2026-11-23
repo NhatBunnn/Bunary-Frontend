@@ -8,3 +8,6 @@ export { default as FriendPage } from "./Profile/FriendPage/FriendPage";
 // Learning
 export { default as FlashCard } from "./Learning/FlashCard/FlashCard";
 export { default as TestPage } from "./Learning/TestPage/TestPage";
+// Crystal Store & Payment
+export { default as CrystalStore } from "./CrystalStore/CrystalStore";
+export { default as PaymentResult } from "./PaymentResult/PaymentResult";

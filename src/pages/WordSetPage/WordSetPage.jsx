@@ -20,7 +20,7 @@ import TitleSection from "@components/TitleSection";
 import Button from "@components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { AddToCollection } from "@features/collection/components";
-import { getThumbnailUrl } from "@utils/getThumbnailUrl";
+import { Image } from "@assets/images";
 import { useUser } from "@context/UserProvider/UserProvider";
 
 const c = classNames.bind(styles);
@@ -155,14 +155,14 @@ const WordSetPage = () => {
       {/* Main Grid Content */}
       <div className={c("mainGrid")}>
         <div className={c("thumbnailWrapper")}>
-          <img src={wordSet?.thumbnail} alt={wordSet?.title} />
+          <Image src={wordSet?.thumbnail} alt={wordSet?.title} />
         </div>
 
         <div className={c("wordGrid")}>
           {words.map((word, idx) => (
             <div key={idx} className={c("wordCard")}>
               <div className={c("wordImage")}>
-                <img src={getThumbnailUrl(word?.thumbnail)} alt={word?.term} />
+                <Image src={word?.thumbnail} alt={word?.term} />
               </div>
               <div className={c("wordContent")}>
                 <div className={c("wordTopLine")}>

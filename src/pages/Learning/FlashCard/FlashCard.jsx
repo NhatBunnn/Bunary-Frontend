@@ -5,7 +5,7 @@ import useFlashCard from "./useFlashCard";
 import Loading from "@components/Loading/Loading";
 import FinishScreen from "../components/FinishScreen/FinishScreen";
 import { useNavigate } from "react-router-dom";
-import { getThumbnailUrl } from "@utils/getThumbnailUrl";
+import { Image } from "@assets/images";
 import { ChevronLeft, ChevronRight, RotateCw, Info } from "lucide-react";
 
 const c = classNames.bind(styles);
@@ -79,12 +79,11 @@ function FlashCard() {
               {/* Front Side */}
               <div className={c("side", "front")}>
                 {settings.front.image && words[currentCard]?.thumbnail && (
-                  <div className={c("imageWrapper")}>
-                    <img
-                      src={getThumbnailUrl(words[currentCard]?.thumbnail)}
-                      alt=""
-                    />
-                  </div>
+                  <Image
+                    src={words[currentCard]?.thumbnail}
+                    alt=""
+                    className={c("imageWrapper")}
+                  />
                 )}
                 {settings.front.partOfSpeech &&
                   words[currentCard]?.partOfSpeech && (
@@ -110,12 +109,11 @@ function FlashCard() {
               {/* Back Side */}
               <div className={c("side", "back")}>
                 {settings.back.image && words[currentCard]?.thumbnail && (
-                  <div className={c("imageWrapper")}>
-                    <img
-                      src={getThumbnailUrl(words[currentCard]?.thumbnail)}
-                      alt=""
-                    />
-                  </div>
+                  <Image
+                    src={words[currentCard]?.thumbnail}
+                    alt=""
+                    className={c("imageWrapper")}
+                  />
                 )}
                 {settings.back.partOfSpeech &&
                   words[currentCard]?.partOfSpeech && (
