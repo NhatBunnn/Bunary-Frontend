@@ -81,6 +81,7 @@ function useWordSetForm() {
       const wordSet = {
         title: wordSetInput.name,
         description: wordSetInput.description,
+        thumbnail: wordSetInput.thumbnail || "",
         visibility: wordSetInput.visibility,
         level: wordSetInput.level,
         word: wordInputs,
@@ -132,6 +133,7 @@ function useWordSetForm() {
       const wordSet = {
         title: wordSetInput.name,
         description: wordSetInput.description,
+        thumbnail: wordSetInput.thumbnail || "",
         visibility: wordSetInput.visibility,
         level: wordSetInput.level || null,
         word: wordInputs,
