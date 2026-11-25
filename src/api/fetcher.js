@@ -39,6 +39,7 @@ export const useFetcher = () => {
     params,
     data,
     signal,
+    timeout,
     credentials = false,
   }) => {
     try {
@@ -50,6 +51,7 @@ export const useFetcher = () => {
         params,
         data,
         signal,
+        timeout,
         withCredentials: credentials,
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });

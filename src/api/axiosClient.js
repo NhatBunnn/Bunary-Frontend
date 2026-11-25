@@ -3,7 +3,7 @@ import { API_URL } from "@config/apiConfig";
 
 const axiosClient = axios.create({
   baseURL: `${API_URL}`,
-  timeout: 10000,
+  timeout: 30000,
 });
 
 export default axiosClient;

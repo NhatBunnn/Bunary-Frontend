@@ -18,6 +18,7 @@ export const autoFillWords = async (fetcher, terms) => {
     url: "/api/v1/ai/autofill",
     method: "POST",
     data: { terms },
+    timeout: 60000,
   });
 };
 
@@ -26,5 +27,6 @@ export const suggestWords = async (fetcher, payload) => {
     url: "/api/v1/ai/suggest-words",
     method: "POST",
     data: payload,
+    timeout: 60000,
   });
 };
