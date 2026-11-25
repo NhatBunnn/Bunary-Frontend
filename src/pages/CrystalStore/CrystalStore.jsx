@@ -4,7 +4,6 @@ import styles from "./CrystalStore.module.css";
 import classNames from "classnames/bind";
 import { useUser } from "@context/UserProvider/UserProvider";
 import { useFetcher } from "@api/fetcher";
-import { getActivePackages, createPayment } from "@api/paymentApi";
 import { useNotification } from "@context/NotificationProvider";
 import {
   Diamond,
@@ -35,7 +34,10 @@ function CrystalStore() {
     const fetchPackages = async () => {
       setLoading(true);
       try {
-        const response = await getActivePackages(fetcher);
+        const response = await fetcher({
+          url: "/api/payments/packages",
+          method: "GET",
+        });
         if (isMounted) {
           if (response && response.data) {
             setPackages(response.data);
@@ -73,7 +75,11 @@ function CrystalStore() {
 
     try {
       setProcessingPackageId(pkg.id);
-      const response = await createPayment(fetcher, pkg.id);
+      const response = await fetcher({
+        url: "/api/payments/create",
+        method: "POST",
+        data: { packageId: pkg.id },
+      });
 
       const paymentData = response?.data || response;
       const paymentUrl = paymentData?.paymentUrl;

@@ -40,6 +40,8 @@ const publicRoutes = [
   { path: "/wordsets", Page: WordSetList, Layout: DefaultLayout },
 
   { path: "/terms", Page: TermPage, Layout: DefaultLayout },
+  { path: "/wordset", Page: WordSetPage, Layout: DefaultLayout },
+  { path: "/wordset/:id", Page: WordSetPage, Layout: DefaultLayout },
   { path: "/wordset/:id/:slug", Page: WordSetPage, Layout: DefaultLayout },
   { path: "/search", Page: SearchPage, Layout: DefaultLayout },
 

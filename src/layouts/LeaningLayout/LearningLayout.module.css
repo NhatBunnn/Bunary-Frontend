@@ -1,18 +1,21 @@
 .learning-layout {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9f0f8 100%);
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .header {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e2e8f0;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 30;
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1140px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -22,27 +25,29 @@
   align-items: center;
   justify-content: space-between;
   min-height: 64px;
+  gap: 12px;
 }
 
-/* Nút Home */
+/* Nút Quay lại */
 .home-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  background: transparent;
-  border: none;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
-  color: #495057;
-  font-weight: 500;
-  font-size: 1rem;
+  color: #334155;
+  font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .home-btn:hover {
-  background: #f0f4ff;
-  color: #007bff;
+  background: #e2e8f0;
+  color: #0f172a;
 }
 
 .home-label {
@@ -58,111 +63,193 @@
 /* Tabs */
 .tabs {
   display: flex;
-  gap: 12px;
-  padding: 8px 0;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  background: #f1f5f9;
+  border-radius: 14px;
 }
 
 .tab {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
+  gap: 8px;
+  padding: 8px 16px;
   background: transparent;
   border: none;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #495057;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
   cursor: pointer;
-  transition: all 0.25s ease;
-  min-width: 80px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.tab:hover {
-  background: #f0f4ff;
-  color: #007bff;
+.tab:hover:not(.locked) {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .tab.active {
-  color: #007bff;
-  font-weight: 600;
+  background: #ffffff;
+  color: #4f46e5;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+}
+
+.tab.completed {
+  color: #059669;
+}
+
+.tab.locked {
+  color: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.tab-icon-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.check-icon {
+  color: #10b981;
+  flex-shrink: 0;
 }
 
 .tab-indicator {
-  position: absolute;
-  bottom: -8px;
-  width: 30px;
-  height: 3px;
-  background: #007bff;
-  border-radius: 2px;
+  display: none;
 }
 
 .tab-label {
-  font-size: 0.85rem;
+  display: none;
 }
 
-/* Mobile: chỉ icon cho tab + nút home nhỏ */
-@media (max-width: 640px) {
-  .header-inner {
-    min-height: 56px;
-    padding: 0 8px;
-  }
-
-  .home-btn {
-    padding: 8px;
-    gap: 0;
-  }
-
-  .home-label {
-    display: none;
-  }
-
-  .tabs {
-    gap: 16px;
-  }
-
-  .tab {
-    padding: 10px 14px;
-    min-width: auto;
-    gap: 4px;
-  }
-
-  .tab-label {
-    display: none;
-  }
-
-  .tab-indicator {
-    bottom: -10px;
-  }
-}
-
-/* Tablet: hiện chữ tab */
-@media (min-width: 641px) and (max-width: 900px) {
-  .tab {
-    flex-direction: row;
-    gap: 10px;
-    padding: 10px 20px;
-  }
-
+@media (min-width: 768px) {
   .tab-label {
     display: inline;
   }
 }
 
-@media (min-width: 901px) {
-  .tab {
-    flex-direction: row;
-    gap: 12px;
-    padding: 12px 28px;
-  }
+/* Status Pill */
+.status-pill {
+  display: none;
+}
 
-  .tab-label {
-    display: inline;
+@media (min-width: 960px) {
+  .status-pill {
+    display: flex;
+    align-items: center;
   }
+}
+
+.pill-progress {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #4f46e5;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.pill-mastered {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #059669;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
 .content {
-  padding: 24px 0;
+  padding: 24px 0 48px;
+}
+
+/* Locked Screen */
+.locked-screen {
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.locked-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 2.75rem 2rem;
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.08);
+}
+
+.locked-icon-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.locked-card h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.locked-card p {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
+}
+
+.locked-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-unlock {
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-unlock:hover {
+  background: #4338ca;
+}
+
+.btn-back {
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background: #e2e8f0;
 }

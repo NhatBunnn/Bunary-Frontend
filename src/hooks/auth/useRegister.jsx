@@ -1,11 +1,12 @@
 import { useState } from "react";
 import useAuthBase from "./useAuthBase";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../config/apiConfig";
 import { useTranslation } from "react-i18next";
+import { useFetcher } from "@api/fetcher";
 
 function useRegister() {
   const { t: te } = useTranslation("error");
+  const { fetcher } = useFetcher();
 
   const authBase = useAuthBase();
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -14,7 +15,7 @@ function useRegister() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     authBase.setError([]);
@@ -62,39 +63,35 @@ function useRegister() {
 
     authBase.setLoading(true);
 
-    fetch(`${API_URL}/api/v1/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((dataReponse) => {
-        authBase.setLoading(false);
-
-        if (dataReponse.statusCode >= 200 && dataReponse.statusCode < 300) {
-          authBase.setSuccess("Đăng kí thành công");
-          navigate(`/verify-email?email=${encodeURIComponent(data.email)}`);
-        } else {
-          if (dataReponse.fieldError) {
-            const response = dataReponse.fieldError;
-            const newErrors = {};
-
-            Object.entries(response).forEach(([field, message]) => {
-              newErrors[field] = message;
-            });
-
-            authBase.setFieldErrors(newErrors);
-          }
-          if (dataReponse.errorCode) {
-            authBase.setError(te(dataReponse.errorCode));
-          }
-        }
-      })
-      .catch((error) => {
-        authBase.setLoading(false);
-        authBase.setError(error.message);
+    try {
+      await fetcher({
+        url: "/api/v1/auth/register",
+        method: "POST",
+        credentials: true,
+        data,
       });
+
+      authBase.setSuccess("Đăng kí thành công");
+      navigate(`/verify-email?email=${encodeURIComponent(data.email)}`);
+    } catch (error) {
+      if (error?.fieldError) {
+        const response = error.fieldError;
+        const newErrors = {};
+
+        Object.entries(response).forEach(([field, message]) => {
+          newErrors[field] = message;
+        });
+
+        authBase.setFieldErrors(newErrors);
+      }
+      if (error?.errorCode) {
+        authBase.setError(te(error.errorCode));
+      } else if (error?.message) {
+        authBase.setError(error.message);
+      }
+    } finally {
+      authBase.setLoading(false);
+    }
   };
 
   return {

@@ -10,7 +10,6 @@ import BulkImport from "./components/Dialogs/BulkImport/BulkImport";
 import AiUsageModal from "./components/AiUsageModal/AiUsageModal";
 import SuggestWordsModal from "./components/SuggestWordsModal/SuggestWordsModal";
 import { useFetcher } from "@api/fetcher";
-import { getAiUsage, buyAiCredits, autoFillWords, suggestWords } from "@api/aiApi";
 import { API_URL } from "@config/apiConfig";
 import {
   Sparkles,
@@ -163,7 +162,10 @@ export default function WordSetForm({ type = "CREATE" }) {
 
     const fetchUsage = async () => {
       try {
-        const res = await getAiUsage(fetcher);
+        const res = await fetcher({
+          url: "/api/v1/ai/usage",
+          method: "GET",
+        });
         if (res?.data) {
           setAiUsage(res.data);
         }
@@ -188,7 +190,11 @@ export default function WordSetForm({ type = "CREATE" }) {
     setIsAutoFilling(true);
     try {
       const terms = wordInputs.map((w) => w.term?.trim() || "");
-      const res = await autoFillWords(fetcher, terms);
+      const res = await fetcher({
+        url: "/api/v1/ai/autofill",
+        method: "POST",
+        data: { terms },
+      });
 
       if (res?.data?.results) {
         const results = res.data.results;
@@ -250,7 +256,12 @@ export default function WordSetForm({ type = "CREATE" }) {
   const handleSuggestWords = async (payload) => {
     setIsSuggesting(true);
     try {
-      const res = await suggestWords(fetcher, payload);
+      const res = await fetcher({
+        url: "/api/v1/ai/suggest-words",
+        method: "POST",
+        data: payload,
+        timeout: 60000,
+      });
       if (res?.data?.words && res.data.words.length > 0) {
         const newWords = res.data.words.map((w) => ({
           term: w.term || "",
@@ -312,7 +323,11 @@ export default function WordSetForm({ type = "CREATE" }) {
   const handleBuyCredits = async (credits) => {
     setIsBuyingCredits(true);
     try {
-      const res = await buyAiCredits(fetcher, credits);
+      const res = await fetcher({
+        url: "/api/v1/ai/credits/buy",
+        method: "POST",
+        data: { credits },
+      });
       if (res?.data) {
         setAiUsage(res.data);
         showNotification(`Mua thành công ${credits} AI Credits!`, "success");

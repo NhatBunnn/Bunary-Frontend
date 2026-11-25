@@ -1,5 +1,4 @@
-import { removeCollection } from "@api/collectionApi";
-import { useToken } from "@context/AuthProvider/TokenContext";
+import { useFetcher } from "@api/fetcher";
 import { useNotification } from "@context/NotificationProvider";
 import useStatus from "@hooks/useStatus";
 import { useTranslation } from "react-i18next";
@@ -9,12 +8,15 @@ function useCollectionPreview() {
   const { t: ts } = useTranslation("success");
   const { showNotification } = useNotification();
   const { setLoading, loading } = useStatus();
-  const { getToken } = useToken();
+  const { fetcher } = useFetcher();
 
   const handleRemoveCollection = async (id) => {
     setLoading(true);
     try {
-      await removeCollection({ token: await getToken(), collectionId: id });
+      await fetcher({
+        url: `/api/v1/collections/${id}`,
+        method: "DELETE",
+      });
       showNotification(ts("COLLECTION_CREATE_SUCCESS"), "success");
     } catch (e) {
       showNotification(te(e.errorCode), "error");

@@ -1,40 +1,39 @@
 import { useEffect, useState } from "react";
-import { useAccessToken } from "../context/AccessTokenProvider";
 import { useParams } from "react-router-dom";
-import { findWordsByWordSetId } from "@api/wordApi";
 import { useNotification } from "@context/NotificationProvider";
 import useStatus from "./useStatus";
 import { useTranslation } from "react-i18next";
-import { findWordSetById } from "@api/wordSetApi";
+import { useFetcher } from "@api/fetcher";
 
 function useWordSetPage() {
-  const { accessToken } = useAccessToken();
   const [words, setWords] = useState([]);
   const [wordSet, setWordSet] = useState("");
-  // const { wordSets, getWordSetById } = useWordSetListProvider();
 
   const { t: te } = useTranslation("error");
   const { setLoading, loading } = useStatus();
   const { showNotification } = useNotification();
+  const { fetcher } = useFetcher();
 
   const { id } = useParams();
-
-  // useEffect(() => {
-  //   const currentWordset = getWordSetById(id);
-  //   if (currentWordset) setWordSet(currentWordset);
-  // }, [wordSets, getWordSetById, id]);
 
   useEffect(() => {
     const fetchWords = async () => {
       setLoading(true);
       try {
-        const wordsRes = await findWordsByWordSetId(accessToken, id);
-        setWords(wordsRes.data);
-        const wordSetsRes = await findWordSetById(accessToken, id, {
-          includeUser: true,
-          includeCollection: true,
+        const wordsRes = await fetcher({
+          url: `/api/v1/words/${id}`,
+          method: "GET",
         });
-        setWordSet(wordSetsRes.data);
+        setWords(wordsRes?.data || []);
+        const wordSetsRes = await fetcher({
+          url: `/api/v1/wordsets/${id}`,
+          method: "GET",
+          params: {
+            includeUser: true,
+            includeCollection: true,
+          },
+        });
+        setWordSet(wordSetsRes?.data || "");
       } catch (error) {
         showNotification(te("FETCH_FAILED"), "error");
         setLoading(false);
@@ -44,7 +43,7 @@ function useWordSetPage() {
     };
 
     fetchWords();
-  }, [accessToken, id, setLoading, showNotification, te]);
+  }, [id, setLoading, showNotification, te]);
 
   return { words, wordSet, loading };
 }

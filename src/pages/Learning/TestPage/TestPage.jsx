@@ -1,53 +1,129 @@
-import React, { useState, useEffect } from "react";
-import { CheckCircle2, XCircle, RotateCw } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  CheckCircle2,
+  XCircle,
+  RotateCw,
+  Clock,
+  Trophy,
+  Volume2,
+  Zap,
+  ArrowRight,
+  Award,
+  Shuffle,
+} from "lucide-react";
 import classNames from "classnames/bind";
 import styles from "./TestPage.module.css";
-import useMultipleChoice from "../MultipleChoice/useMultipleChoice"; // giữ nguyên hook lấy words
+import useMultipleChoice from "../MultipleChoice/useMultipleChoice";
+import FinishScreen from "../components/FinishScreen/FinishScreen";
+import { useNavigate, useParams } from "react-router-dom";
+import { useFetcher } from "@api/fetcher";
 
 const cx = classNames.bind(styles);
 
 const TestPage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { fetcher } = useFetcher();
   const { words } = useMultipleChoice();
+
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({}); // { questionId: optionId }
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const timerRef = useRef(null);
+
+  // Phát âm chuẩn Anh - Mỹ
+  const handleSpeak = (e, text) => {
+    e?.stopPropagation();
+    if (!text || typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Tạo câu hỏi trắc nghiệm xáo trộn từ bộ từ
   useEffect(() => {
-    if (words.length > 0) {
+    if (words && words.length > 0) {
       const qs = generateQuestionsFromWords(words);
       setQuestions(qs);
+      setElapsedSeconds(0);
     }
   }, [words]);
 
-  function generateQuestionsFromWords(words) {
-    return words.map((word, index) => {
-      const correctOption = { id: "a", text: word.meaning, isCorrect: true };
+  // Bộ đếm thời gian làm bài (Stopwatch)
+  useEffect(() => {
+    if (questions.length > 0 && !submitted) {
+      timerRef.current = setInterval(() => {
+        setElapsedSeconds((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [questions.length, submitted]);
 
-      const wrongMeanings = [];
-      while (wrongMeanings.length < 3) {
-        const randomWord = words[Math.floor(Math.random() * words.length)];
+  function generateQuestionsFromWords(wordsList) {
+    if (!wordsList || wordsList.length === 0) return [];
+    // Xáo trộn thứ tự các câu hỏi trong bài kiểm tra
+    const randomizedWords = shuffle(wordsList);
+
+    return randomizedWords.map((word, index) => {
+      const isMeaningToTerm = Math.random() < 0.5;
+      const correctText = isMeaningToTerm ? word.term : word.meaning;
+      const correctOption = { id: "a", text: correctText, isCorrect: true };
+
+      const wrongTexts = [];
+      const maxTries = 25;
+      let tries = 0;
+      while (wrongTexts.length < 3 && tries < maxTries) {
+        tries++;
+        const randomWord =
+          wordsList[Math.floor(Math.random() * wordsList.length)];
+        const candidate = isMeaningToTerm
+          ? randomWord.term
+          : randomWord.meaning;
         if (
-          randomWord.meaning !== word.meaning &&
-          !wrongMeanings.includes(randomWord.meaning)
+          candidate &&
+          candidate !== correctText &&
+          !wrongTexts.includes(candidate)
         ) {
-          wrongMeanings.push(randomWord.meaning);
+          wrongTexts.push(candidate);
         }
+      }
+
+      while (wrongTexts.length < 3) {
+        wrongTexts.push(
+          isMeaningToTerm
+            ? `Option #${wrongTexts.length + 1}`
+            : `Ý nghĩa dự phòng #${wrongTexts.length + 1}`
+        );
       }
 
       const options = shuffle([
         correctOption,
-        { id: "b", text: wrongMeanings[0], isCorrect: false },
-        { id: "c", text: wrongMeanings[1], isCorrect: false },
-        { id: "d", text: wrongMeanings[2], isCorrect: false },
+        { id: "b", text: wrongTexts[0], isCorrect: false },
+        { id: "c", text: wrongTexts[1], isCorrect: false },
+        { id: "d", text: wrongTexts[2], isCorrect: false },
       ]);
 
       return {
         id: word.id || index,
+        promptLabel: isMeaningToTerm
+          ? `Nghĩa: "${word.meaning}"`
+          : word.term,
         term: word.term,
-        question: `Từ '${word.term}' có nghĩa là gì?`,
+        ipa: isMeaningToTerm ? null : word.ipa,
+        allowAudio: !isMeaningToTerm,
+        question: isMeaningToTerm
+          ? `Từ vựng nào mang nghĩa '${word.meaning}'?`
+          : `Từ '${word.term}' có nghĩa là gì?`,
         options,
-        correctText: word.meaning,
+        correctText,
       };
     });
   }
@@ -66,24 +142,82 @@ const TestPage = () => {
     setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
   };
 
-  const handleSubmit = () => {
+  // Nộp bài thi Thử thách Trạm 3 & Ghi nhận vào Bảng Vàng
+  const handleSubmit = async () => {
+    if (isSubmitting || questions.length === 0) return;
+    setIsSubmitting(true);
+    if (timerRef.current) clearInterval(timerRef.current);
+
     let correctCount = 0;
-    questions.forEach((q) => {
+    const avgResponseTimeMs = Math.round(
+      (elapsedSeconds * 1000) / Math.max(1, questions.length)
+    );
+
+    // Tính điểm và gửi SM-2 review cho từng từ
+    questions.forEach(async (q) => {
       const selectedId = answers[q.id];
       const selectedOption = q.options.find((opt) => opt.id === selectedId);
-      if (selectedOption?.isCorrect) correctCount++;
+      const isCorrect = Boolean(selectedOption?.isCorrect);
+      if (isCorrect) correctCount++;
+
+      if (selectedId) {
+        try {
+          await fetcher({
+            url: `/api/v1/learning/wordsets/${id}/review-word`,
+            method: "POST",
+            data: {
+              wordId: q.id,
+              isCorrect,
+              responseTimeMs: avgResponseTimeMs,
+            },
+          });
+        } catch (e) {
+          console.error("SM-2 review failed for test question:", q.id);
+        }
+      }
     });
+
     setScore(correctCount);
     setSubmitted(true);
+
+    const total = questions.length;
+    const stage3Score = Math.round((correctCount / total) * 100);
+
+    // Cập nhật Lộ trình Chặng 3 & Đua top Leaderboard
+    try {
+      await fetcher({
+        url: `/api/v1/learning/wordsets/${id}/roadmap`,
+        method: "PUT",
+        data: {
+          step: 3,
+          stage3Score,
+          stage3DurationSeconds: elapsedSeconds,
+        },
+      });
+      window.dispatchEvent(new Event("roadmapUpdated"));
+    } catch (e) {
+      console.error("Failed to update roadmap stage 3:", e);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleRestart = () => {
     setAnswers({});
     setSubmitted(false);
     setScore(0);
-    if (words.length > 0) {
+    setElapsedSeconds(0);
+    if (words && words.length > 0) {
       setQuestions(generateQuestionsFromWords(words));
     }
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const getOptionClasses = (questionId, option) => {
@@ -99,33 +233,94 @@ const TestPage = () => {
     return cx("option", "faded");
   };
 
-  if (questions.length === 0) {
-    return <div className="text-center py-5">Đang tải câu hỏi kiểm tra...</div>;
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="text-center py-5">
+        Đang chuẩn bị đề thi kiểm tra từ vựng...
+      </div>
+    );
   }
 
   const total = questions.length;
+  const answeredCount = Object.keys(answers).length;
   const percentage = submitted ? Math.round((score / total) * 100) : 0;
 
   return (
     <div className={cx("container")}>
+      {/* Header bài thi & Đồng hồ bấm giờ */}
       <div className={cx("header")}>
-        <h1 className={cx("title")}>Kiểm tra từ vựng</h1>
+        <div className={cx("headerMeta")}>
+          <span className={cx("stageBadge")}>
+            Trạm 3: Thử thách áp lực cao
+          </span>
+          <div className={cx("metaActions")}>
+            {!submitted && (
+              <button
+                className={cx("shuffleTestBtn")}
+                onClick={handleRestart}
+                title="Xáo trộn lại toàn bộ câu hỏi và bắt đầu lại"
+              >
+                <Shuffle size={14} />
+                <span>Xáo trộn đề</span>
+              </button>
+            )}
+            <div className={cx("timerBox")}>
+              <Clock size={16} />
+              <span>Thời gian: {formatTime(elapsedSeconds)}</span>
+            </div>
+          </div>
+        </div>
+
+        <h1 className={cx("title")}>Kiểm tra năng lực từ vựng</h1>
         <p className={cx("subtitle")}>
-          {questions.length} câu hỏi • Chọn nghĩa chính xác của từ
+          Hoàn thành {total} câu hỏi để đánh giá độ thành thạo và ghi danh vào
+          Bảng Vàng Cao Thủ!
         </p>
-        {submitted && (
-          <div className={cx("result-summary")}>
-            <span className={cx("score")}>
-              Kết quả: {score}/{total} ({percentage}%)
-            </span>
-            <button onClick={handleRestart} className={cx("restart-btn")}>
-              <RotateCw size={18} />
-              Làm lại bài thi
-            </button>
+
+        {submitted ? (
+          <div className={cx("resultBanner")}>
+            <div className={cx("resultScore")}>
+              <Award size={32} className={cx("awardIcon")} />
+              <div>
+                <h3 className="mb-0 fw-bold">
+                  {score}/{total} câu đúng ({percentage}%)
+                </h3>
+                <p className="mb-0 small text-muted">
+                  Thời gian hoàn thành: {formatTime(elapsedSeconds)} • Điểm đã được lưu vào Bảng Vàng!
+                </p>
+              </div>
+            </div>
+            <div className={cx("resultActions")}>
+              <button onClick={handleRestart} className={cx("restartBtn")}>
+                <RotateCw size={16} />
+                <span>Thi lại</span>
+              </button>
+              <button
+                onClick={() => navigate(`/wordset/${id}`)}
+                className={cx("leaderboardBtn")}
+              >
+                <Trophy size={16} />
+                <span>Xem Bảng Vàng & Lộ trình</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className={cx("progressStatus")}>
+            <div className="d-flex justify-content-between mb-1 small text-muted">
+              <span>Đã trả lời: {answeredCount}/{total} câu</span>
+              <span>{Math.round((answeredCount / total) * 100)}%</span>
+            </div>
+            <div className="progress" style={{ height: "6px" }}>
+              <div
+                className="progress-bar bg-primary"
+                style={{ width: `${(answeredCount / total) * 100}%` }}
+              />
+            </div>
           </div>
         )}
       </div>
 
+      {/* Danh sách câu hỏi */}
       <div className={cx("questions-list")}>
         {questions.map((q, index) => {
           const selectedId = answers[q.id];
@@ -135,24 +330,42 @@ const TestPage = () => {
           return (
             <div key={q.id} className={cx("question-item")}>
               <div className={cx("question-header")}>
-                <span className={cx("question-number")}>Câu {index + 1}.</span>
-                <span className={cx("term")}>{q.term}</span>
-
-                {/* Hiển thị trạng thái ngay bên cạnh nếu đã chọn */}
-                {selectedId && !submitted && (
-                  <span className={cx("selected-indicator")}>Đã chọn</span>
+                <span className={cx("question-number")}>
+                  Câu {index + 1}.
+                </span>
+                <span className={cx("term")}>{q.promptLabel || q.term}</span>
+                {q.ipa && (
+                  <span className={cx("ipa")}>/{q.ipa}/</span>
                 )}
-                {submitted &&
-                  isCorrect !== undefined &&
-                  (isCorrect ? (
-                    <CheckCircle2 size={24} className="text-success" />
-                  ) : (
-                    <XCircle size={24} className="text-danger" />
-                  ))}
+                {q.allowAudio !== false && (
+                  <button
+                    className={cx("audioBtn")}
+                    onClick={(e) => handleSpeak(e, q.term)}
+                    title="Nghe phát âm"
+                  >
+                    <Volume2 size={18} />
+                  </button>
+                )}
+
+                {submitted && (
+                  <span
+                    className={cx("resultBadge", isCorrect ? "correct" : "incorrect")}
+                  >
+                    {isCorrect ? (
+                      <>
+                        <CheckCircle2 size={16} /> Đúng
+                      </>
+                    ) : (
+                      <>
+                        <XCircle size={16} /> Sai
+                      </>
+                    )}
+                  </span>
+                )}
               </div>
 
               <div className={cx("options")}>
-                {q.options.map((option) => (
+                {q.options.map((option, optIdx) => (
                   <button
                     key={option.id}
                     onClick={() => handleSelect(q.id, option.id)}
@@ -160,17 +373,16 @@ const TestPage = () => {
                     className={getOptionClasses(q.id, option)}
                   >
                     <span className={cx("label")}>
-                      {option.id.toUpperCase()}
+                      {["A", "B", "C", "D"][optIdx] || option.id.toUpperCase()}
                     </span>
-                    <span>{option.text}</span>
+                    <span className={cx("optionText")}>{option.text}</span>
                   </button>
                 ))}
               </div>
 
-              {/* Hiển thị đáp án đúng nếu sai và đã submit */}
               {submitted && !isCorrect && (
-                <div className={cx("correct-answer")}>
-                  <strong>Đáp án chính xác:</strong> {q.correctText}
+                <div className={cx("correction")}>
+                  Đáp án chính xác: <strong>{q.correctText}</strong>
                 </div>
               )}
             </div>
@@ -178,14 +390,24 @@ const TestPage = () => {
         })}
       </div>
 
+      {/* Nút nộp bài */}
       {!submitted && (
-        <div className={cx("submit-section")}>
+        <div className={cx("submitFooter")}>
           <button
             onClick={handleSubmit}
-            disabled={Object.keys(answers).length < questions.length}
-            className={cx("submit-btn")}
+            disabled={isSubmitting || answeredCount === 0}
+            className={cx("submitBtn")}
           >
-            Nộp bài kiểm tra ({Object.keys(answers).length}/{total} đã làm)
+            {isSubmitting ? (
+              <span>Đang chấm điểm...</span>
+            ) : (
+              <>
+                <span>
+                  Nộp bài thi ({answeredCount}/{total} câu)
+                </span>
+                <ArrowRight size={18} />
+              </>
+            )}
           </button>
         </div>
       )}

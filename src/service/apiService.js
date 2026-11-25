@@ -34,7 +34,7 @@ async function getNewAccessToken() {
 }
 
 export function getRefreshToken() {
-  return fetch(`${API_URL}/auth/refreshToken`, {
+  return fetch(`${API_URL}/api/v1/auth/refresh-Token`, {
     method: "GET",
     credentials: "include",
   })
