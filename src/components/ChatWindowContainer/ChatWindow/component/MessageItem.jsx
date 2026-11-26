@@ -1,4 +1,4 @@
-import { Image } from "@assets/images";
+import { Image, Images } from "@assets/images";
 import styles from "./MessageItem.module.css";
 import classNames from "classnames/bind";
 
@@ -16,6 +16,7 @@ function MessageItem({ content, isMe, src, showAvatar = true }) {
     >
       <Image
         src={src}
+        fallback={Images.avatar}
         size="30px"
         isCircled={true}
         className={c("avatar", "me-2", showAvatar ? "" : "invisible")}

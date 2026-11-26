@@ -2,67 +2,75 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Image, Images } from "@assets/images";
 import styles from "./LargeWordSet.module.css";
 import classNames from "classnames/bind";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const c = classNames.bind(styles);
 
 function LargeWordSet({ author, wordSet }) {
-  return (
-    <Link
-      className={c(
-        "largeWordSet",
-        "d-flex",
-        "justify-content-left",
-        "link-no-style"
-      )}
-      to={`/wordset/${wordSet?.id}/${wordSet?.title
+  const slug = wordSet?.title
+    ? wordSet.title
         .split(" ")
         .filter(Boolean)
         .map((d) => d.toLowerCase())
-        .join("-")}`}
+        .join("-")
+    : "";
+
+  const ratingAvg = wordSet?.stat?.ratingAvg ?? 0;
+  const wordCount = wordSet?.stat?.wordCount ?? 0;
+
+  return (
+    <Link
+      className={c("largeWordSet", "link-no-style")}
+      to={`/wordset/${wordSet?.id}/${slug}`}
     >
+      {/* Left: Thumbnail */}
       <div className={c("thumbnail")}>
-        <div className={c("rating")}>
-          <FontAwesomeIcon icon={faStar} className={c("rating__icon")} />
-          <span>{wordSet?.stat.ratingAvg}</span>
-        </div>
-        <img
-          src={wordSet?.thumbnail || Images.flashCardNoImageLarge}
-          alt={wordSet?.title}
+        {ratingAvg > 0 && (
+          <div className={c("rating")}>
+            <FontAwesomeIcon icon={faStar} className={c("rating__icon")} />
+            <span>{Number(ratingAvg).toFixed(1)}</span>
+          </div>
+        )}
+        <Image
+          src={wordSet?.thumbnail}
+          fallback={Images.flashCardNoImageLarge}
+          alt={wordSet?.title || "WordSet thumbnail"}
+          width="100%"
+          height="100%"
         />
       </div>
 
-      <div
-        className={c(
-          "content",
-          "d-flex",
-          "flex-column",
-          "justify-content-between"
-        )}
-      >
+      {/* Right: Content */}
+      <div className={c("content")}>
         <div className={c("head")}>
-          <div className={c("title", "font-medium")}>{wordSet?.title}</div>
-
-          {/* Giữ nguyên số từ vựng như gốc */}
-          <div className={c("vocab")}>
-            <span>{`${wordSet?.stat?.wordCount} từ vựng`}</span>
+          <div className={c("title")} title={wordSet?.title}>
+            {wordSet?.title}
           </div>
 
-          {/* Chỉ thêm đúng 1 tag level */}
-          <div className={c("level-tag")}>{wordSet?.level}</div>
+          <div className={c("badges")}>
+            <span className={c("vocab")}>
+              <FontAwesomeIcon icon={faBookOpen} className={c("vocab__icon")} />
+              {wordCount} từ vựng
+            </span>
+            {wordSet?.level && (
+              <span className={c("level-tag")}>{wordSet.level}</span>
+            )}
+          </div>
         </div>
 
-        <div className={c("description", "h-100")}>{wordSet?.description}</div>
+        <p className={c("description")}>
+          {wordSet?.description || "Chưa có mô tả cho bộ từ vựng này."}
+        </p>
 
         {author && (
-          <div className={c("author", "d-flex", "align-items-center")}>
+          <div className={c("author")}>
             <Image
               src={author.avatar || Images.Logo}
-              size="24px"
+              size="22px"
               isCircled="true"
             />
-            <span>{author.fullName}</span>
+            <span className={c("authorName")}>{author.fullName}</span>
           </div>
         )}
       </div>

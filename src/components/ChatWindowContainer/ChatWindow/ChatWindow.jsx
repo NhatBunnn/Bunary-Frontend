@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import MessageItem from "./component/MessageItem";
-import { Image } from "@assets/images";
+import { Image, Images } from "@assets/images";
 
 const c = classNames.bind(styles);
 
@@ -47,6 +47,7 @@ function ChatWindow({
       <div className={c("chatHeader")}>
         <Image
           src={receiver.avatar}
+          fallback={Images.avatar}
           size="40px"
           isCircled={true}
           className={c("headerAvatar")}

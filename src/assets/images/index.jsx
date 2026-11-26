@@ -58,6 +58,7 @@ export const Image = ({
         src={currentSrc}
         alt={alt}
         loading={loading}
+        referrerPolicy="no-referrer"
         onError={handleError}
         style={{
           width: "100%",

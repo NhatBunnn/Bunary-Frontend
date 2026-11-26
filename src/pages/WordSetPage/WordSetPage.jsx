@@ -26,6 +26,8 @@ import {
   faXmark,
   faBullseye,
   faLock,
+  faArrowRight,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./WordSetPage.module.css";
@@ -36,50 +38,10 @@ import { DialogWrapper } from "@components/index";
 import FlashCardSetting from "./dialogs/FlashCardSetting/FlashCardSetting";
 import { useNavigate } from "react-router-dom";
 import { AddToCollection } from "@features/collection/components";
-import { Image } from "@assets/images";
+import { Image, Images } from "@assets/images";
 import { useUser } from "@context/UserProvider/UserProvider";
 
 const c = classNames.bind(styles);
-
-// Mock Top 5 Leaderboard Data
-const TOP5_LEADERBOARD = [
-  {
-    rank: 1,
-    name: "Trần Minh Quân",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&auto=format&fit=crop&q=80",
-    score: "15/15",
-    time: "42s",
-  },
-  {
-    rank: 2,
-    name: "Lê Thuỳ Linh",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&auto=format&fit=crop&q=80",
-    score: "15/15",
-    time: "48s",
-  },
-  {
-    rank: 3,
-    name: "Nhat Dev (Bạn)",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&auto=format&fit=crop&q=80",
-    score: "14/15",
-    time: "51s",
-    isMe: true,
-  },
-  {
-    rank: 4,
-    name: "Hoàng Long",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&auto=format&fit=crop&q=80",
-    score: "13/15",
-    time: "55s",
-  },
-  {
-    rank: 5,
-    name: "Phạm Gia Huy",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&auto=format&fit=crop&q=80",
-    score: "13/15",
-    time: "59s",
-  },
-];
 
 const WordSetPage = () => {
   // Toggle UI Modals & Menus
@@ -188,8 +150,28 @@ const WordSetPage = () => {
     return () => stopPodcast();
   }, []);
 
-  if (loading || !wordSet) {
+  if (loading) {
     return <Loading />;
+  }
+
+  if (!wordSet) {
+    return (
+      <div className={c("page")} style={{ paddingTop: "3rem", textAlign: "center" }}>
+        <h2>Không tìm thấy bộ từ vựng</h2>
+        <p style={{ color: "#6b7280" }}>
+          Bộ từ vựng không tồn tại hoặc đã bị xóa.
+        </p>
+        <div>
+          <button
+            className={c("actionBtn", "actionBtnPrimary")}
+            style={{ margin: "0 auto" }}
+            onClick={() => navigate("/wordsets")}
+          >
+            Khám phá bộ từ vựng
+          </button>
+        </div>
+      </div>
+    );
   }
 
   const isAuthor = wordSet?.author?.id === user?.id;
@@ -204,16 +186,111 @@ const WordSetPage = () => {
     : words;
 
   // Diagnostic Stats calculation
-  const totalCount = diagnostics?.totalWords || words.length || 1;
-  const learnedCount = diagnostics?.learnedCount || 0;
-  const learningCount = diagnostics?.learningCount || 0;
-  const unlearnedCount = diagnostics?.unlearnedCount || 0;
-  const learnedPercent = diagnostics?.learnedPercent || (totalCount > 0 ? Math.round((learnedCount / totalCount) * 100) : 0);
-  const learningPercent = diagnostics?.learningPercent || (totalCount > 0 ? Math.round((learningCount / totalCount) * 100) : 0);
-  const unlearnedPercent = diagnostics?.unlearnedPercent || (totalCount > 0 ? Math.max(0, 100 - learnedPercent - learningPercent) : 0);
+  const totalCount = diagnostics?.totalWords ?? words.length ?? 0;
+  const learnedCount = diagnostics?.learnedCount ?? 0;
+  const learningCount = diagnostics?.learningCount ?? 0;
+  const unlearnedCount = diagnostics?.unlearnedCount ?? 0;
+  const learnedPercent =
+    diagnostics?.learnedPercent ??
+    (totalCount > 0 ? Math.round((learnedCount / totalCount) * 100) : 0);
+  const learningPercent =
+    diagnostics?.learningPercent ??
+    (totalCount > 0 ? Math.round((learningCount / totalCount) * 100) : 0);
+  const unlearnedPercent =
+    diagnostics?.unlearnedPercent ??
+    (totalCount > 0 ? Math.max(0, 100 - learnedPercent - learningPercent) : 0);
+
+  // Roadmap steps config
+  const roadmapSteps = [
+    {
+      num: 1,
+      title: "Ghi Nhớ",
+      subtitle: "Flashcard 3D",
+      desc: "Lật 100% thẻ làm quen mặt chữ & phát âm",
+      icon: faIdCard,
+      passed: roadmap?.stage1Completed,
+      active: !roadmap?.stage1Completed,
+      locked: false,
+      score: roadmap?.stage1Completed ? "100% ✓" : "Đang làm quen",
+      btnLabel: "Lật Thẻ Flashcard",
+      btnColor: "emerald",
+      onClick: () => setOpenSetting((prev) => ({ ...prev, flashCard: true })),
+    },
+    {
+      num: 2,
+      title: "Phản Xạ",
+      subtitle: "Trắc nghiệm",
+      desc: "4 đáp án nhanh 10s/câu (Yêu cầu ≥ 80%)",
+      icon: faListCheck,
+      passed: roadmap?.stage2HighestScore >= 80,
+      active: roadmap?.currentStep >= 2 && !(roadmap?.stage2HighestScore >= 80),
+      locked: roadmap?.currentStep < 2,
+      score: roadmap?.stage2HighestScore ? `${roadmap.stage2HighestScore}%` : "Chưa làm",
+      btnLabel: roadmap?.currentStep < 2 ? "Cần qua Trạm 1" : "Luyện Phản Xạ",
+      btnColor: roadmap?.currentStep < 2 ? "disabled" : "primary",
+      onClick: () => navigate(`/learning/${wordSet.id}/multiple-choice`),
+      disabled: roadmap?.currentStep < 2,
+    },
+    {
+      num: 3,
+      title: "Thử Thách",
+      subtitle: "Kiểm tra tính giờ",
+      desc: "Gõ chữ với đồng hồ đếm ngược áp lực",
+      icon: faGraduationCap,
+      passed: roadmap?.stage3HighestScore >= 80,
+      active: roadmap?.currentStep >= 3 && !(roadmap?.stage3HighestScore >= 80),
+      locked: roadmap?.currentStep < 3,
+      score: roadmap?.stage3HighestScore > 0
+        ? `${roadmap.stage3HighestScore}% (${roadmap.stage3DurationSeconds}s)`
+        : roadmap?.currentStep >= 3 ? "Sẵn sàng" : "Chưa mở",
+      btnLabel: roadmap?.currentStep < 3 ? "Cần qua Trạm 2" : "Vào Thi",
+      btnColor: roadmap?.currentStep < 3 ? "disabled" : "primary",
+      onClick: () => navigate(`/learning/${wordSet.id}/test`),
+      disabled: roadmap?.currentStep < 3,
+    },
+    {
+      num: "🏆",
+      title: "Tốt Nghiệp",
+      subtitle: "Truyện AI",
+      desc: "Đạt ≥ 80% Trạm 3 để mở khóa truyện AI",
+      icon: faBookOpen,
+      passed: roadmap?.isMastered,
+      active: Boolean(roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4),
+      locked: !Boolean(roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4),
+      score: Boolean(roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4)
+        ? "Đã mở khóa 🎁" : "Hoàn thành 3 Trạm",
+      btnLabel: Boolean(roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4)
+        ? "Tạo truyện AI" : "Cần qua Trạm 3",
+      btnColor: Boolean(roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4)
+        ? "amber" : "disabled",
+      onClick: () => setIsStoryModalOpen(true),
+      disabled: !Boolean(roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4),
+      isFinal: true,
+    },
+  ];
+
+  // Calculate rating distribution from ratingList
+  const ratingCounts = [0, 0, 0, 0, 0]; // 1-5 star counts
+  if (ratingList && ratingList.length > 0) {
+    ratingList.forEach((r) => {
+      const v = r.value || 5;
+      if (v >= 1 && v <= 5) ratingCounts[v - 1]++;
+    });
+  }
+  const totalRatings = ratingList?.length || wordSet?.stat?.ratingCount || 0;
+  const ratingAvgValue =
+    ratingList && ratingList.length > 0
+      ? (
+          ratingList.reduce((sum, r) => sum + (r.value || 0), 0) /
+          ratingList.length
+        ).toFixed(1)
+      : wordSet?.stat?.ratingAvg
+      ? Number(wordSet.stat.ratingAvg).toFixed(1)
+      : "0.0";
+  const getBarPercent = (starIdx) => totalRatings > 0 ? Math.round((ratingCounts[starIdx] / totalRatings) * 100) : 0;
 
   return (
-    <div className={c("container")}>
+    <div className={c("page")}>
       {/* Dialog: Add to Collection */}
       <AddToCollection
         isOpen={openAddToCollect}
@@ -230,706 +307,474 @@ const WordSetPage = () => {
         <FlashCardSetting wordSetId={wordSet.id} />
       </DialogWrapper>
 
-      {/* ================= 1. WORDSET HERO CARD ================= */}
-      <div className={c("heroCard")}>
-        <div className={c("heroContent")}>
-          {/* Thumbnail */}
-          <div className={c("thumbnailWrapper")}>
+      {/* ===================== HERO BANNER ===================== */}
+      <section className={c("heroBanner")}>
+        <div className={c("heroBg")}>
+          <Image
+            src={wordSet?.thumbnail}
+            fallback={Images.flashCardNoImageLarge}
+            alt=""
+            width="100%"
+            height="100%"
+          />
+        </div>
+        <div className={c("heroOverlay")} />
+
+        <div className={c("heroInner")}>
+          {/* Floating Thumbnail */}
+          <div className={c("heroThumb")}>
             <Image
-              src={wordSet?.thumbnail || "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&auto=format&fit=crop&q=80"}
+              src={wordSet?.thumbnail}
+              fallback={Images.flashCardNoImageLarge}
               alt={wordSet?.title}
+              width="100%"
+              height="100%"
             />
-            <div className={c("publicBadge")}>
-              <FontAwesomeIcon icon={faGlobe} />
-              <span>PUBLIC</span>
-            </div>
+            {wordSet?.visibility !== "PRIVATE" && (
+              <span className={c("publicBadge")}>
+                <FontAwesomeIcon icon={faGlobe} />
+                {wordSet?.visibility || "PUBLIC"}
+              </span>
+            )}
           </div>
 
-          {/* Details */}
-          <div className={c("heroDetails")}>
-            <div className={c("categoryLine")}>
-              <span className={c("categoryTag")}>IT & Software Engineering</span>
-              <span className={c("updatedTime")}>• {words.length} từ vựng</span>
+          {/* Hero Content */}
+          <div className={c("heroMeta")}>
+            <div className={c("heroTags")}>
+              {wordSet?.level && (
+                <span className={c("catPill")}>{wordSet.level}</span>
+              )}
+              <span className={c("countPill")}>{words.length} từ vựng</span>
             </div>
 
-            <h1 className={c("wordsetTitle")}>{wordSet.title}</h1>
+            <h1 className={c("heroTitle")}>{wordSet.title}</h1>
 
-            <p className={c("wordsetDescription")}>
-              {wordSet.description ||
-                "Hệ sinh thái học từ vựng thích ứng thông minh: Lộ trình 3 chặng, nghe thụ động rảnh tay và thuật toán chống quên SM-2."}
-            </p>
+            {wordSet.description && (
+              <p className={c("heroDesc")}>{wordSet.description}</p>
+            )}
 
-            {/* Author Row */}
-            <div className={c("authorRow")}>
-              <div className={c("authorLeft")}>
-                <img
-                  src={
-                    wordSet.author?.avatar ||
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80"
-                  }
+            {/* Author Chip */}
+            {wordSet.author && (
+              <div className={c("heroAuthor")}>
+                <Image
+                  src={wordSet.author?.avatar}
+                  fallback={Images.avatar}
                   alt={wordSet.author?.fullName}
-                  className={c("authorAvatar")}
+                  size="32px"
+                  isCircled={true}
+                  className={c("heroAuthorAvatar")}
                 />
-                <div className={c("authorInfo")}>
-                  <span className={c("authorName")}>
-                    {wordSet.author?.fullName || "Nguyễn Hải Đăng"}
+                <div className={c("heroAuthorInfo")}>
+                  <span className={c("heroAuthorName")}>
+                    {wordSet.author?.fullName || wordSet.author?.username}
                   </span>
-                  <span className={c("authorRole")}>
-                    Tác giả bộ từ • {wordSet.author?.username ? `@${wordSet.author.username}` : "@haidang_dev"}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                className={c("followBtn", isFollowing && "followingActive")}
-                onClick={() => setIsFollowing(!isFollowing)}
-              >
-                <FontAwesomeIcon icon={faUserPlus} />
-                <span>{isFollowing ? "Đang theo dõi ✔" : "Theo dõi"}</span>
-              </button>
-            </div>
-
-            {/* Actions & Stats Row */}
-            <div className={c("heroActionsBar")}>
-              <div className={c("statsCluster")}>
-                <div
-                  className={c("ratingBadge")}
-                  onClick={() => {
-                    const el = document.getElementById("rating-section");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                  }}
-                >
-                  <FontAwesomeIcon icon={faStar} color="#ffc107" />
-                  <b>{wordSet?.stat?.ratingAvg || "4.9"}</b>
-                  <span>({wordSet?.stat?.ratingCount || 128} đánh giá)</span>
-                </div>
-                <span>•</span>
-                <div className={c("statItem")}>
-                  <FontAwesomeIcon icon={faUsers} />
-                  <span>
-                    <b>{wordSet?.stat?.studyCount || 1428}</b> lượt học
-                  </span>
-                </div>
-                <span>•</span>
-                <div className={c("statItem")}>
-                  <FontAwesomeIcon icon={faCodeFork} />
-                  <span>
-                    <b>342</b> forks
-                  </span>
-                </div>
-              </div>
-
-              <div className={c("actionBtns")}>
-                {/* Add to Collection */}
-                <button
-                  className={c("btnOutline")}
-                  onClick={() => setOpenAddToCollect(true)}
-                >
-                  <FontAwesomeIcon icon={faBookmark} />
-                  <span>Lưu vào bộ</span>
-                </button>
-
-                {/* Fork */}
-                <button
-                  className={c("btnOutline")}
-                  onClick={() => alert("🍴 Đã sao chép (Fork) bộ từ về tài khoản cá nhân thành công!")}
-                >
-                  <FontAwesomeIcon icon={faCodeFork} />
-                  <span>Fork</span>
-                </button>
-
-                {/* Hands-Free Podcast Mode */}
-                <button
-                  className={c("btnPrimary")}
-                  onClick={togglePodcast}
-                  style={isPodcastActive ? { background: "#4338ca" } : {}}
-                >
-                  <FontAwesomeIcon icon={faHeadphones} />
-                  <span>{isPodcastActive ? "Đang Nghe Podcast" : "Nghe Rảnh Tay"}</span>
-                </button>
-
-                {/* More Options (Edit if author) */}
-                <div className={c("moreOptionsWrapper")}>
-                  <button
-                    className={c("btnOutline")}
-                    style={{ padding: "0.55rem 0.75rem" }}
-                    onClick={() => setMoreOptions((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </button>
-                  {openMoreOptions && (
-                    <div className={c("dropdownMenu")}>
-                      {isAuthor && (
-                        <button
-                          className={c("dropdownItem")}
-                          onClick={() => {
-                            setMoreOptions(false);
-                            navigate(`/wordset/${wordSet.id}/edit`);
-                          }}
-                        >
-                          Chỉnh sửa bộ từ
-                        </button>
-                      )}
-                      <button
-                        className={c("dropdownItem")}
-                        onClick={() => {
-                          setMoreOptions(false);
-                          alert("Đã chia sẻ liên kết bộ từ!");
-                        }}
-                      >
-                        Chia sẻ liên kết
-                      </button>
-                    </div>
+                  {wordSet.author?.username && (
+                    <span className={c("heroAuthorHandle")}>
+                      @{wordSet.author.username}
+                    </span>
                   )}
                 </div>
+                <button
+                  className={c("followChip", isFollowing && "followChipActive")}
+                  onClick={() => setIsFollowing(!isFollowing)}
+                >
+                  <FontAwesomeIcon icon={faUserPlus} />
+                  {isFollowing ? "Đang theo dõi" : "Theo dõi"}
+                </button>
+              </div>
+            )}
+
+            {/* Stats Row */}
+            <div className={c("heroStats")}>
+              <div
+                className={c("statChip")}
+                onClick={() => {
+                  const el = document.getElementById("rating-section");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <FontAwesomeIcon icon={faStar} className={c("statIconGold")} />
+                <strong>{ratingAvgValue}</strong>
+                <span>({totalRatings})</span>
+              </div>
+              <div className={c("statChip")}>
+                <FontAwesomeIcon icon={faUsers} />
+                <strong>{wordSet?.stat?.studyCount ?? 0}</strong>
+                <span>lượt học</span>
               </div>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ===================== ACTION BAR ===================== */}
+      <div className={c("actionBar")}>
+        <button className={c("actionBtn", "actionBtnPrimary")} onClick={togglePodcast}
+          style={isPodcastActive ? { background: "#4338ca" } : {}}
+        >
+          <FontAwesomeIcon icon={faHeadphones} />
+          <span>{isPodcastActive ? "Đang Nghe" : "Nghe Rảnh Tay"}</span>
+        </button>
+        <button className={c("actionBtn")} onClick={() => setOpenAddToCollect(true)}>
+          <FontAwesomeIcon icon={faBookmark} />
+          <span>Lưu</span>
+        </button>
+        <button className={c("actionBtn")} onClick={() => alert("🍴 Đã sao chép (Fork) bộ từ về tài khoản cá nhân thành công!")}>
+          <FontAwesomeIcon icon={faCodeFork} />
+          <span>Fork</span>
+        </button>
+
+        <div className={c("actionBarRight")}>
+          <div className={c("moreOptionsWrapper")}>
+            <button
+              className={c("actionBtn")}
+              onClick={() => setMoreOptions((prev) => !prev)}
+            >
+              <FontAwesomeIcon icon={faEllipsisVertical} />
+            </button>
+            {openMoreOptions && (
+              <div className={c("dropdownMenu")}>
+                {isAuthor && (
+                  <button
+                    className={c("dropdownItem")}
+                    onClick={() => {
+                      setMoreOptions(false);
+                      navigate(`/wordset/${wordSet.id}/edit`);
+                    }}
+                  >
+                    Chỉnh sửa bộ từ
+                  </button>
+                )}
+                <button
+                  className={c("dropdownItem")}
+                  onClick={() => {
+                    setMoreOptions(false);
+                    alert("Đã chia sẻ liên kết bộ từ!");
+                  }}
+                >
+                  Chia sẻ liên kết
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* ================= 2. MEMORY DIAGNOSTIC BAR (X-QUANG TRÍ NHỚ) ================= */}
-      <div className={c("diagnosticSection")}>
-        <div className={c("diagnosticHeader")}>
-          <div className={c("diagnosticTitle")}>
-            <FontAwesomeIcon icon={faBullseye} color="#4f46e5" />
-            <span>Thanh Chẩn Đoán Trí Nhớ (X-quang)</span>
-            <span className={c("diagnosticSub")}>
-              (Đánh giá dựa trên lịch sử trả lời & thuật toán SM-2)
+      {/* ===================== DIAGNOSTIC STRIP ===================== */}
+      <section className={c("diagStrip")}>
+        <div className={c("diagTop")}>
+          <div className={c("diagLabel")}>
+            <FontAwesomeIcon icon={faBullseye} className={c("diagIcon")} />
+            <span>X-quang Trí Nhớ</span>
+          </div>
+
+          <div className={c("diagCounters")}>
+            <span className={c("diagCounter", "diagGreen")}>
+              <span className={c("diagDot", "dotGreen")} />
+              Thuộc: <strong>{learnedCount}</strong> ({learnedPercent}%)
+            </span>
+            <span className={c("diagCounter", "diagAmber")}>
+              <span className={c("diagDot", "dotAmber")} />
+              Đang học: <strong>{learningCount}</strong> ({learningPercent}%)
+            </span>
+            <span className={c("diagCounter", "diagRose")}>
+              <span className={c("diagDot", "dotRose")} />
+              Chưa biết: <strong>{unlearnedCount}</strong> ({unlearnedPercent}%)
             </span>
           </div>
 
           <button
-            className={c("filterBtn", filterUnlearned && "filterBtnActive")}
+            className={c("filterPill", filterUnlearned && "filterPillActive")}
             onClick={() => setFilterUnlearned(!filterUnlearned)}
           >
-            <FontAwesomeIcon icon={faBullseye} />
-            <span>
-              {filterUnlearned
-                ? "Hiển thị tất cả từ vựng"
-                : `🎯 Chỉ học ${unlearnedCount} từ chưa biết`}
-            </span>
+            {filterUnlearned ? "Hiển thị tất cả" : `🎯 Chỉ ${unlearnedCount} từ chưa biết`}
           </button>
         </div>
 
-        {/* 3-Color Progress Track */}
-        <div className={c("progressBarContainer")}>
-          <div
-            className={c("barLearned")}
-            style={{ width: `${learnedPercent}%` }}
-            title={`${learnedCount} từ Đã thuộc (${learnedPercent}%)`}
-          />
-          <div
-            className={c("barLearning")}
-            style={{ width: `${learningPercent}%` }}
-            title={`${learningCount} từ Đang học (${learningPercent}%)`}
-          />
-          <div
-            className={c("barUnlearned")}
-            style={{ width: `${unlearnedPercent}%` }}
-            title={`${unlearnedCount} từ Chưa biết (${unlearnedPercent}%)`}
-          />
+        <div className={c("diagBar")}>
+          <div className={c("diagFillGreen")} style={{ width: `${learnedPercent}%` }} />
+          <div className={c("diagFillAmber")} style={{ width: `${learningPercent}%` }} />
+          <div className={c("diagFillRose")} style={{ width: `${unlearnedPercent}%` }} />
         </div>
 
-        <div className={c("diagnosticLegend")}>
-          <div className={c("legendList")}>
-            <div className={c("legendItem")}>
-              <span className={c("dotGreen")} />
-              <span>
-                Đã thuộc: <b>{learnedCount} từ</b> ({learnedPercent}%)
-              </span>
-            </div>
-            <div className={c("legendItem")}>
-              <span className={c("dotAmber")} />
-              <span>
-                Đang học: <b>{learningCount} từ</b> ({learningPercent}%)
-              </span>
-            </div>
-            <div className={c("legendItem")}>
-              <span className={c("dotRose")} />
-              <span>
-                Chưa biết: <b>{unlearnedCount} từ</b> ({unlearnedPercent}%)
-              </span>
-            </div>
-          </div>
-
-          <span>
-            Tiến độ tổng: <b>{learnedCount}/{totalCount} từ ghi nhớ</b>
-          </span>
+        <div className={c("diagProgress")}>
+          Tiến độ: <strong>{learnedCount}/{totalCount}</strong> từ ghi nhớ
         </div>
-      </div>
+      </section>
 
-      {/* ================= 3. ROADMAP STEPPER (LỘ TRÌNH 3 CHẶNG) ================= */}
-      <div className={c("roadmapSection")}>
-        <div className={c("sectionHeader")}>
+      {/* ===================== ROADMAP TIMELINE ===================== */}
+      <section className={c("roadmapWrap")}>
+        <div className={c("roadmapHead")}>
           <div>
-            <h2 className={c("sectionHeading")}>
-              <FontAwesomeIcon icon={faGraduationCap} color="#4f46e5" />
-              <span>Lộ Trình 3 Chặng Chuẩn Sư Phạm</span>
+            <h2 className={c("roadmapTitle")}>
+              <FontAwesomeIcon icon={faGraduationCap} className={c("roadmapTitleIcon")} />
+              Lộ Trình Học Tập
             </h2>
-            <p className={c("sectionSubtitle")}>
-              Tiến trình tiếp thu tự nhiên: Ghi nhớ mặt chữ &rarr; Phản xạ trắc nghiệm &rarr; Thử thách tính giờ &rarr; Mở khóa truyện AI
+            <p className={c("roadmapSub")}>
+              Ghi nhớ → Phản xạ → Thử thách → Mở khóa truyện AI
             </p>
           </div>
-          <span className={c("statusPill")}>
+          <span className={c("roadmapStatus")}>
             {roadmap?.isMastered
-              ? "Trạng thái: 🏆 Đã Tốt Nghiệp Bộ Từ"
-              : `Trạng thái: Trạm ${roadmap?.currentStep || 1} Đang mở 🔓`}
+              ? "🏆 Đã Tốt Nghiệp"
+              : `Trạm ${roadmap?.currentStep || 1} đang mở`}
           </span>
         </div>
 
-        <div className={c("stepperGrid")}>
-          {/* Trạm 1: Ghi nhớ (Flashcard) */}
-          <div className={c("stepCard", roadmap?.stage1Completed ? "stepPassed" : "stepActive")}>
-            <div className={c("stepTop")}>
-              <span className={c("stepBadge", roadmap?.stage1Completed ? "badgePassed" : "badgeActive")}>1</span>
-              <span className={c("stepTag", roadmap?.stage1Completed ? "tagPassed" : "tagActive")}>
-                {roadmap?.stage1Completed ? "ĐÃ QUA TRẠM" : "ĐANG HỌC"}
-              </span>
-            </div>
-            <div className={c("stepBody")}>
-              <h4 className={c("stepTitle")}>Trạm 1: Ghi Nhớ</h4>
-              <p className={c("stepDesc")}>Lật 100% thẻ Flashcard 3D làm quen mặt chữ & phát âm.</p>
-              <div className={c("stepScore")}>
-                <FontAwesomeIcon icon={faCheck} color="#10b981" />{" "}
-                {roadmap?.stage1Completed ? "Tiến độ: 100% (Hoàn thành)" : "Đang làm quen thẻ"}
-              </div>
-            </div>
-            <button
-              className={c("stepBtn", "stepBtnEmerald")}
-              onClick={() => setOpenSetting((prev) => ({ ...prev, flashCard: true }))}
-            >
-              <FontAwesomeIcon icon={faIdCard} />
-              <span>Lật Thẻ Flashcard</span>
-            </button>
-          </div>
-
-          {/* Trạm 2: Phản xạ (Trắc nghiệm) */}
-          <div
-            className={c(
-              "stepCard",
-              roadmap?.currentStep < 2
-                ? "stepLocked"
-                : roadmap?.stage2HighestScore >= 80
-                ? "stepPassed"
-                : "stepActive"
-            )}
-          >
-            <div className={c("stepTop")}>
-              <span
-                className={c(
-                  "stepBadge",
-                  roadmap?.currentStep < 2
-                    ? "badgeLocked"
-                    : roadmap?.stage2HighestScore >= 80
-                    ? "badgePassed"
-                    : "badgeActive"
-                )}
-              >
-                2
-              </span>
-              <span
-                className={c(
-                  "stepTag",
-                  roadmap?.currentStep < 2
-                    ? "tagLocked"
-                    : roadmap?.stage2HighestScore >= 80
-                    ? "tagPassed"
-                    : "tagActive"
-                )}
-              >
-                {roadmap?.currentStep < 2
-                  ? "KHÓA"
-                  : roadmap?.stage2HighestScore >= 80
-                  ? "ĐÃ QUA TRẠM"
-                  : "ĐANG MỞ"}
-              </span>
-            </div>
-            <div className={c("stepBody")}>
-              <h4 className={c("stepTitle")}>Trạm 2: Phản Xạ</h4>
-              <p className={c("stepDesc")}>Trắc nghiệm 4 đáp án nhanh trong 10s/câu (Yêu cầu &ge; 80%).</p>
-              <div className={c("stepScore")}>
-                <FontAwesomeIcon icon={faTrophy} color="#f59e0b" /> Điểm cao nhất:{" "}
-                <b>{roadmap?.stage2HighestScore ? `${roadmap.stage2HighestScore}%` : "Chưa làm"}</b>
-              </div>
-            </div>
-            <button
-              className={c("stepBtn", roadmap?.currentStep < 2 ? "stepBtnDisabled" : "stepBtnPrimary")}
-              disabled={roadmap?.currentStep < 2}
-              onClick={() => navigate(`/learning/${wordSet.id}/multiple-choice`)}
-            >
-              <FontAwesomeIcon icon={faListCheck} />
-              <span>{roadmap?.currentStep < 2 ? "Cần hoàn thành Trạm 1" : "Luyện Phản Xạ Ngay"}</span>
-            </button>
-          </div>
-
-          {/* Trạm 3: Thử thách (Kiểm tra tính giờ) */}
-          <div
-            className={c(
-              "stepCard",
-              roadmap?.currentStep < 3
-                ? "stepLocked"
-                : roadmap?.stage3HighestScore >= 80
-                ? "stepPassed"
-                : "stepActive"
-            )}
-          >
-            <div className={c("stepTop")}>
-              <span
-                className={c(
-                  "stepBadge",
-                  roadmap?.currentStep < 3
-                    ? "badgeLocked"
-                    : roadmap?.stage3HighestScore >= 80
-                    ? "badgePassed"
-                    : "badgeActive"
-                )}
-              >
-                3
-              </span>
-              <span
-                className={c(
-                  "stepTag",
-                  roadmap?.currentStep < 3
-                    ? "tagLocked"
-                    : roadmap?.stage3HighestScore >= 80
-                    ? "tagPassed"
-                    : "tagActive"
-                )}
-              >
-                {roadmap?.currentStep < 3
-                  ? "KHÓA"
-                  : roadmap?.stage3HighestScore >= 80
-                  ? "ĐÃ TỐT NGHIỆP"
-                  : "ĐÃ MỞ KHÓA"}
-              </span>
-            </div>
-            <div className={c("stepBody")}>
-              <h4 className={c("stepTitle")}>Trạm 3: Thử Thách</h4>
-              <p className={c("stepDesc")}>Đề thi gõ chữ có đồng hồ đếm ngược áp lực thời gian.</p>
-              <div className={c("stepScore")}>
-                <FontAwesomeIcon icon={faCheck} color="#4f46e5" />{" "}
-                {roadmap?.stage3HighestScore > 0
-                  ? `Điểm: ${roadmap.stage3HighestScore}% (${roadmap.stage3DurationSeconds}s)`
-                  : roadmap?.currentStep >= 3
-                  ? "Đủ điều kiện dự thi"
-                  : "Cần qua Trạm 2"}
-              </div>
-            </div>
-            <button
-              className={c("stepBtn", roadmap?.currentStep < 3 ? "stepBtnDisabled" : "stepBtnPrimary")}
-              disabled={roadmap?.currentStep < 3}
-              onClick={() => navigate(`/learning/${wordSet.id}/test`)}
-            >
-              <FontAwesomeIcon icon={faGraduationCap} />
-              <span>{roadmap?.currentStep < 3 ? "Cần hoàn thành Trạm 2" : "Vào Thi Thử Thách"}</span>
-            </button>
-          </div>
-
-          {/* Chặng Cuối: Tốt Nghiệp & Truyện AI */}
-          {(() => {
-            const isStoryUnlocked = Boolean(
-              roadmap?.unlockedStory || roadmap?.isMastered || (roadmap?.currentStep || 1) >= 4
-            );
+        <div className={c("timeline")}>
+          {roadmapSteps.map((step, i) => {
+            const stateClass = step.passed ? "stepDone" : step.locked ? "stepLocked" : "stepCurrent";
             return (
-              <div
-                className={c(
-                  "stepCard",
-                  roadmap?.isMastered
-                    ? "stepPassed"
-                    : isStoryUnlocked
-                    ? "stepFinal"
-                    : "stepLocked"
+              <div key={i} className={c("timelineItem", stateClass)}>
+                {/* Connector line */}
+                {i < roadmapSteps.length - 1 && (
+                  <div className={c("connector", step.passed && "connectorDone")} />
                 )}
-              >
-                <div className={c("stepTop")}>
-                  <span
-                    className={c(
-                      "stepBadge",
-                      roadmap?.isMastered
-                        ? "badgePassed"
-                        : isStoryUnlocked
-                        ? "badgeFinal"
-                        : "badgeLocked"
-                    )}
-                  >
-                    {isStoryUnlocked ? "🏆" : <FontAwesomeIcon icon={faLock} />}
-                  </span>
-                  <span
-                    className={c(
-                      "stepTag",
-                      roadmap?.isMastered
-                        ? "tagPassed"
-                        : isStoryUnlocked
-                        ? "tagFinal"
-                        : "tagLocked"
-                    )}
-                  >
-                    {roadmap?.isMastered
-                      ? "ĐÃ TỐT NGHIỆP"
-                      : isStoryUnlocked
-                      ? "ĐÃ MỞ KHÓA"
-                      : "KHÓA"}
-                  </span>
-                </div>
-                <div className={c("stepBody")}>
-                  <h4 className={c("stepTitle")}>Tốt Nghiệp & Truyện AI</h4>
-                  <p className={c("stepDesc")}>
-                    Đạt &ge; 80% Trạm 3 để tốt nghiệp & mở khóa tạo truyện tranh AI.
-                  </p>
-                  <div className={c("stepScore")}>
-                    {isStoryUnlocked
-                      ? "🎁 Đã mở khóa AI Storyteller"
-                      : "Hoàn thành 3 Trạm để mở khóa"}
-                  </div>
-                </div>
-                <button
-                  className={c(
-                    "stepBtn",
-                    isStoryUnlocked ? "stepBtnAmber" : "stepBtnDisabled"
+
+                <div className={c("stepCircle")}>
+                  {step.passed ? (
+                    <FontAwesomeIcon icon={faCheck} />
+                  ) : step.locked ? (
+                    <FontAwesomeIcon icon={faLock} />
+                  ) : typeof step.num === "string" ? (
+                    step.num
+                  ) : (
+                    step.num
                   )}
-                  disabled={!isStoryUnlocked}
-                  onClick={() => setIsStoryModalOpen(true)}
-                >
-                  <FontAwesomeIcon icon={faBookOpen} />
-                  <span>
-                    {isStoryUnlocked ? "Tạo truyện AI" : "Cần hoàn thành Trạm 3"}
-                  </span>
-                </button>
+                </div>
+
+                <div className={c("stepContent")}>
+                  <div className={c("stepHeader")}>
+                    <h4 className={c("stepName")}>{step.title}</h4>
+                    <span className={c("stepType")}>{step.subtitle}</span>
+                  </div>
+                  <p className={c("stepDesc")}>{step.desc}</p>
+                  <div className={c("stepMeta")}>
+                    <span className={c("stepScore")}>
+                      {step.passed ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faTrophy} />}
+                      {step.score}
+                    </span>
+                  </div>
+                  <button
+                    className={c("stepAction", `stepAction_${step.btnColor}`)}
+                    disabled={step.disabled}
+                    onClick={step.onClick}
+                  >
+                    <FontAwesomeIcon icon={step.icon} />
+                    {step.btnLabel}
+                  </button>
+                </div>
               </div>
             );
-          })()}
+          })}
         </div>
-      </div>
+      </section>
 
-      {/* ================= 4. PRACTICE MODES (CHẾ ĐỘ LUYỆN TẬP BỔ TRỢ) ================= */}
-      <div className={c("practiceSection")}>
-        <div className={c("sectionHeader")}>
-          <div>
-            <h3 className={c("sectionHeading")} style={{ fontSize: "1rem" }}>
-              <FontAwesomeIcon icon={faBolt} color="#f59e0b" />
-              <span>Chế Độ Luyện Tập Bổ Trợ (Tùy Chọn)</span>
-            </h3>
-            <p className={c("sectionSubtitle")}>
-              Các kỹ năng rèn luyện tự do, người học có thể trải nghiệm bất cứ lúc nào
-            </p>
-          </div>
-        </div>
+      {/* ===================== PRACTICE MODES ===================== */}
+      <section className={c("practiceWrap")}>
+        <h3 className={c("practiceHeading")}>
+          <FontAwesomeIcon icon={faBolt} className={c("practiceHeadingIcon")} />
+          Luyện Tập Bổ Trợ
+        </h3>
 
-        <div className={c("practiceGrid")}>
-          {/* Card 1: Podcast Player */}
-          <div className={c("practiceCard")}>
-            <div className={c("practiceTop")}>
-              <div className={c("practiceIcon")}>
-                <FontAwesomeIcon icon={faHeadphones} />
-              </div>
-              <div>
-                <h4 className={c("practiceTitle")}>Nghe Thụ Động (Podcast)</h4>
-                <p className={c("practiceDesc")}>Cắm tai nghe học rảnh tay, máy tự đọc tiếng Anh &rarr; nghĩa tiếng Việt.</p>
-              </div>
+        <div className={c("practiceRow")}>
+          {/* Podcast */}
+          <button className={c("practiceChip")} onClick={togglePodcast}>
+            <div className={c("chipIcon", "chipIconPurple")}>
+              <FontAwesomeIcon icon={faHeadphones} />
             </div>
-            <button className={c("practiceActionBtn")} onClick={togglePodcast}>
-              <FontAwesomeIcon icon={faPlay} />
-              <span>{isPodcastActive ? "Tắt Podcast" : "Bật Nghe Rảnh Tay"}</span>
-            </button>
-          </div>
-
-          {/* Card 2: AI Speaking Check */}
-          <div className={c("practiceCard")}>
-            <div className={c("practiceTop")}>
-              <div className={c("practiceIcon")} style={{ background: "#ffe4e6", color: "#f43f5e" }}>
-                <FontAwesomeIcon icon={faMicrophone} />
-              </div>
-              <div>
-                <h4 className={c("practiceTitle")}>Luyện Nói AI (Speaking)</h4>
-                <p className={c("practiceDesc")}>Đọc to câu ví dụ qua Micro, AI so khớp chuỗi chấm điểm 0 - 100.</p>
-              </div>
+            <div className={c("chipText")}>
+              <strong>Nghe Thụ Động</strong>
+              <span>Cắm tai nghe học rảnh tay</span>
             </div>
-            <button
-              className={c("practiceActionBtn")}
-              onClick={() => alert("🎙️ Chế độ Luyện Nói: Bạn hãy mở câu ví dụ của từ và bấm micro để đọc thử nhé!")}
-            >
+            <FontAwesomeIcon icon={faChevronRight} className={c("chipArrow")} />
+          </button>
+
+          {/* Speaking */}
+          <button className={c("practiceChip")}
+            onClick={() => alert("🎙️ Chế độ Luyện Nói: Bạn hãy mở câu ví dụ của từ và bấm micro để đọc thử nhé!")}
+          >
+            <div className={c("chipIcon", "chipIconRose")}>
               <FontAwesomeIcon icon={faMicrophone} />
-              <span>Thử Luyện Phát Âm</span>
-            </button>
+            </div>
+            <div className={c("chipText")}>
+              <strong>Luyện Nói AI</strong>
+              <span>Đọc to, AI chấm điểm 0-100</span>
+            </div>
+            <FontAwesomeIcon icon={faChevronRight} className={c("chipArrow")} />
+          </button>
+
+          {/* 1vs1 */}
+          <button className={c("practiceChip")}
+            onClick={() => alert("⚔️ Đấu trường 1vs1 WebSocket đang kết nối sẵn sàng!")}
+          >
+            <div className={c("chipIcon", "chipIconGreen")}>
+              <FontAwesomeIcon icon={faCrown} />
+            </div>
+            <div className={c("chipText")}>
+              <strong>Đấu Trường 1vs1</strong>
+              <span>Thách đấu tốc độ real-time</span>
+            </div>
+            <FontAwesomeIcon icon={faChevronRight} className={c("chipArrow")} />
+          </button>
+        </div>
+      </section>
+
+      {/* ===================== MAIN: WORDS + LEADERBOARD ===================== */}
+      <div className={c("mainGrid")}>
+        {/* Words */}
+        <section className={c("wordsSection")}>
+          <div className={c("wordsSectionHeader")}>
+            <h3 className={c("wordsSectionTitle")}>Danh sách từ vựng</h3>
+            <span className={c("wordsCount")}>
+              {displayedWords.length}/{words.length} từ
+            </span>
           </div>
 
-          {/* Card 3: 1vs1 Arena */}
-          <div className={c("practiceCard")}>
-            <div className={c("practiceTop")}>
-              <div className={c("practiceIcon")} style={{ background: "#ecfdf5", color: "#10b981" }}>
-                <FontAwesomeIcon icon={faCrown} />
-              </div>
-              <div>
-                <h4 className={c("practiceTitle")}>Đấu Trường 1vs1 (WebSocket)</h4>
-                <p className={c("practiceDesc")}>Thách đấu thi trắc nghiệm tốc độ 10s/câu với bạn bè thời gian thực.</p>
-              </div>
-            </div>
-            <button
-              className={c("practiceActionBtn")}
-              onClick={() => alert("⚔️ Đấu trường 1vs1 WebSocket đang kết nối sẵn sàng!")}
-            >
-              <FontAwesomeIcon icon={faTrophy} />
-              <span>Vào Đấu Trường 1v1</span>
-            </button>
+          <div className={c("wordsList")}>
+            {displayedWords.length === 0 ? (
+              <p style={{ textAlign: "center", color: "#6b7280", padding: "1.5rem 0", margin: 0 }}>
+                {filterUnlearned ? "Không có từ chưa biết nào." : "Chưa có từ vựng nào trong bộ này."}
+              </p>
+            ) : (
+              displayedWords.map((word, idx) => (
+                <div key={word?.id || idx} className={c("wordCard")}>
+                  <Image
+                    src={word?.thumbnail}
+                    fallback={Images.flashCardNoImageSmall}
+                    alt={word?.term}
+                    size="40px"
+                    className={c("wordImg")}
+                  />
+                  <div className={c("wordBody")}>
+                    <div className={c("wordTop")}>
+                      <span className={c("wordTerm")}>{word?.term}</span>
+                      {word?.ipa && (
+                        <span className={c("wordIpa")}>/{word.ipa}/</span>
+                      )}
+                      {word?.partOfSpeech && (
+                        <span className={c("wordPos")}>({word.partOfSpeech})</span>
+                      )}
+                    </div>
+                    <p className={c("wordMeaning")}>{word?.meaning}</p>
+                  </div>
+                  <button
+                    className={c("wordSpeak")}
+                    title="Nghe phát âm"
+                    onClick={() => speakText(word?.term, "en-US")}
+                  >
+                    <FontAwesomeIcon icon={faVolumeHigh} />
+                  </button>
+                </div>
+              ))
+            )}
           </div>
-        </div>
+        </section>
+
+        {/* Leaderboard */}
+        <aside className={c("leaderboard")}>
+          <div className={c("lbHeader")}>
+            <div className={c("lbTitle")}>
+              <FontAwesomeIcon icon={faTrophy} className={c("lbTrophyIcon")} />
+              Bảng Vàng
+            </div>
+            <span className={c("lbBadge")}>Top 5</span>
+          </div>
+
+          <div className={c("lbList")}>
+            {leaderboard && leaderboard.length > 0 ? (
+              leaderboard.map((item, index) => {
+                const rank = item.rank || index + 1;
+                const name = item.fullName || item.name || item.username;
+                const score = item.highestScore !== undefined ? `${item.highestScore}%` : (item.score || "0%");
+                const time = item.formattedDuration || (item.durationSeconds ? `${item.durationSeconds}s` : (item.time || ""));
+                const isMe = item.isMe || (user?.id && item.userId === user.id);
+
+                return (
+                  <div
+                    key={item.userId || index}
+                    className={c(
+                      "lbItem",
+                      rank === 1 && "lbItemGold",
+                      rank === 2 && "lbItemSilver",
+                      rank === 3 && "lbItemBronze",
+                      isMe && "lbItemMe"
+                    )}
+                  >
+                    <div className={c("lbRank")}>
+                      {rank === 1 && "🥇"}
+                      {rank === 2 && "🥈"}
+                      {rank === 3 && "🥉"}
+                      {rank > 3 && <span className={c("lbRankNum")}>{rank}</span>}
+                    </div>
+                    <Image
+                      src={item.avatar}
+                      fallback={Images.avatar}
+                      alt={name}
+                      size="28px"
+                      isCircled={true}
+                      className={c("lbAvatar")}
+                    />
+                    <div className={c("lbUser")}>
+                      <span className={c("lbName")}>{name} {isMe ? "(Bạn)" : ""}</span>
+                      <span className={c("lbScore")}>
+                        {score}{time ? <> • <strong>{time}</strong></> : null}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p style={{ textAlign: "center", color: "#6b7280", fontSize: "0.8rem", padding: "1rem 0", margin: 0 }}>
+                Chưa có học viên nào lên bảng vàng.
+              </p>
+            )}
+          </div>
+        </aside>
       </div>
 
-      {/* ================= 5. TWO-COLUMN MAIN CONTENT (WORDS LIST + LEADERBOARD) ================= */}
-      <div className={c("contentGrid")}>
-        {/* Left Column: Words List */}
-        <div className={c("wordsCard")}>
-          <div className={c("wordsListHeader")}>
-            <div>
-              <h3 className={c("sectionHeading")} style={{ fontSize: "1.1rem" }}>
-                <span>Danh sách từ trong bộ</span>
-              </h3>
-              <span className={c("wordCount")}>
-                Hiển thị {displayedWords.length}/{words.length} từ vựng
-              </span>
+      {/* ===================== RATINGS & REVIEWS ===================== */}
+      <section className={c("reviewsWrap")} id="rating-section">
+        <h3 className={c("reviewsHeading")}>
+          <FontAwesomeIcon icon={faStar} className={c("reviewsHeadingIcon")} />
+          Đánh giá & Nhận xét
+        </h3>
+
+        {/* Overview Cards */}
+        <div className={c("ratingRow")}>
+          <div className={c("ratingScore")}>
+            <div className={c("bigScore")}>{ratingAvgValue}</div>
+            <div className={c("bigStars")}>
+              {[...Array(5)].map((_, i) => (
+                <FontAwesomeIcon key={i} icon={faStar} />
+              ))}
             </div>
+            <div className={c("bigCount")}>{totalRatings} nhận xét</div>
           </div>
 
-          <div className={c("wordsItemsContainer")}>
-            {displayedWords.map((word, idx) => (
-              <div key={idx} className={c("wordItem")}>
-                <img
-                  src={
-                    word?.thumbnail ||
-                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&auto=format&fit=crop&q=80"
-                  }
-                  alt={word?.term}
-                  className={c("wordThumb")}
-                />
-                <div className={c("wordMain")}>
-                  <div className={c("wordLine1")}>
-                    <span className={c("wordTerm")}>{word?.term}</span>
-                    <span className={c("wordIpa")}>/{word?.ipa || "ipa"}/</span>
-                    <span className={c("wordPos")}>({word?.partOfSpeech || "adj"})</span>
-                  </div>
-                  <div className={c("wordMeaning")}>{word?.meaning}</div>
+          <div className={c("ratingBarsWrap")}>
+            {[5, 4, 3, 2, 1].map((star) => (
+              <div key={star} className={c("ratingBarLine")}>
+                <span>{star}★</span>
+                <div className={c("ratingBarTrack")}>
+                  <div className={c("ratingBarFill")} style={{ width: `${getBarPercent(star - 1)}%` }} />
                 </div>
-
-                {/* Speaker pronunciation button */}
-                <button
-                  className={c("speakerBtn")}
-                  title="Nghe phát âm"
-                  onClick={() => speakText(word?.term, "en-US")}
-                >
-                  <FontAwesomeIcon icon={faVolumeHigh} />
-                </button>
+                <span className={c("ratingBarPct")}>{getBarPercent(star - 1)}%</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right Column: Inline Leaderboard Top 5 */}
-        <div className={c("leaderboardCard")}>
-          <div className={c("leaderboardHeader")}>
-            <div className={c("leaderboardTitle")}>
-              <FontAwesomeIcon icon={faTrophy} color="#f59e0b" />
-              <span>Bảng Vàng Cao Thủ</span>
-            </div>
-            <span className={c("liveTag")}>Top 5</span>
-          </div>
-
-          <div className={c("leaderboardList")}>
-            {(leaderboard && leaderboard.length > 0 ? leaderboard : TOP5_LEADERBOARD).map((item, index) => {
-              const rank = item.rank || index + 1;
-              const name = item.fullName || item.name || item.username;
-              const avatar = item.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&auto=format&fit=crop&q=80";
-              const score = item.highestScore !== undefined ? `${item.highestScore}%` : (item.score || "100%");
-              const time = item.formattedDuration || (item.durationSeconds ? `${item.durationSeconds}s` : (item.time || "45s"));
-              const isMe = item.isMe || (user?.id && item.userId === user.id);
-
-              return (
-                <div
-                  key={index}
-                  className={c(
-                    "rankItem",
-                    rank === 1 && "rankItemTop1",
-                    isMe && "rankItemMe"
-                  )}
-                >
-                  <div className={c("rankLeft")}>
-                    {rank === 1 && <span className={c("rankMedal")}>🥇</span>}
-                    {rank === 2 && <span className={c("rankMedal")}>🥈</span>}
-                    {rank === 3 && <span className={c("rankMedal")}>🥉</span>}
-                    {rank > 3 && <span className={c("rankNum")}>{rank}</span>}
-
-                    <img src={avatar} alt={name} className={c("rankAvatar")} />
-
-                    <div className={c("rankUser")}>
-                      <span className={c("rankName")}>
-                        {name} {isMe ? "(Bạn)" : ""}
-                      </span>
-                      <span className={c("rankTime")}>
-                        {score} • <b>{time}</b>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* ================= 6. RATINGS & REVIEWS SECTION ================= */}
-      <div className={c("ratingSection")} id="rating-section">
-        <h3 className={c("sectionHeading")} style={{ fontSize: "1.15rem" }}>
-          <FontAwesomeIcon icon={faStar} color="#ffc107" />
-          <span>Đánh giá & Bình luận từ học viên</span>
-        </h3>
-
-        {/* Rating Overview */}
-        <div className={c("ratingOverview")}>
-          <div>
-            <div className={c("scoreBig")}>{wordSet?.stat?.ratingAvg || "4.9"}</div>
-            <div className={c("starsRow")}>
-              {[...Array(5)].map((_, i) => (
-                <FontAwesomeIcon key={i} icon={faStar} />
-              ))}
-            </div>
-            <div className={c("scoreSub")}>Dựa trên {wordSet?.stat?.ratingCount || 128} nhận xét</div>
-          </div>
-
-          <div className={c("ratingBars")}>
-            <div className={c("ratingBarRow")}>
-              <span>5 sao</span>
-              <div className={c("barTrack")}>
-                <div className={c("barFill")} style={{ width: "88%" }} />
-              </div>
-              <span>88%</span>
-            </div>
-            <div className={c("ratingBarRow")}>
-              <span>4 sao</span>
-              <div className={c("barTrack")}>
-                <div className={c("barFill")} style={{ width: "9%" }} />
-              </div>
-              <span>9%</span>
-            </div>
-            <div className={c("ratingBarRow")}>
-              <span>3 sao</span>
-              <div className={c("barTrack")}>
-                <div className={c("barFill")} style={{ width: "3%" }} />
-              </div>
-              <span>3%</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Review Form */}
-        <div className={c("reviewForm")}>
-          <div className={c("reviewStarsSelect")}>
-            <span style={{ fontSize: "0.85rem", fontWeight: 700 }}>Chọn mức đánh giá:</span>
+        {/* Write Review */}
+        <div className={c("writeReview")}>
+          <div className={c("writeStars")}>
+            <span className={c("writeLabel")}>Đánh giá:</span>
             {[1, 2, 3, 4, 5].map((star) => {
               const active = star <= (hoverRating || rating.value);
               return (
                 <button
                   key={star}
-                  className={c("starBtn", active && "starFilled")}
+                  className={c("starSelect", active && "starActive")}
                   onClick={() => setRating((prev) => ({ ...prev, value: star }))}
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
@@ -943,50 +788,52 @@ const WordSetPage = () => {
           <textarea
             value={rating.comment}
             onChange={(e) => setRating((prev) => ({ ...prev, comment: e.target.value }))}
-            placeholder="Chia sẻ cảm nhận của bạn về bộ từ này (chất lượng từ vựng, tính ứng dụng thực tế...)..."
-            className={c("reviewTextarea")}
+            placeholder="Chia sẻ cảm nhận của bạn về bộ từ này..."
+            className={c("reviewInput")}
           />
 
-          <button className={c("reviewSubmitBtn")} onClick={handleRatingWordSet}>
+          <button className={c("reviewSend")} onClick={handleRatingWordSet}>
             Gửi nhận xét
           </button>
         </div>
 
-        {/* Reviews List */}
-        <div className={c("reviewsList")}>
-          {ratingList?.map((item, i) => (
-            <div className={c("reviewCard")} key={i}>
-              <div className={c("reviewerTop")}>
-                <div className={c("reviewerLeft")}>
-                  <img
-                    src={
-                      item.user?.avatar ||
-                      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80"
-                    }
-                    alt={item.user?.fullName}
-                    className={c("reviewerAvatar")}
-                  />
-                  <div>
-                    <div className={c("reviewerName")}>
-                      {item.user?.fullName || "Học viên Bunary"}
+        {/* Reviews */}
+        <div className={c("reviewCards")}>
+          {ratingList && ratingList.length > 0 ? (
+            ratingList.map((item, i) => (
+              <div className={c("reviewCard")} key={item.id || i}>
+                <div className={c("rcTop")}>
+                  <div className={c("rcUser")}>
+                    <Image
+                      src={item.user?.avatar}
+                      fallback={Images.avatar}
+                      alt={item.user?.fullName}
+                      size="28px"
+                      isCircled={true}
+                      className={c("rcAvatar")}
+                    />
+                    <div>
+                      <div className={c("rcName")}>{item.user?.fullName || "Học viên Bunary"}</div>
+                      <div className={c("rcDate")}>{item.createdAt || "Gần đây"}</div>
                     </div>
-                    <div className={c("reviewDate")}>{item.createdAt || "Gần đây"}</div>
+                  </div>
+                  <div className={c("rcStars")}>
+                    {"★".repeat(item.value || 5)}
+                    {"☆".repeat(5 - (item.value || 5))}
                   </div>
                 </div>
-
-                <div className={c("reviewStars")}>
-                  {"★".repeat(item.value || 5)}
-                  {"☆".repeat(5 - (item.value || 5))}
-                </div>
+                <p className={c("rcBody")}>{item.comment}</p>
               </div>
-
-              <p className={c("reviewBodyText")}>{item.comment}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p style={{ textAlign: "center", color: "#6b7280", fontSize: "0.85rem", padding: "1rem 0", margin: 0 }}>
+              Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ cảm nhận!
+            </p>
+          )}
         </div>
-      </div>
+      </section>
 
-      {/* ================= 7. AI STORYTELLER MODAL ================= */}
+      {/* ===================== AI STORY MODAL ===================== */}
       <AiStoryModal
         isOpen={isStoryModalOpen}
         onClose={() => setIsStoryModalOpen(false)}
@@ -996,11 +843,11 @@ const WordSetPage = () => {
         speakText={speakText}
       />
 
-      {/* ================= 8. FLOATING PODCAST MINI-PLAYER DOCK ================= */}
+      {/* ===================== PODCAST DOCK ===================== */}
       {isPodcastActive && words.length > 0 && (
         <div className={c("podcastDock")}>
           <div className={c("podcastInfo")}>
-            <FontAwesomeIcon icon={faHeadphones} color="#818cf8" />
+            <FontAwesomeIcon icon={faHeadphones} className={c("podcastIcon")} />
             <div className={c("podcastText")}>
               <span className={c("podcastTerm")}>
                 {words[podcastIndex % words.length]?.term}
@@ -1013,7 +860,7 @@ const WordSetPage = () => {
 
           <div className={c("podcastControls")}>
             <button
-              className={c("podcastBtn")}
+              className={c("podBtn")}
               onClick={() =>
                 setPodcastIndex((prev) => (prev - 1 + words.length) % words.length)
               }
@@ -1021,20 +868,20 @@ const WordSetPage = () => {
               <FontAwesomeIcon icon={faBackwardStep} />
             </button>
 
-            <button className={c("podcastPlayBtn")} onClick={togglePodcastPlay}>
+            <button className={c("podPlayBtn")} onClick={togglePodcastPlay}>
               <FontAwesomeIcon icon={isPodcastPlaying ? faPause : faPlay} />
             </button>
 
             <button
-              className={c("podcastBtn")}
+              className={c("podBtn")}
               onClick={() => setPodcastIndex((prev) => (prev + 1) % words.length)}
             >
               <FontAwesomeIcon icon={faForwardStep} />
             </button>
 
             <button
-              className={c("podcastBtn")}
-              style={{ marginLeft: "0.5rem" }}
+              className={c("podBtn")}
+              style={{ marginLeft: "0.4rem" }}
               onClick={() => {
                 stopPodcast();
                 setIsPodcastActive(false);

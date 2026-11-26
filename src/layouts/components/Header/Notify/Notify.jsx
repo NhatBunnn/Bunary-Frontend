@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useNotification } from "@context/WebSocketProvider/NotificationProvider";
+import { Image, Images } from "@assets/images";
 
 const c = bindClass(styles);
 
@@ -81,7 +82,13 @@ function Notify() {
                     onClick={() => handleClickNotification(notification)}
                   >
                     <div className={c("avatar")}>
-                      <img src={notification?.actor?.avatar} alt="avatar" />
+                      <Image
+                        src={notification?.actor?.avatar}
+                        fallback={Images.avatar}
+                        size="32px"
+                        isCircled={true}
+                        alt="avatar"
+                      />
                     </div>
 
                     <div className={c("info")}>
