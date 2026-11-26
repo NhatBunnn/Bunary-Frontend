@@ -39,6 +39,54 @@ export const autoFillWords = async (arg1, arg2) => {
   });
 };
 
+export const getAiQueueTicket = async (arg1, arg2) => {
+  let f = defaultFetcher;
+  let ticketId = arg1;
+  if (typeof arg1 === "function") {
+    f = arg1;
+    ticketId = arg2;
+  }
+  return await f({
+    url: `/api/v1/ai/queue/${ticketId}`,
+    method: "GET",
+  });
+};
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Poll trạng thái AiQueueTicket cho đến khi COMPLETED hoặc FAILED.
+ */
+export const pollAiQueueTicket = async (
+  fetcherFn,
+  ticketId,
+  { intervalMs = 1500, maxAttempts = 80, onStatus } = {}
+) => {
+  const f = resolveFetcher(fetcherFn);
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const res = await getAiQueueTicket(f, ticketId);
+    const ticket = res?.data;
+    if (!ticket) {
+      throw new Error("Không nhận được trạng thái hàng đợi AI");
+    }
+
+    onStatus?.(ticket);
+
+    if (ticket.status === "COMPLETED") {
+      return ticket.result;
+    }
+    if (ticket.status === "FAILED") {
+      const err = new Error(ticket.error || "Xử lý AI thất bại, vui lòng thử lại!");
+      err.errorCode = "AI_TASK_FAILED";
+      throw err;
+    }
+
+    await sleep(intervalMs);
+  }
+
+  throw new Error("Yêu cầu AI xử lý quá lâu, vui lòng thử lại sau!");
+};
+
 export const suggestWords = async (arg1, arg2) => {
   let f = defaultFetcher;
   let payload = arg1;
@@ -46,10 +94,14 @@ export const suggestWords = async (arg1, arg2) => {
     f = arg1;
     payload = arg2;
   }
-  return await f({
+  const res = await f({
     url: "/api/v1/ai/suggest-words",
     method: "POST",
     data: payload,
-    timeout: 60000,
   });
+  if (res?.data?.ticketId) {
+    const result = await pollAiQueueTicket(f, res.data.ticketId);
+    return { ...res, data: result };
+  }
+  return res;
 };

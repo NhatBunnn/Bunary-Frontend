@@ -1,4 +1,5 @@
 import { useFetcher } from "@api/fetcher";
+import { pollAiQueueTicket } from "@api/aiApi";
 import useAppBase from "@hooks/useAppBase";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -177,8 +178,11 @@ function useWordSetPage() {
         method: "POST",
         data: { style, character },
       });
-      if (res?.data) {
-        setAiStory(res.data);
+      const storyData = res?.data?.ticketId
+        ? await pollAiQueueTicket(fetcher, res.data.ticketId)
+        : res?.data;
+      if (storyData) {
+        setAiStory(storyData);
         showNotification("Đã tạo truyện tranh AI 9 cảnh thành công!", "success");
       }
     } catch (e) {

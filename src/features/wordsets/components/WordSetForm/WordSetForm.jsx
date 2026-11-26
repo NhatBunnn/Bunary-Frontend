@@ -9,6 +9,7 @@ import WordInput from "./components/WordInput/WordInput";
 import BulkImport from "./components/Dialogs/BulkImport/BulkImport";
 import AiUsageModal from "./components/AiUsageModal/AiUsageModal";
 import SuggestWordsModal from "./components/SuggestWordsModal/SuggestWordsModal";
+import { pollAiQueueTicket } from "../../../../api/aiApi";
 import { useFetcher } from "@api/fetcher";
 import { API_URL } from "@config/apiConfig";
 import {
@@ -252,7 +253,7 @@ export default function WordSetForm({ type = "CREATE" }) {
     }
   };
 
-  // Gợi ý từ vựng qua AI
+  // Gợi ý từ vựng qua AI (hàng đợi AiQueueTicket + polling)
   const handleSuggestWords = async (payload) => {
     setIsSuggesting(true);
     try {
@@ -260,10 +261,13 @@ export default function WordSetForm({ type = "CREATE" }) {
         url: "/api/v1/ai/suggest-words",
         method: "POST",
         data: payload,
-        timeout: 60000,
       });
-      if (res?.data?.words && res.data.words.length > 0) {
-        const newWords = res.data.words.map((w) => ({
+      const resultData = res?.data?.ticketId
+        ? await pollAiQueueTicket(fetcher, res.data.ticketId)
+        : res?.data;
+
+      if (resultData?.words && resultData.words.length > 0) {
+        const newWords = resultData.words.map((w) => ({
           term: w.term || "",
           meaning: w.meaning || "",
           ipa: w.ipa || "",
@@ -285,13 +289,13 @@ export default function WordSetForm({ type = "CREATE" }) {
           ...prev,
           description: prev.description?.trim()
             ? prev.description
-            : res.data.description || prev.description,
-          thumbnail: res.data.suggestedThumbnail || prev.thumbnail,
+            : resultData.description || prev.description,
+          thumbnail: resultData.suggestedThumbnail || prev.thumbnail,
           thumbnailFile: null,
         }));
 
-        if (res.data.usage) {
-          setAiUsage(res.data.usage);
+        if (resultData.usage) {
+          setAiUsage(resultData.usage);
         }
 
         setShowSuggestModal(false);
@@ -301,13 +305,21 @@ export default function WordSetForm({ type = "CREATE" }) {
         );
       }
     } catch (e) {
-      if (e?.errorCode === "AI_USAGE_EXHAUSTED" || e?.status === 429) {
+      if (e?.errorCode === "AI_USAGE_EXHAUSTED") {
         showNotification(
           "Bạn đã hết lượt sử dụng AI hôm nay. Hãy nâng cấp thêm AI Credits!",
           "warning"
         );
         setShowSuggestModal(false);
         setShowAiModal(true);
+      } else if (
+        e?.errorCode === "AI_QUEUE_FULL" ||
+        e?.errorCode === "AI_USER_QUEUE_LIMIT"
+      ) {
+        showNotification(
+          e?.message || "Hệ thống AI đang bận, vui lòng thử lại sau ít phút!",
+          "warning"
+        );
       } else {
         showNotification(
           e?.message || "Có lỗi xảy ra khi gợi ý từ vựng bằng AI",
