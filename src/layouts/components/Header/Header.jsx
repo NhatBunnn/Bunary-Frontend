@@ -13,18 +13,42 @@ import Notify from "./Notify/Notify";
 import Search from "./Search/Search";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import useLogin from "@hooks/auth/useLogin";
+import { useFetcher } from "@api/fetcher";
 
 const c = classNames.bind(styles);
 
 function Header({ onMenuClick, onRankingMenu }) {
   const [openDropDown, setOpenDropDown] = useState(false);
+  const [streak, setStreak] = useState(0);
 
   const { user, loading: loadingUser } = useUser();
   const { loginGoogle, loadingGoogle } = useLogin();
+  const { fetcher } = useFetcher();
 
   const { handleSubmit } = useLogout();
 
   const dropDownRef = useRef();
+
+  useEffect(() => {
+    if (!user || Object.keys(user).length === 0) {
+      setStreak(0);
+      return;
+    }
+    let mounted = true;
+    fetcher({
+      url: "/api/v1/users/me/stats",
+      method: "GET",
+    })
+      .then((res) => {
+        if (mounted && res?.data?.streak != null) {
+          setStreak(res.data.streak);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, [user, fetcher]);
 
   // Handle click outside
   useEffect(() => {
@@ -96,6 +120,15 @@ function Header({ onMenuClick, onRankingMenu }) {
         )}
         {Object.keys(user).length !== 0 && (
           <div className={c("logged-in", "d-flex", "align-items-center")}>
+            <Link
+              to="/stats"
+              className={c("streakBadge")}
+              title={`Chuỗi ${streak} ngày học liên tiếp`}
+            >
+              <span className={c("streakIcon")}>🔥</span>
+              <span className={c("streakAmount")}>{streak}</span>
+            </Link>
+
             <Link
               to="/store"
               className={c("crystalBadge")}

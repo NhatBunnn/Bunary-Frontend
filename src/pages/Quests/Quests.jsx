@@ -10,88 +10,33 @@ import {
   Clock,
   Gift,
   CheckCircle2,
-  Calendar,
 } from "lucide-react";
 import styles from "./Quests.module.css";
 import { useNotification } from "@context/NotificationProvider";
+import { useFetcher } from "@api/fetcher";
+import { getQuests, claimQuest } from "@api/questApi";
 
 const c = classNames.bind(styles);
 
-const INITIAL_QUESTS = [
-  // Nhiệm vụ ngày
-  {
-    id: 1,
-    code: "DAILY_STREAK",
-    type: "DAILY",
-    title: "Giữ lửa Streak hôm nay",
-    description: "Hoàn thành ít nhất 1 phiên học bộ từ hoặc ôn tập SM-2 trong ngày.",
-    icon: Flame,
-    iconColor: "iconOrange",
-    currentProgress: 1,
-    targetCount: 1,
-    rewardSpark: 15,
-    rewardXp: 20,
-    status: "COMPLETED",
-  },
-  {
-    id: 2,
-    code: "DAILY_MASTER_WORDSET",
-    type: "DAILY",
-    title: "Chinh phục bộ từ",
-    description: "Hoàn thành trọn vẹn lộ trình học của 1 bộ từ vựng trong ngày.",
-    icon: BookOpen,
-    iconColor: "iconIndigo",
-    currentProgress: 0,
-    targetCount: 1,
-    rewardSpark: 30,
-    rewardXp: 50,
-    status: "IN_PROGRESS",
-  },
+const QUEST_UI_META = {
+  DAILY_STUDY_WORDSET: { icon: BookOpen, iconColor: "iconIndigo" },
+  WEEKLY_WARRIOR: { icon: Trophy, iconColor: "iconViolet" },
+  WEEKLY_CONTRIBUTE_WORDSET: { icon: Users, iconColor: "iconAmber" },
+};
 
-  // Nhiệm vụ tuần
-  {
-    id: 3,
-    code: "WEEKLY_WARRIOR",
-    type: "WEEKLY",
-    title: "Chiến binh tuần",
-    description: "Chinh phục tổng cộng 5 bộ từ vựng trong tuần này.",
-    icon: Trophy,
-    iconColor: "iconViolet",
-    currentProgress: 2,
-    targetCount: 5,
-    rewardSpark: 80,
-    rewardXp: 150,
-    status: "IN_PROGRESS",
-  },
-  {
-    id: 4,
-    code: "WEEKLY_STREAK_6",
-    type: "WEEKLY",
-    title: "Kiên trì cả tuần",
-    description: "Duy trì chuỗi Streak học tập đủ 6 ngày trong tuần.",
-    icon: Calendar,
-    iconColor: "iconEmerald",
-    currentProgress: 4,
-    targetCount: 6,
-    rewardSpark: 100,
-    rewardXp: 200,
-    status: "IN_PROGRESS",
-  },
-  {
-    id: 5,
-    code: "WEEKLY_CONTRIBUTE_WORDSET",
-    type: "WEEKLY",
-    title: "Đóng góp cộng đồng",
-    description: "Tạo 1 bộ từ vựng mới và vượt qua hệ thống kiểm duyệt trong tuần.",
-    icon: Users,
-    iconColor: "iconAmber",
-    currentProgress: 0,
-    targetCount: 1,
-    rewardSpark: 120,
-    rewardXp: 250,
-    status: "IN_PROGRESS",
-  },
-];
+function enrichQuests(list = []) {
+  return list.map((q) => {
+    const meta = QUEST_UI_META[q.code] || {
+      icon: BookOpen,
+      iconColor: "iconIndigo",
+    };
+    return {
+      ...q,
+      icon: meta.icon,
+      iconColor: meta.iconColor,
+    };
+  });
+}
 
 function getTimeUntilMidnight() {
   const now = new Date();
@@ -106,13 +51,16 @@ function getTimeUntilMidnight() {
 
 function Quests() {
   const { showNotification } = useNotification();
+  const { fetcher } = useFetcher();
   const [activeTab, setActiveTab] = useState("DAILY");
-  const [quests, setQuests] = useState(INITIAL_QUESTS);
+  const [quests, setQuests] = useState([]);
   const [countdown, setCountdown] = useState(getTimeUntilMidnight);
+  const [loading, setLoading] = useState(true);
+  const [claimingCode, setClaimingCode] = useState(null);
   const [stats, setStats] = useState({
-    streak: 4,
-    spark: 120,
-    xp: 1240,
+    streak: 0,
+    spark: 0,
+    xp: 0,
   });
 
   useEffect(() => {
@@ -122,23 +70,58 @@ function Quests() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleClaim = (questId) => {
-    const target = quests.find((q) => q.id === questId);
-    if (!target || target.status !== "COMPLETED") return;
+  useEffect(() => {
+    let mounted = true;
+    const fetchQuests = async () => {
+      try {
+        setLoading(true);
+        const res = await getQuests(fetcher);
+        const payload = res?.data;
+        if (mounted && payload) {
+          setQuests(enrichQuests(payload.quests || []));
+          if (payload.stats) {
+            setStats(payload.stats);
+          }
+        }
+      } catch (err) {
+        if (mounted) {
+          showNotification(
+            err?.message || "Không thể tải danh sách nhiệm vụ",
+            "error"
+          );
+        }
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    fetchQuests();
+    return () => {
+      mounted = false;
+    };
+  }, [fetcher, showNotification]);
 
-    setQuests((prev) =>
-      prev.map((q) => (q.id === questId ? { ...q, status: "CLAIMED" } : q))
-    );
-    setStats((prev) => ({
-      ...prev,
-      spark: prev.spark + target.rewardSpark,
-      xp: prev.xp + target.rewardXp,
-    }));
+  const handleClaim = async (quest) => {
+    if (!quest || quest.status !== "COMPLETED" || claimingCode) return;
 
-    showNotification(
-      `Đã nhận +${target.rewardSpark} Spark và +${target.rewardXp} XP từ "${target.title}"!`,
-      "success"
-    );
+    try {
+      setClaimingCode(quest.code);
+      const res = await claimQuest(fetcher, quest.code);
+      const payload = res?.data;
+      if (payload) {
+        setQuests(enrichQuests(payload.quests || []));
+        if (payload.stats) {
+          setStats(payload.stats);
+        }
+      }
+      showNotification(
+        `Đã nhận +${quest.rewardSpark} Spark và +${quest.rewardXp} XP từ "${quest.title}"!`,
+        "success"
+      );
+    } catch (err) {
+      showNotification(err?.message || "Không thể nhận thưởng nhiệm vụ", "error");
+    } finally {
+      setClaimingCode(null);
+    }
   };
 
   const dailyClaimable = quests.filter(
@@ -173,21 +156,25 @@ function Quests() {
             <div className={c("statPill")}>
               <Flame size={22} color="#fb923c" />
               <div>
-                <div className={c("statValue")}>{stats.streak} ngày</div>
+                <div className={c("statValue")}>{stats?.streak ?? 0} ngày</div>
                 <div className={c("statLabel")}>Streak hiện tại</div>
               </div>
             </div>
             <div className={c("statPill")}>
               <Sparkles size={22} color="#fde047" />
               <div>
-                <div className={c("statValue")}>{stats.spark.toLocaleString()}</div>
+                <div className={c("statValue")}>
+                  {(stats?.spark ?? 0).toLocaleString()}
+                </div>
                 <div className={c("statLabel")}>Spark</div>
               </div>
             </div>
             <div className={c("statPill")}>
               <Zap size={22} color="#a5b4fc" />
               <div>
-                <div className={c("statValue")}>{stats.xp.toLocaleString()}</div>
+                <div className={c("statValue")}>
+                  {(stats?.xp ?? 0).toLocaleString()}
+                </div>
                 <div className={c("statLabel")}>XP tích lũy</div>
               </div>
             </div>
@@ -226,6 +213,9 @@ function Quests() {
       </div>
 
       {/* Quest Cards */}
+      {loading && filteredQuests.length === 0 ? (
+        <div className={c("progressOverview")}>Đang tải nhiệm vụ...</div>
+      ) : (
       <div className={c("questGrid")}>
         {filteredQuests.map((quest) => {
           const IconComponent = quest.icon;
@@ -283,9 +273,13 @@ function Quests() {
                   <button
                     type="button"
                     className={c("claimBtn")}
-                    onClick={() => handleClaim(quest.id)}
+                    disabled={claimingCode === quest.code}
+                    onClick={() => handleClaim(quest)}
                   >
-                    <Gift size={15} /> Nhận thưởng
+                    <Gift size={15} />{" "}
+                    {claimingCode === quest.code
+                      ? "Đang nhận..."
+                      : "Nhận thưởng"}
                   </button>
                 )}
 
@@ -303,6 +297,7 @@ function Quests() {
           );
         })}
       </div>
+      )}
     </div>
   );
 }

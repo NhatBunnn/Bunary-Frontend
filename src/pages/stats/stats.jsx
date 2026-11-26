@@ -17,12 +17,23 @@ import {
 import classNames from "classnames/bind";
 import styles from "./stats.module.css";
 import useStats from "./useStats";
+import { useNotification } from "@context/NotificationProvider";
 
 const c = classNames.bind(styles);
 
 export default function Stats() {
-  const { total, chart, fetchLastDaysStats, fetchTotalStats, period } =
-    useStats();
+  const { showNotification } = useNotification();
+  const {
+    total,
+    chart,
+    period,
+    streakBadges,
+    maxStreak,
+    claimingBadgeCode,
+    handleClaimBadge,
+    fetchLastDaysStats,
+    fetchTotalStats,
+  } = useStats();
 
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
@@ -131,7 +142,7 @@ export default function Stats() {
       label: "Bộ từ vựng đã tạo",
       value: total.wordsetCreatedCount || 0,
     },
-    { icon: Flame, label: "Chuỗi ngày học", value: "12 ngày" },
+    { icon: Flame, label: "Chuỗi ngày học", value: `${total.streak || 0} ngày` },
     { icon: Clock, label: "Thời gian học", value: "48.5h" },
   ];
 
@@ -238,29 +249,81 @@ export default function Stats() {
 
         {/* Achievements */}
         <h2 className={c("sectionTitle")}>
-          <Award size={20} /> Thành tích đạt được
+          <Award size={20} /> Huy hiệu Streak (Kỷ lục: {maxStreak} ngày)
         </h2>
         <div className={c("achievementsContainer")}>
           <div className={c("achievementGrid")}>
-            {[
-              { icon: Trophy, label: "Người mới", unlocked: true },
-              { icon: Trophy, label: "Chăm chỉ", unlocked: true },
-              { icon: Trophy, label: "Bậc thầy", unlocked: true },
-              { icon: Lock, label: "Huyền thoại", unlocked: false },
-              { icon: Lock, label: "Chiến thần", unlocked: false },
-              { icon: Lock, label: "Nhà thông thái", unlocked: false },
-            ].map((item, i) => (
-              <div
-                className={c("badge", item.unlocked ? "unlocked" : "locked")}
-                key={i}
-              >
-                <item.icon
-                  size={32}
-                  color={item.unlocked ? "#f59e0b" : "#94a3b8"}
-                />
-                <p>{item.label}</p>
-              </div>
-            ))}
+            {streakBadges.map((item) => {
+              const isLocked = item.status === "LOCKED";
+              const isUnlocked = item.status === "UNLOCKED";
+              const isClaimed = item.status === "CLAIMED";
+              const IconComponent = isLocked ? Lock : Flame;
+
+              return (
+                <div
+                  className={c(
+                    "badge",
+                    isLocked ? "locked" : "unlocked",
+                    isUnlocked && "claimable"
+                  )}
+                  key={item.code}
+                >
+                  <IconComponent
+                    size={30}
+                    color={isLocked ? "#94a3b8" : "#f97316"}
+                  />
+                  <div className={c("badgeDays")}>{item.targetDays} ngày</div>
+                  <p className={c("badgeTitle")}>{item.title}</p>
+
+                  <div className={c("badgeRewards")}>
+                    <span className={c("badgeXp")}>+{item.rewardXp} XP</span>
+                    {item.rewardSpark > 0 && (
+                      <span className={c("badgeSpark")}>
+                        +{item.rewardSpark} Spark
+                      </span>
+                    )}
+                  </div>
+
+                  {isUnlocked && (
+                    <button
+                      type="button"
+                      className={c("badgeClaimBtn")}
+                      disabled={claimingBadgeCode === item.code}
+                      onClick={async () => {
+                        try {
+                          await handleClaimBadge(item.code);
+                          const sparkMsg =
+                            item.rewardSpark > 0
+                              ? ` và +${item.rewardSpark} Spark`
+                              : "";
+                          showNotification(
+                            `Đã nhận +${item.rewardXp} XP${sparkMsg} từ huy hiệu "${item.title}"!`,
+                            "success"
+                          );
+                        } catch (err) {
+                          showNotification(
+                            err?.message || "Không thể nhận thưởng huy hiệu",
+                            "error"
+                          );
+                        }
+                      }}
+                    >
+                      {claimingBadgeCode === item.code
+                        ? "Đang nhận..."
+                        : "Nhận thưởng"}
+                    </button>
+                  )}
+
+                  {isClaimed && (
+                    <span className={c("badgeClaimedText")}>✓ Đã nhận</span>
+                  )}
+
+                  {isLocked && (
+                    <span className={c("badgeLockedText")}>Chưa đạt</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

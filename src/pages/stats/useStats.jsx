@@ -1,6 +1,7 @@
 import { useFetcher } from "@api/fetcher";
+import { getStreakBadges, claimStreakBadge } from "@api/badgeApi";
 import useAppBase from "@hooks/useAppBase";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 function useStats() {
   const { fetcher } = useFetcher();
@@ -9,6 +10,9 @@ function useStats() {
   const [chart, setChart] = useState([]);
   const [period, setPeriod] = useState("TODAY");
   const [total, setTotal] = useState({});
+  const [streakBadges, setStreakBadges] = useState([]);
+  const [maxStreak, setMaxStreak] = useState(0);
+  const [claimingBadgeCode, setClaimingBadgeCode] = useState(null);
 
   const fetchTotalStats = async () => {
     setLoading(true);
@@ -48,11 +52,56 @@ function useStats() {
     }
   };
 
+  const fetchStreakBadges = useCallback(async () => {
+    try {
+      const res = await getStreakBadges(fetcher);
+      const data = res?.data;
+      if (data) {
+        setStreakBadges(data.badges || []);
+        setMaxStreak(data.maxStreak || 0);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [fetcher]);
+
+  const handleClaimBadge = async (code) => {
+    if (!code || claimingBadgeCode) return null;
+    setClaimingBadgeCode(code);
+    try {
+      const res = await claimStreakBadge(fetcher, code);
+      const data = res?.data;
+      if (data) {
+        setStreakBadges(data.badges || []);
+        setMaxStreak(data.maxStreak || 0);
+      }
+      if (period === "TOTAL") {
+        await fetchTotalStats();
+      } else {
+        await fetchLastDaysStats(period);
+      }
+      return data;
+    } finally {
+      setClaimingBadgeCode(null);
+    }
+  };
+
   useEffect(() => {
     fetchLastDaysStats("TODAY");
+    fetchStreakBadges();
   }, []);
 
-  return { total, chart, period, fetchLastDaysStats, fetchTotalStats };
+  return {
+    total,
+    chart,
+    period,
+    streakBadges,
+    maxStreak,
+    claimingBadgeCode,
+    handleClaimBadge,
+    fetchLastDaysStats,
+    fetchTotalStats,
+  };
 }
 
 export default useStats;

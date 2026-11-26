@@ -98,3 +98,38 @@
   font-family: Roboto-Medium, sans-serif;
 }
 
+.streakBadge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.14), rgba(249, 115, 22, 0.2));
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.14);
+  text-decoration: none;
+  color: #c2410c;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.streakBadge:hover {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.24), rgba(249, 115, 22, 0.32));
+  border-color: #ea580c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.28);
+  color: #9a3412;
+}
+
+.streakIcon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.streakAmount {
+  letter-spacing: 0.3px;
+  font-family: Roboto-Medium, sans-serif;
+}
+
