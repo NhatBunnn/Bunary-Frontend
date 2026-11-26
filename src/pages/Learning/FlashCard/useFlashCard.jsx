@@ -15,6 +15,7 @@ function useFlashCard() {
   const { fetcher } = useFetcher();
 
   const [progress, setProgress] = useState({});
+  const [sessionId, setSessionId] = useState(null);
   const [sm2Stats, setSm2Stats] = useState({
     againCount: 0,
     hardCount: 0,
@@ -69,6 +70,19 @@ function useFlashCard() {
         });
         const wordsList = wordsRes?.data || [];
         setAllWords(wordsList);
+
+        if (wordsList.length > 0) {
+          try {
+            const sessionRes = await fetcher({
+              url: `/api/v1/learning/sessions/start`,
+              method: "POST",
+              data: { wordSetId: Number(id), stage: 1 },
+            });
+            setSessionId(sessionRes?.data?.sessionId || null);
+          } catch (e) {
+            console.error("Failed to start stage 1 session:", e);
+          }
+        }
 
         try {
           const dueRes = await fetcher({
@@ -147,6 +161,7 @@ function useFlashCard() {
         url: `/api/v1/learning/wordsets/${id}/roadmap`,
         method: "PUT",
         data: {
+          sessionId,
           step: 1,
           stage1Completed: true,
         },

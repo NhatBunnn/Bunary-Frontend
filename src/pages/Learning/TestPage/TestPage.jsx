@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -13,10 +13,9 @@ import {
 } from "lucide-react";
 import classNames from "classnames/bind";
 import styles from "./TestPage.module.css";
-import useMultipleChoice from "../MultipleChoice/useMultipleChoice";
-import FinishScreen from "../components/FinishScreen/FinishScreen";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetcher } from "@api/fetcher";
+import { useNotification } from "@context/NotificationProvider";
 
 const cx = classNames.bind(styles);
 
@@ -24,10 +23,12 @@ const TestPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { fetcher } = useFetcher();
-  const { words } = useMultipleChoice();
+  const { showNotification } = useNotification();
 
+  const [sessionId, setSessionId] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({}); // { questionId: optionId }
+  const [resultsMap, setResultsMap] = useState({}); // { questionId: { selectedOptionId, correctOptionId, isCorrect } }
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -46,14 +47,27 @@ const TestPage = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Tạo câu hỏi trắc nghiệm xáo trộn từ bộ từ
-  useEffect(() => {
-    if (words && words.length > 0) {
-      const qs = generateQuestionsFromWords(words);
-      setQuestions(qs);
+  // Khởi tạo phiên thi Trạm 3 và nhận đề thi đã random từ Backend (không kèm đáp án đúng)
+  const startStage3Session = useCallback(async () => {
+    try {
+      const res = await fetcher({
+        url: `/api/v1/learning/sessions/start`,
+        method: "POST",
+        data: { wordSetId: Number(id), stage: 3 },
+      });
+      const data = res?.data;
+      setSessionId(data?.sessionId || null);
+      setQuestions(data?.questions || []);
       setElapsedSeconds(0);
+    } catch (e) {
+      console.error("Failed to start stage 3 session:", e);
+      showNotification(e?.message || "Không thể khởi tạo đề thi Trạm 3", "error");
     }
-  }, [words]);
+  }, [fetcher, id, showNotification]);
+
+  useEffect(() => {
+    startStage3Session();
+  }, [startStage3Session]);
 
   // Bộ đếm thời gian làm bài (Stopwatch)
   useEffect(() => {
@@ -67,76 +81,6 @@ const TestPage = () => {
     };
   }, [questions.length, submitted]);
 
-  function generateQuestionsFromWords(wordsList) {
-    if (!wordsList || wordsList.length === 0) return [];
-    // Xáo trộn thứ tự các câu hỏi trong bài kiểm tra
-    const randomizedWords = shuffle(wordsList);
-
-    return randomizedWords.map((word, index) => {
-      const isMeaningToTerm = Math.random() < 0.5;
-      const correctText = isMeaningToTerm ? word.term : word.meaning;
-      const correctOption = { id: "a", text: correctText, isCorrect: true };
-
-      const wrongTexts = [];
-      const maxTries = 25;
-      let tries = 0;
-      while (wrongTexts.length < 3 && tries < maxTries) {
-        tries++;
-        const randomWord =
-          wordsList[Math.floor(Math.random() * wordsList.length)];
-        const candidate = isMeaningToTerm
-          ? randomWord.term
-          : randomWord.meaning;
-        if (
-          candidate &&
-          candidate !== correctText &&
-          !wrongTexts.includes(candidate)
-        ) {
-          wrongTexts.push(candidate);
-        }
-      }
-
-      while (wrongTexts.length < 3) {
-        wrongTexts.push(
-          isMeaningToTerm
-            ? `Option #${wrongTexts.length + 1}`
-            : `Ý nghĩa dự phòng #${wrongTexts.length + 1}`
-        );
-      }
-
-      const options = shuffle([
-        correctOption,
-        { id: "b", text: wrongTexts[0], isCorrect: false },
-        { id: "c", text: wrongTexts[1], isCorrect: false },
-        { id: "d", text: wrongTexts[2], isCorrect: false },
-      ]);
-
-      return {
-        id: word.id || index,
-        promptLabel: isMeaningToTerm
-          ? `Nghĩa: "${word.meaning}"`
-          : word.term,
-        term: word.term,
-        ipa: isMeaningToTerm ? null : word.ipa,
-        allowAudio: !isMeaningToTerm,
-        question: isMeaningToTerm
-          ? `Từ vựng nào mang nghĩa '${word.meaning}'?`
-          : `Từ '${word.term}' có nghĩa là gì?`,
-        options,
-        correctText,
-      };
-    });
-  }
-
-  function shuffle(array) {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
   const handleSelect = (questionId, optionId) => {
     if (submitted) return;
     setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
@@ -144,59 +88,64 @@ const TestPage = () => {
 
   // Nộp bài thi Thử thách Trạm 3 & Ghi nhận vào Bảng Vàng
   const handleSubmit = async () => {
-    if (isSubmitting || questions.length === 0) return;
+    if (isSubmitting || submitted || questions.length === 0 || !sessionId) return;
     setIsSubmitting(true);
     if (timerRef.current) clearInterval(timerRef.current);
 
-    let correctCount = 0;
     const avgResponseTimeMs = Math.round(
       (elapsedSeconds * 1000) / Math.max(1, questions.length)
     );
 
-    // Tính điểm và gửi SM-2 review cho từng từ
-    questions.forEach(async (q) => {
-      const selectedId = answers[q.id];
-      const selectedOption = q.options.find((opt) => opt.id === selectedId);
-      const isCorrect = Boolean(selectedOption?.isCorrect);
-      if (isCorrect) correctCount++;
-
-      if (selectedId) {
-        try {
-          await fetcher({
-            url: `/api/v1/learning/wordsets/${id}/review-word`,
-            method: "POST",
-            data: {
-              wordId: q.id,
-              isCorrect,
-              responseTimeMs: avgResponseTimeMs,
-            },
-          });
-        } catch (e) {
-          console.error("SM-2 review failed for test question:", q.id);
-        }
-      }
-    });
-
-    setScore(correctCount);
-    setSubmitted(true);
-
-    const total = questions.length;
-    const stage3Score = Math.round((correctCount / total) * 100);
-
-    // Cập nhật Lộ trình Chặng 3 & Đua top Leaderboard
     try {
-      await fetcher({
-        url: `/api/v1/learning/wordsets/${id}/roadmap`,
-        method: "PUT",
+      const res = await fetcher({
+        url: `/api/v1/learning/wordsets/${id}/stage3/submit`,
+        method: "POST",
         data: {
-          step: 3,
-          stage3Score,
-          stage3DurationSeconds: elapsedSeconds,
+          sessionId,
+          answers: questions.map((q) => ({
+            questionId: q.id,
+            selectedOptionId: answers[q.id] || null,
+          })),
         },
       });
+
+      const data = res?.data;
+      const nextResultsMap = {};
+      (data?.results || []).forEach((r) => {
+        nextResultsMap[r.questionId] = r;
+      });
+
+      setResultsMap(nextResultsMap);
+      setScore(data?.correctCount ?? 0);
+      if (typeof data?.durationSeconds === "number") {
+        setElapsedSeconds(data.durationSeconds);
+      }
+      setSubmitted(true);
       window.dispatchEvent(new Event("roadmapUpdated"));
+
+      // Ghi nhận phản hồi SM-2 cho từng từ đã chọn dựa trên kết quả BE chấm
+      questions.forEach(async (q) => {
+        const selectedId = answers[q.id];
+        const result = nextResultsMap[q.id];
+        if (selectedId && result) {
+          try {
+            await fetcher({
+              url: `/api/v1/learning/wordsets/${id}/review-word`,
+              method: "POST",
+              data: {
+                wordId: q.id,
+                isCorrect: Boolean(result.isCorrect),
+                responseTimeMs: avgResponseTimeMs,
+              },
+            });
+          } catch (e) {
+            console.error("SM-2 review failed for test question:", q.id);
+          }
+        }
+      });
     } catch (e) {
-      console.error("Failed to update roadmap stage 3:", e);
+      console.error("Failed to submit stage 3:", e);
+      showNotification(e?.message || "Nộp bài thất bại, vui lòng thử lại!", "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -204,12 +153,11 @@ const TestPage = () => {
 
   const handleRestart = () => {
     setAnswers({});
+    setResultsMap({});
     setSubmitted(false);
     setScore(0);
     setElapsedSeconds(0);
-    if (words && words.length > 0) {
-      setQuestions(generateQuestionsFromWords(words));
-    }
+    startStage3Session();
   };
 
   const formatTime = (seconds) => {
@@ -228,8 +176,9 @@ const TestPage = () => {
       return cx("option", { selected: isSelected });
     }
 
-    if (option.isCorrect) return cx("option", "correct");
-    if (isSelected && !option.isCorrect) return cx("option", "incorrect");
+    const result = resultsMap[questionId];
+    if (result?.correctOptionId === option.id) return cx("option", "correct");
+    if (isSelected && !result?.isCorrect) return cx("option", "incorrect");
     return cx("option", "faded");
   };
 
@@ -323,9 +272,11 @@ const TestPage = () => {
       {/* Danh sách câu hỏi */}
       <div className={cx("questions-list")}>
         {questions.map((q, index) => {
-          const selectedId = answers[q.id];
-          const selectedOption = q.options.find((opt) => opt.id === selectedId);
-          const isCorrect = selectedOption?.isCorrect;
+          const result = resultsMap[q.id];
+          const isCorrect = Boolean(result?.isCorrect);
+          const correctText = q.options.find(
+            (opt) => opt.id === result?.correctOptionId
+          )?.text;
 
           return (
             <div key={q.id} className={cx("question-item")}>
@@ -380,9 +331,9 @@ const TestPage = () => {
                 ))}
               </div>
 
-              {submitted && !isCorrect && (
+              {submitted && !isCorrect && correctText && (
                 <div className={cx("correction")}>
-                  Đáp án chính xác: <strong>{q.correctText}</strong>
+                  Đáp án chính xác: <strong>{correctText}</strong>
                 </div>
               )}
             </div>

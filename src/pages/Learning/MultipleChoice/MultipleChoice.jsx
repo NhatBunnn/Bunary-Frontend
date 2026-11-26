@@ -22,8 +22,22 @@ const MultipleChoice = () => {
   const [score, setScore] = useState(0);
   const [isTestComplete, setIsTestComplete] = useState(false);
   const [speedNotice, setSpeedNotice] = useState("");
+  const [sessionId, setSessionId] = useState(null);
 
   const questionStartTimeRef = useRef(Date.now());
+
+  const startStage2Session = useCallback(async () => {
+    try {
+      const res = await fetcher({
+        url: `/api/v1/learning/sessions/start`,
+        method: "POST",
+        data: { wordSetId: Number(id), stage: 2 },
+      });
+      setSessionId(res?.data?.sessionId || null);
+    } catch (e) {
+      console.error("Failed to start stage 2 session:", e);
+    }
+  }, [fetcher, id]);
 
   const handleSpeak = (e, text) => {
     e?.stopPropagation();
@@ -40,8 +54,9 @@ const MultipleChoice = () => {
       const qs = generateQuestionsFromWords(words);
       setQuestions(qs);
       questionStartTimeRef.current = Date.now();
+      startStage2Session();
     }
-  }, [words]);
+  }, [words, startStage2Session]);
 
   function generateQuestionsFromWords(wordsList) {
     if (!wordsList || wordsList.length === 0) return [];
@@ -176,6 +191,7 @@ const MultipleChoice = () => {
           url: `/api/v1/learning/wordsets/${id}/roadmap`,
           method: "PUT",
           data: {
+            sessionId,
             step: 2,
             stage2Score: percentage,
           },
@@ -187,7 +203,7 @@ const MultipleChoice = () => {
 
       setIsTestComplete(true);
     }
-  }, [currentIndex, questions.length, score, fetcher, id]);
+  }, [currentIndex, questions.length, score, fetcher, id, sessionId]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -231,6 +247,7 @@ const MultipleChoice = () => {
     if (words && words.length > 0) {
       setQuestions(generateQuestionsFromWords(words));
       questionStartTimeRef.current = Date.now();
+      startStage2Session();
     }
   };
 
