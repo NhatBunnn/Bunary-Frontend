@@ -32,6 +32,7 @@ import LearningLayout from "@layouts/LeaningLayout/LearningLayout";
 import PostPage from "@pages/Profile/Profile/PostPage";
 import CrystalStore from "@pages/CrystalStore/CrystalStore";
 import PaymentResult from "@pages/PaymentResult/PaymentResult";
+import Quests from "@pages/Quests/Quests";
 
 const publicRoutes = [
   // Homepage
@@ -64,6 +65,7 @@ const publicRoutes = [
 const privateRoutes = [
   { path: "/createwordset", Page: CreateWordSet, Layout: DefaultLayout },
   { path: "/stats", Page: stats, Layout: DefaultLayout },
+  { path: "/quests", Page: Quests, Layout: DefaultLayout },
   { path: "/setting", Page: Setting, Layout: DefaultLayout },
   { path: "/collection", Page: Collection, Layout: DefaultLayout },
   { path: "/wordset/:id/edit", Page: EditWordset, Layout: DefaultLayout },
