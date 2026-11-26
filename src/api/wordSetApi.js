@@ -146,3 +146,19 @@ export const removeWordSet = async (arg1, arg2) => {
     method: "DELETE",
   });
 };
+
+export const resubmitWordSetModeration = async (arg1, arg2) => {
+  let f = defaultFetcher;
+  let wordSetId = arg1;
+  if (typeof arg1 === "function") {
+    f = arg1;
+    wordSetId = arg2;
+  } else if (typeof arg1 === "string") {
+    wordSetId = arg2;
+  }
+
+  return await f({
+    url: `/api/v1/wordsets/${wordSetId}/resubmit-moderation`,
+    method: "POST",
+  });
+};
