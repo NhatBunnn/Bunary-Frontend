@@ -152,7 +152,8 @@
 .author {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding-left: 4px;
   font-size: 12px;
   color: #475569;
   font-weight: 500;

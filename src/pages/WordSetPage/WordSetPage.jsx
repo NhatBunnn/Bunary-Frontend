@@ -40,6 +40,9 @@ import { useNavigate } from "react-router-dom";
 import { AddToCollection } from "@features/collection/components";
 import { Image, Images } from "@assets/images";
 import { useUser } from "@context/UserProvider/UserProvider";
+import ProfileHoverCard from "@components/ProfileHoverCard/ProfileHoverCard";
+import UserAvatar from "@components/UserAvatar/UserAvatar";
+import { useEquippedCosmetics } from "@utils/cosmetics";
 
 const c = classNames.bind(styles);
 
@@ -79,6 +82,7 @@ const WordSetPage = () => {
   } = useWordSetPage();
 
   const { user } = useUser();
+  const authorCosmetics = useEquippedCosmetics(wordSet?.author);
   const [hoverRating, setHoverRating] = useState(0);
   const navigate = useNavigate();
 
@@ -356,24 +360,34 @@ const WordSetPage = () => {
             {/* Author Chip */}
             {wordSet.author && (
               <div className={c("heroAuthor")}>
-                <Image
-                  src={wordSet.author?.avatar}
-                  fallback={Images.avatar}
-                  alt={wordSet.author?.fullName}
-                  size="32px"
-                  isCircled={true}
-                  className={c("heroAuthorAvatar")}
-                />
-                <div className={c("heroAuthorInfo")}>
-                  <span className={c("heroAuthorName")}>
-                    {wordSet.author?.fullName || wordSet.author?.username}
-                  </span>
-                  {wordSet.author?.username && (
-                    <span className={c("heroAuthorHandle")}>
-                      @{wordSet.author.username}
-                    </span>
-                  )}
-                </div>
+                <ProfileHoverCard user={wordSet.author}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", cursor: "pointer" }}>
+                    <UserAvatar
+                      src={wordSet.author?.avatar || Images.avatar}
+                      alt={wordSet.author?.fullName}
+                      frame={authorCosmetics.avatarFrame}
+                      size={32}
+                      className={c("heroAuthorAvatar")}
+                    />
+                    <div className={c("heroAuthorInfo")}>
+                      <span
+                        className={c("heroAuthorName")}
+                        style={
+                          authorCosmetics.nameColor
+                            ? { color: authorCosmetics.nameColor }
+                            : undefined
+                        }
+                      >
+                        {wordSet.author?.fullName || wordSet.author?.username}
+                      </span>
+                      {wordSet.author?.username && (
+                        <span className={c("heroAuthorHandle")}>
+                          @{wordSet.author.username}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </ProfileHoverCard>
                 <button
                   className={c("followChip", isFollowing && "followChipActive")}
                   onClick={() => setIsFollowing(!isFollowing)}
@@ -707,16 +721,37 @@ const WordSetPage = () => {
                       {rank === 3 && "🥉"}
                       {rank > 3 && <span className={c("lbRankNum")}>{rank}</span>}
                     </div>
-                    <Image
-                      src={item.avatar}
-                      fallback={Images.avatar}
-                      alt={name}
-                      size="28px"
-                      isCircled={true}
-                      className={c("lbAvatar")}
-                    />
+                    <ProfileHoverCard
+                      user={{
+                        id: item.userId,
+                        fullName: name,
+                        username: item.username || name,
+                        avatar: item.avatar,
+                        avatarFrame: item.avatarFrame,
+                      }}
+                    >
+                      <UserAvatar
+                        src={item.avatar || Images.avatar}
+                        alt={name}
+                        frame={item.avatarFrame}
+                        size={28}
+                        className={c("lbAvatar")}
+                      />
+                    </ProfileHoverCard>
                     <div className={c("lbUser")}>
-                      <span className={c("lbName")}>{name} {isMe ? "(Bạn)" : ""}</span>
+                      <ProfileHoverCard
+                        user={{
+                          id: item.userId,
+                          fullName: name,
+                          username: item.username || name,
+                          avatar: item.avatar,
+                          avatarFrame: item.avatarFrame,
+                        }}
+                      >
+                        <span className={c("lbName")} style={{ cursor: "pointer" }}>
+                          {name} {isMe ? "(Bạn)" : ""}
+                        </span>
+                      </ProfileHoverCard>
                       <span className={c("lbScore")}>
                         {score}{time ? <> • <strong>{time}</strong></> : null}
                       </span>
@@ -804,18 +839,21 @@ const WordSetPage = () => {
               <div className={c("reviewCard")} key={item.id || i}>
                 <div className={c("rcTop")}>
                   <div className={c("rcUser")}>
-                    <Image
-                      src={item.user?.avatar}
-                      fallback={Images.avatar}
-                      alt={item.user?.fullName}
-                      size="28px"
-                      isCircled={true}
-                      className={c("rcAvatar")}
-                    />
-                    <div>
-                      <div className={c("rcName")}>{item.user?.fullName || "Học viên Bunary"}</div>
-                      <div className={c("rcDate")}>{item.createdAt || "Gần đây"}</div>
-                    </div>
+                    <ProfileHoverCard user={item.user}>
+                      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.55rem", cursor: "pointer" }}>
+                        <UserAvatar
+                          src={item.user?.avatar || Images.avatar}
+                          alt={item.user?.fullName}
+                          frame={item.user?.avatarFrame}
+                          size={28}
+                          className={c("rcAvatar")}
+                        />
+                        <div>
+                          <div className={c("rcName")}>{item.user?.fullName || "Học viên Bunary"}</div>
+                          <div className={c("rcDate")}>{item.createdAt || "Gần đây"}</div>
+                        </div>
+                      </div>
+                    </ProfileHoverCard>
                   </div>
                   <div className={c("rcStars")}>
                     {"★".repeat(item.value || 5)}

@@ -1,0 +1,41 @@
+.triggerWrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.popoverLayer {
+  position: fixed;
+  z-index: 9999;
+  animation: fadeInDown 0.16s ease-out;
+}
+
+.popoverLayer.placeAbove {
+  transform: translateY(-100%);
+  animation: fadeInUp 0.16s ease-out;
+}
+
+.floatingCard {
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.18) !important;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-100% + 4px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+}

@@ -15,9 +15,18 @@ import {
   Zap,
   Calendar,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OptionsMenuWrapper } from "@components/index";
 import ProfileEditModal from "@components/ProfileEditModal/ProfileEditModal";
+import UserAvatar from "@components/UserAvatar/UserAvatar";
+import { useUser } from "@context/UserProvider/UserProvider";
+import {
+  BANNER_STYLES,
+  EFFECT_STYLES,
+  NAMEPLATE_COLORS,
+  COSMETICS_UPDATED_EVENT,
+  loadEquippedCosmetics,
+} from "@utils/cosmetics";
 
 const c = classNames.bind(styles);
 
@@ -35,8 +44,26 @@ function ProfileCard({
     acceptFriendRequest,
   } = useProfileCard();
 
+  const { user: currentUser } = useUser() || {};
   const [openOptionsMenu, setOpenOptionsMenu] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [localCosmetics, setLocalCosmetics] = useState(() => loadEquippedCosmetics());
+
+  useEffect(() => {
+    const onUpdate = (e) => setLocalCosmetics(e.detail || loadEquippedCosmetics());
+    window.addEventListener(COSMETICS_UPDATED_EVENT, onUpdate);
+    return () => window.removeEventListener(COSMETICS_UPDATED_EVENT, onUpdate);
+  }, []);
+
+  const isCurrentUser = !user?.id || !currentUser?.id || user.id === currentUser.id;
+  const activeFrame =
+    user?.avatarFrame || user?.avatarDecoKey || (isCurrentUser ? localCosmetics.avatarFrame : null);
+  const activeBannerKey =
+    user?.bannerTheme || (isCurrentUser ? localCosmetics.bannerTheme : null);
+  const activeEffectKey =
+    user?.profileEffect || (isCurrentUser ? localCosmetics.profileEffect : null);
+  const activeNameplateKey =
+    user?.nameplate || (isCurrentUser ? localCosmetics.nameplate : null);
 
   const defaultBadges = [
     { id: "spark", label: "Bunary Spark", icon: Sparkles, color: "#5865f2", bg: "#eef0ff" },
@@ -47,17 +74,39 @@ function ProfileCard({
 
   return (
     <div className={c("profileCard", className)}>
-      <div className={c("banner-wrapper")}>
-        <Image src={user?.banner} className={c("banner")} alt="Banner" />
+      {activeEffectKey && EFFECT_STYLES[activeEffectKey] && (
+        <div
+          className={c("effect-overlay")}
+          style={{ background: EFFECT_STYLES[activeEffectKey] }}
+        />
+      )}
+
+      <div
+        className={c("banner-wrapper")}
+        style={
+          !user?.banner && activeBannerKey && BANNER_STYLES[activeBannerKey]
+            ? { background: BANNER_STYLES[activeBannerKey] }
+            : undefined
+        }
+      >
+        {user?.banner && (
+          <Image src={user.banner} className={c("banner")} alt="Banner" />
+        )}
       </div>
 
       <div className={c("card-content")}>
         <div className={c("card-header-row")}>
           <div className={c("avatar-wrapper")}>
-            <Link to={`/profile/${user?.username}`}>
-              <Image src={user?.avatar} className={c("avatar")} alt="Avatar" />
+            <Link to={`/u/${user?.username}`}>
+              <UserAvatar
+                src={user?.avatar}
+                alt="Avatar"
+                frame={activeFrame}
+                size={92}
+                status="online"
+                imgClassName={c("avatar")}
+              />
             </Link>
-            <div className={c("status-indicator")}></div>
           </div>
 
           <div className={c("badges-pill")} aria-label="Profile Badges">
@@ -86,7 +135,16 @@ function ProfileCard({
 
         <div className={c("info-section")}>
           <div className={c("name-wrapper")}>
-            <h2 className={c("name")}>{user?.fullName || "Bunary User"}</h2>
+            <h2
+              className={c("name")}
+              style={
+                activeNameplateKey && NAMEPLATE_COLORS[activeNameplateKey]
+                  ? { color: NAMEPLATE_COLORS[activeNameplateKey] }
+                  : undefined
+              }
+            >
+              {user?.fullName || "Bunary User"}
+            </h2>
             <div className={c("meta-line")}>
               <span className={c("username")}>@{user?.username}</span>
               <span className={c("dot")}>•</span>

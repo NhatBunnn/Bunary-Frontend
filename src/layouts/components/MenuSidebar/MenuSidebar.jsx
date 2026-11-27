@@ -10,6 +10,7 @@ import {
   BarChart,
   Trophy,
   Target,
+  ShoppingBag,
 } from "lucide-react";
 import styles from "./MenuSidebar.module.css";
 import classNames from "classnames/bind";
@@ -38,7 +39,7 @@ function MenuSidebar({ collapsed, className, onClose }) {
     { icon: Library, label: "Bộ sưu tập", to: "/collection" },
     { hr: true },
     // { icon: Gamepad, label: "Trò chơi" },
-    // { icon: ShoppingCart, label: "Cửa hàng" },
+    { icon: ShoppingBag, label: "Cửa hàng", to: "/shop" },
     { icon: Sparkles, label: "ChatGPT" },
   ];
 

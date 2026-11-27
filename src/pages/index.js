@@ -11,3 +11,4 @@ export { default as TestPage } from "./Learning/TestPage/TestPage";
 // Crystal Store & Payment
 export { default as CrystalStore } from "./CrystalStore/CrystalStore";
 export { default as PaymentResult } from "./PaymentResult/PaymentResult";
+export { default as Shop } from "./Shop/Shop";

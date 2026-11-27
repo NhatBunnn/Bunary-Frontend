@@ -4,10 +4,14 @@ import styles from "./LargeWordSet.module.css";
 import classNames from "classnames/bind";
 import { faStar, faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import ProfileHoverCard from "@components/ProfileHoverCard/ProfileHoverCard";
+import UserAvatar from "@components/UserAvatar/UserAvatar";
+import { useEquippedCosmetics } from "@utils/cosmetics";
 
 const c = classNames.bind(styles);
 
 function LargeWordSet({ author, wordSet }) {
+  const authorCosmetics = useEquippedCosmetics(author);
   const slug = wordSet?.title
     ? wordSet.title
         .split(" ")
@@ -64,14 +68,29 @@ function LargeWordSet({ author, wordSet }) {
         </p>
 
         {author && (
-          <div className={c("author")}>
-            <Image
-              src={author.avatar || Images.Logo}
-              size="22px"
-              isCircled="true"
-            />
-            <span className={c("authorName")}>{author.fullName}</span>
-          </div>
+          <ProfileHoverCard user={author}>
+            <div
+              className={c("author")}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <UserAvatar
+                src={author.avatar || Images.Logo}
+                alt={author.fullName}
+                frame={authorCosmetics.avatarFrame}
+                size={24}
+              />
+              <span
+                className={c("authorName")}
+                style={
+                  authorCosmetics.nameColor
+                    ? { color: authorCosmetics.nameColor, fontWeight: 700 }
+                    : undefined
+                }
+              >
+                {author.fullName}
+              </span>
+            </div>
+          </ProfileHoverCard>
         )}
       </div>
     </Link>
