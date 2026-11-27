@@ -1,14 +1,19 @@
 import classNames from "classnames/bind";
 import styles from "./ProfileLayout.module.css";
 import ProfileCard from "@components/ProfileCard/ProfileCard";
-import { Background } from "@assets/images";
 import DefaultLayout from "@layouts/DefaultLayout/DefaultLayout";
 import { useNavigate, useLocation } from "react-router-dom";
 import useProfileLayout from "./useProfileLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loading from "@components/Loading/Loading";
 
 const c = classNames.bind(styles);
+
+const COSMETIC_PRESETS = [
+  { id: "default", label: "Mặc định", bannerTheme: null, avatarFrame: null, nameplate: null },
+  { id: "nebula", label: "Tinh Vân", bannerTheme: "nebula", avatarFrame: "nebula", nameplate: "nebula" },
+  { id: "gold", label: "Hoàng Kim", bannerTheme: "gold", avatarFrame: "gold", nameplate: "gold" },
+];
 
 function ProfileLayout({ children }) {
   const {
@@ -16,12 +21,12 @@ function ProfileLayout({ children }) {
     friendStatus,
     setFriendStatus,
     user,
-    profile,
     loading,
   } = useProfileLayout();
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [activePreset, setActivePreset] = useState("default");
 
   useEffect(() => {
     fetchUserByUserName();
@@ -29,66 +34,69 @@ function ProfileLayout({ children }) {
 
   if (loading) return <Loading />;
 
+  const presetObj = COSMETIC_PRESETS.find((p) => p.id === activePreset) || COSMETIC_PRESETS[0];
+  const displayUser = {
+    ...user,
+    bannerTheme: presetObj.bannerTheme ?? user?.bannerTheme,
+    avatarFrame: presetObj.avatarFrame ?? user?.avatarFrame,
+    nameplate: presetObj.nameplate ?? user?.nameplate,
+  };
+
   return (
     <DefaultLayout>
-      <div className={c("profileLayout")}>
-        {/* Banner Section */}
-        <div className={c("slider")}>
-          <Background
-            className={c("banner")}
-            src="https://wallpapers.com/images/featured/universe-qs811igzbabl1m0o.jpg"
-          >
-            <div className={c("preface")}>{profile?.title}</div>
-          </Background>
-        </div>
-
-        {/* Main Interface */}
-        <div className={c("content")}>
-          <div className="row g-4">
+      <div className={c("profilePage")}>
+        <div className={c("container")}>
+          <div className={c("pageGrid")}>
             {/* Left Column: Sticky Profile Card */}
-            <div className="col-12 col-lg-4">
-              <div className={c("profileCard-sticky")}>
-                <ProfileCard
-                  user={user}
-                  friendStatus={friendStatus}
-                  setFriendStatus={setFriendStatus}
-                />
-              </div>
-            </div>
+            <aside className={c("leftCol")}>
+              <ProfileCard
+                user={displayUser}
+                friendStatus={friendStatus}
+                setFriendStatus={setFriendStatus}
+              />
 
-            {/* Right Column: Content & Tabs */}
-            <div className="col-12 col-lg-8">
-              {/* Navigation Tabs */}
-              <div className={c("tabs")}>
+              <div className={c("presetCard")}>
+                <div className={c("presetTitle")}>Thử nhanh giao diện thẻ</div>
+                <div className={c("presetRow")}>
+                  {COSMETIC_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      className={c("presetBtn", { active: activePreset === preset.id })}
+                      onClick={() => setActivePreset(preset.id)}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </aside>
+
+            {/* Right Column: Navigation & Posts Feed */}
+            <section className={c("rightCol")}>
+              <div className={c("topNavTabs")}>
                 <button
                   type="button"
-                  className={c("tabBtn", {
+                  className={c("navTabBtn", {
                     active: !location.pathname.endsWith("/friends"),
                   })}
-                  onClick={() => navigate(`/u/${user?.username}`)}
+                  onClick={() => navigate(`/u/${user?.username || "minhnhat"}`)}
                 >
                   Bài viết
                 </button>
                 <button
                   type="button"
-                  className={c("tabBtn", {
+                  className={c("navTabBtn", {
                     active: location.pathname.endsWith("/friends"),
                   })}
-                  onClick={() => navigate(`/u/${user?.username}/friends`)}
+                  onClick={() => navigate(`/u/${user?.username || "minhnhat"}/friends`)}
                 >
                   Bạn bè
                 </button>
-                <button type="button" className={c("tabBtn")}>
-                  Ảnh
-                </button>
-                <button type="button" className={c("tabBtn")}>
-                  Video
-                </button>
               </div>
 
-              {/* Dynamic Content */}
               <div className={c("mainContent")}>{children}</div>
-            </div>
+            </section>
           </div>
         </div>
       </div>

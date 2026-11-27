@@ -34,6 +34,8 @@ import CrystalStore from "@pages/CrystalStore/CrystalStore";
 import PaymentResult from "@pages/PaymentResult/PaymentResult";
 import Quests from "@pages/Quests/Quests";
 import Shop from "@pages/Shop/Shop";
+import Leaderboard from "@pages/Leaderboard/Leaderboard";
+import BunSnap from "@pages/BunSnap/BunSnap";
 
 const publicRoutes = [
   // Homepage
@@ -56,6 +58,8 @@ const publicRoutes = [
   // Store & Payment
   { path: "/store", Page: CrystalStore, Layout: DefaultLayout },
   { path: "/shop", Page: Shop, Layout: DefaultLayout },
+  { path: "/leaderboard", Page: Leaderboard, Layout: DefaultLayout },
+  { path: "/bunsnap", Page: BunSnap, Layout: DefaultLayout },
   { path: "/payment-result", Page: PaymentResult, Layout: DefaultLayout },
 
   // FallBack

@@ -11,6 +11,7 @@ import {
   Trophy,
   Target,
   ShoppingBag,
+  Camera,
 } from "lucide-react";
 import styles from "./MenuSidebar.module.css";
 import classNames from "classnames/bind";
@@ -26,13 +27,14 @@ function MenuSidebar({ collapsed, className, onClose }) {
   const menuItems = [
     { hr: true },
     { icon: Home, label: "Trang chủ", to: "/" },
-    { icon: User, label: "Người dùng", to: `/u/${user?.username}` },
+    { icon: User, label: "Người dùng", to: `/u/${user?.username || "minhnhat"}` },
     { icon: Users, label: "Cộng đồng", to: "/community" },
+    { icon: Camera, label: "BunSnap", to: "/bunsnap" },
     { icon: BarChart, label: "Thống kê", to: "/stats" },
     { icon: Target, label: "Nhiệm vụ", to: "/quests" },
     // { hr: true },
     // { icon: FileText, label: "Hộp chứa từ" },
-    { icon: Trophy, label: "Xếp hạng" },
+    { icon: Trophy, label: "Xếp hạng", to: "/leaderboard" },
     { hr: true },
     // { icon: Clipboard, label: "Ghi chú" },
     { icon: Hash, label: "Thẻ ghi nhớ", to: "/createwordset" },
