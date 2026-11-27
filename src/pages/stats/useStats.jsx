@@ -8,7 +8,8 @@ function useStats() {
   const { setLoading } = useAppBase();
 
   const [chart, setChart] = useState([]);
-  const [period, setPeriod] = useState("TODAY");
+  const [heatmap28, setHeatmap28] = useState([]);
+  const [period, setPeriod] = useState("LAST_7_DAYS");
   const [total, setTotal] = useState({});
   const [streakBadges, setStreakBadges] = useState([]);
   const [maxStreak, setMaxStreak] = useState(0);
@@ -32,25 +33,41 @@ function useStats() {
     }
   };
 
-  const fetchLastDaysStats = async (period = "TODAY") => {
+  const fetchLastDaysStats = async (targetPeriod = "LAST_7_DAYS") => {
     setLoading(true);
     try {
       const response = await fetcher({
         url: `/api/v1/users/me/stats-daily`,
         method: "GET",
-        params: { period },
+        params: { period: targetPeriod },
       });
 
       const data = response.data || {};
       setTotal(data.total || {});
       setChart(data.chart || []);
-      setPeriod(data.period || period);
+      setPeriod(data.period || targetPeriod);
+      if (targetPeriod === "LAST_28_DAYS") {
+        setHeatmap28(data.chart || []);
+      }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
+  const fetchHeatmap28 = useCallback(async () => {
+    try {
+      const response = await fetcher({
+        url: `/api/v1/users/me/stats-daily`,
+        method: "GET",
+        params: { period: "LAST_28_DAYS" },
+      });
+      setHeatmap28(response?.data?.chart || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [fetcher]);
 
   const fetchStreakBadges = useCallback(async () => {
     try {
@@ -87,13 +104,15 @@ function useStats() {
   };
 
   useEffect(() => {
-    fetchLastDaysStats("TODAY");
+    fetchLastDaysStats("LAST_7_DAYS");
+    fetchHeatmap28();
     fetchStreakBadges();
   }, []);
 
   return {
     total,
     chart,
+    heatmap28,
     period,
     streakBadges,
     maxStreak,
