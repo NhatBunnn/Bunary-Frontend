@@ -213,15 +213,39 @@ export const LEADERBOARD_USERS = [
 ];
 
 export const LEAGUE_TIERS = [
-  { id: "master", name: "Cao Thủ", requirement: "Top 1%" },
-  { id: "diamond", name: "Kim Cương", requirement: "10,000+ XP" },
+  { id: "master", name: "Cao Thủ", requirement: "Top 5 Kim Cương" },
+  { id: "diamond", name: "Kim Cương", requirement: "Top 10 Bạch Kim" },
   { id: "platinum", name: "Bạch Kim II", requirement: "Đang ở đây", current: true },
-  { id: "gold", name: "Vàng", requirement: "3,000+ XP" },
-  { id: "silver", name: "Bạc", requirement: "1,000+ XP" },
+  { id: "gold", name: "Vàng", requirement: "Top 10 Bạc" },
+  { id: "silver", name: "Bạc", requirement: "Khởi đầu" },
 ];
 
-export const WEEKLY_REWARDS = [
-  { rank: "Hạng 1", crystal: 150, spark: 1000 },
-  { rank: "Hạng 2 - 3", crystal: 80, spark: 600 },
-  { rank: "Top 4 - 10", crystal: 30, spark: 300 },
-];
+export const LEAGUE_REWARDS_BY_TIER = {
+  silver: [
+    { rank: "Hạng 1", crystal: 0, spark: 300 },
+    { rank: "Hạng 2 - 3", crystal: 0, spark: 200 },
+    { rank: "Top 4 - 10", crystal: 0, spark: 100 },
+  ],
+  gold: [
+    { rank: "Hạng 1", crystal: 5, spark: 400 },
+    { rank: "Hạng 2 - 3", crystal: 2, spark: 250 },
+    { rank: "Top 4 - 10", crystal: 0, spark: 150 },
+  ],
+  platinum: [
+    { rank: "Hạng 1", crystal: 15, spark: 500 },
+    { rank: "Hạng 2 - 3", crystal: 8, spark: 350 },
+    { rank: "Top 4 - 10", crystal: 3, spark: 200 },
+  ],
+  diamond: [
+    { rank: "Hạng 1", crystal: 25, spark: 600 },
+    { rank: "Hạng 2 - 3", crystal: 15, spark: 400 },
+    { rank: "Top 4 - 10", crystal: 5, spark: 200 },
+  ],
+  master: [
+    { rank: "Hạng 1", crystal: 40, spark: 800 },
+    { rank: "Hạng 2 - 3", crystal: 25, spark: 550 },
+    { rank: "Top 4 - 10", crystal: 10, spark: 300 },
+  ],
+};
+
+export const WEEKLY_REWARDS = LEAGUE_REWARDS_BY_TIER.platinum;
